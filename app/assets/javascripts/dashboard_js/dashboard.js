@@ -13,11 +13,6 @@
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
-//= require 'js/bootstrap.js'
-//= require 'js/jquery.prettyPhoto.js'
-//= require 'js/jquery.flexslider.js'
-//= require 'js/jquery.easing.1.3.js'
-//= require 'js/jquery.custom.js'
-//= require 'init_theme.js'
-
+//= require 'dashboard_js/bootstrap.min.js'
+//= require 'dashboard_js/scripts.js'
 //= require_directory .

@@ -26,4 +26,6 @@ Gocreative::Application.configure do
   # This option may cause significant delays in view rendering with a large
   # number of complex assets.
   config.assets.debug = true
+
+  config.assets.precompile += ['dashboard_js/dashboard.js', 'dashboard_css/dashboard.css']
 end
