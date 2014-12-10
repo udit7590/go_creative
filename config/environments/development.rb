@@ -27,5 +27,5 @@ Gocreative::Application.configure do
   # number of complex assets.
   config.assets.debug = true
 
-  config.assets.precompile += ['dashboard_js/dashboard.js', 'dashboard_css/dashboard.css']
+  config.assets.precompile += %w(dashboard_js/dashboard.js dashboard_css/dashboard.css)
 end
