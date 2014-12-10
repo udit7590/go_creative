@@ -14,5 +14,5 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require 'dashboard_js/bootstrap.min.js'
-//= require 'dashboard_js/scripts.js'
+//= require 'dashboard_js/init.dashboard.theme.js'
 //= require_directory .
