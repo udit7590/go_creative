@@ -41,16 +41,7 @@
       <div class="row row-offcanvas row-offcanvas-left">
 
         <div class="col-centered col-md-4 main">
-          <% if flash[:alert] %>
-             <div class="alert alert-error">
-              <center><strong><%= flash[:alert] %></strong></center>
-            </div>
-          <% end %>
-          <% if flash[:notice] %>
-             <div class="alert alert-success">
-              <center><strong><%= flash[:notice] %></strong></center>
-            </div>
-          <% end %>
+          <%= render partial: 'shared/flash' %>
 
           <%= yield %>
 

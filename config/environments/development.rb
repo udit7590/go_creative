@@ -28,4 +28,15 @@ Gocreative::Application.configure do
   config.assets.debug = true
 
   config.assets.precompile += %w(dashboard_js/dashboard.js dashboard_css/dashboard.css)
+
+  #For Mailer
+  config.action_mailer.default_url_options = { :host => 'localhost:3000' }
+  
+  #load mail server settings
+  config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.perform_deliveries = true
+  
+  config.action_mailer.delivery_method = :sendmail
+  config.action_mailer.default_options = {from: 'site@gocreative.com'}
+
 end
