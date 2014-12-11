@@ -4,7 +4,5 @@
 </p>
 
 <h1 class="page-header">Welcome Admin
-  <p class="lead">(You last visited on: <%= current_admin_user.last_sign_in_at %>)</p>
+  <p class="lead">(Last visited: <%= current_admin_user.last_sign_in_at.to_s(:long) %>)</p>
 </h1>
-<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
-<br /><br /><br /><br /><br />

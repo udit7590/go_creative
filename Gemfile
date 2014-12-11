@@ -52,3 +52,6 @@ gem 'paperclip'
 
 # Use thin
 gem 'thin'
+
+# Required for deployment on heroku
+gem 'rails_12factor', group: :production
