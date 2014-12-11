@@ -9,10 +9,7 @@
  * compiled file, but it's generally better to create a new file per style scope.
  *
  *= require_self
- *= require 'css/bootstrap.css'
- *= require 'css/bootstrap-responsive.css'
- *= require 'css/prettyPhoto.css'
- *= require 'css/flexslider.css'
- *= require 'css/custom-styles.css'
+ *= require 'dashboard_css/bootstrap.min.css'
+ *= require 'dashboard_css/styles.css'
  *= require_directory .
  */
