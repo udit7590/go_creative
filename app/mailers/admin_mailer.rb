@@ -8,5 +8,5 @@ class AdminMailer < Devise::Mailer
   # to make sure that you mailer uses the devise views
   default template_path: 'devise/mailer'
 
-  default from: "site@gocreative.com"
+  default from: 'site@gocreative.com'
 end
