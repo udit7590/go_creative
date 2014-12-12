@@ -77,4 +77,7 @@ Gocreative::Application.configure do
 
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
+
+  # asset precompile
+  config.assets.precompile += %w(dashboard_js/dashboard.js dashboard_css/dashboard.css)
 end
