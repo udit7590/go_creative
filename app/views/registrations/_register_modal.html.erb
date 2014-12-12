@@ -7,6 +7,7 @@
         <h4 class="modal-title" id="myModalLabel">Go Creative Signup Page</h4>
       </div>
       <div class="modal-body">
+
         <%= form_for(:user, url: user_registration_path, class: 'form-signin', remote: true) do |f| %>
 
             <div class="input-prepend">
@@ -40,7 +41,7 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-large" data-dismiss="modal">Close</button>
+            <button type="button" id='loginModalButton' class="btn btn-large" onclick='switchModalWindow("userRegistrationModal", "userLoginModal")'>Login</button>
             <%= f.submit 'Sign up', class: 'btn btn-large btn-inverse' %>
           </div>
         <% end %>

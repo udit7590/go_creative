@@ -20,13 +20,21 @@
   <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
 
   <%= csrf_meta_tags %>
+  <script>
+    function switchModalWindow(firstModal, secondModal){
+      $('#' + firstModal).modal('hide');
+      $('#' + secondModal).modal('show');
+    }
+
+  </script>
 </head>
 
 <body class="home">
-    <!-- Color Bars (above header)-->
+  <!-- Color Bars (above header)-->
   <div class="color-bar-1"></div>
-    <div class="color-bar-2 color-bg"></div>
-    
+  <div class="color-bar-2 color-bg"></div>
+  <%= render 'shared/flash_message' %>
+
     <div class="container">
     
       <div class="row header"><!-- Begin Header -->
@@ -48,11 +56,15 @@
               </li>
               <li><a href="#">Projects</a></li>
               <li><a href="#">Contact</a></li>
-              <li><a href="#">Login</a></li>
+              <% if !signed_in? %>
+              <li><a href="#userLoginModal" role="button" data-toggle="modal">Login</a></li>
               <li><a href="#userRegistrationModal" role="button" data-toggle="modal">Signup</a></li>
+              <% else %>
+              <li><%= link_to :Logout, destroy_user_session_path, method: :delete %></li>
+              <% end%>
             </ul>
           </div>
-
+          <%= render 'sessions/login_modal' %>
           <%= render 'registrations/register_modal' %>
 
           <!-- Mobile Nav
