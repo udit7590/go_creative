@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <%= render 'shared/dashboard_head' %>
-  
+
   <body>
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container-fluid">
@@ -24,27 +24,24 @@
     </nav><!-- TOP NAVIGATION -->
 
     <div class="container-fluid">
-
       <div class="row row-offcanvas row-offcanvas-left">
 
-       <div class="col-sm-3 col-md-2 sidebar-offcanvas" id="sidebar" role="navigation">
+        <div class="col-sm-3 col-md-2 sidebar-offcanvas" id="sidebar" role="navigation">
+         
+          <ul class="nav nav-sidebar">
+            <li class="active"><a href="#">Overview</a></li>
+            <li><a href="#">Projects</a></li>
+          </ul>
+        
+        </div><!--/span SIDEBAR -->
 
-        <ul class="nav nav-sidebar">
-          <li class="active"><a href="#">Overview</a></li>
-          <li><a href="#">Projects</a></li>
-        </ul>
+        <div class="col-sm-9 col-md-10 main">
+          <%= render 'shared/flash_message' %>
+          <%= yield %>
+        </div><!--/row MAIN CONTENT-->
 
-      </div><!--/span SIDEBAR -->
-
-      <div class="col-sm-9 col-md-10 main">
-        <%= render 'shared/flash_message' %>
-        <%= yield %>
-
-      </div><!--/row MAIN CONTENT-->
-
-    </div>
-
-  </div><!--/.container-->
+      </div>
+    </div><!--/.container-->
 
   <%= render 'shared/dashboard_footer' %>
 
