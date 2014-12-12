@@ -78,10 +78,9 @@ Gocreative::Application.configure do
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
 
-<<<<<<< Updated upstream
   # asset precompile
   config.assets.precompile += %w(dashboard_js/dashboard.js dashboard_css/dashboard.css)
-=======
+
   #For Mailer
   config.action_mailer.default_url_options = { host: 'gocreative.herokuapp.com'}
 
@@ -91,5 +90,4 @@ Gocreative::Application.configure do
   
   config.action_mailer.delivery_method = :sendmail
   config.action_mailer.default_options = { from: 'site@gocreative.com' }
->>>>>>> Stashed changes
 end
