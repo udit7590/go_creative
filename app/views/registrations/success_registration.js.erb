@@ -1,4 +1,4 @@
-alert(<%= flash[:notice] || flash[:error] %>);
 alert('Thank you for registering with us. You will receive an email with futher instructions.');
 $('#userRegistrationModal').modal('hide');
-$('#userRegistrationModal').find('form').reset();
+$('#userRegistrationModal').find('form').trigger('reset');
+$("div.modal-body div.alert-error").remove();

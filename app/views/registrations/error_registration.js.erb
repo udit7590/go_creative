@@ -1,1 +1,21 @@
-alert()
+alert('We found some errors in the form.');
+
+var errorBox = '<div class="alert alert-error">',
+    $modalErrorBox = $("div.modal-body div.alert-error"),
+    errorMessages = null;
+
+<% @user.errors.full_messages.each do |msg| %>
+  if(errorMessages)
+    errorMessages += '<%= msg %><br />'
+  else
+    errorMessages = '<%= msg %><br />'
+<% end %>
+errorBox += errorMessages;
+errorBox += '</div>';
+
+if ($modalErrorBox.length != 0) {
+  $modalErrorBox.html(errorMessages);
+} else {
+  $('div.modal-body').prepend($(errorBox));
+}
+  
