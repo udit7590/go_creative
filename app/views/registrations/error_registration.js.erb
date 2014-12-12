@@ -1,4 +1,3 @@
-alert('We found some errors in the form.');
 
 var $errorBox = $('<div>', { class: 'alert alert-error' }),
     $modalBoxBody = $("#userRegistrationModal .modal-body"),
@@ -21,4 +20,3 @@ if ($modalErrorBox.length != 0) {
 } else {
   $modalBoxBody.prepend($errorBox);
 }
-  

@@ -15,8 +15,8 @@ class ApplicationController < ActionController::Base
 
   protected
   
-  #For permitting additional attributes to users devise model
-  def configure_permitted_parameters
-    devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(:first_name, :last_name, :email, :password, :password_confirmation, :country, :state, :city, :pincode, :address_line_1, :address_line_2, :phone_number) }
-  end
+    #For permitting additional attributes to users devise model
+    def configure_permitted_parameters
+      devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(:first_name, :last_name, :email, :password, :password_confirmation, :country, :state, :city, :pincode, :address_line_1, :address_line_2, :phone_number) }
+    end
 end
