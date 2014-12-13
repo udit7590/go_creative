@@ -19,6 +19,11 @@ body {
   .container {margin-right: 20px; margin-left: 20px;}
  }
 
+/*Custom: Never show the footer without scroll*/
+body > .container {
+	min-height: 670px;
+}
+
 /***** Titles and Headings *****/
 h1, h2, h3, h4 , h5, h6 {
 	font-family: "Oswald", sans-serif; 

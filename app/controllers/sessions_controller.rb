@@ -1,5 +1,4 @@
 class SessionsController < ::Devise::SessionsController
-  layout 'dashboard_login'
 
   before_action :check_user_confirmation, only: :create
 

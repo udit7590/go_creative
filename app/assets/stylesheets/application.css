@@ -14,5 +14,6 @@
  *= require 'css/prettyPhoto.css'
  *= require 'css/flexslider.css'
  *= require 'css/custom-styles.css'
+ *= require 'css/form.css'
  *= require_directory .
  */
