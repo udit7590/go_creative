@@ -1,0 +1,30 @@
+<!-- Modal -->
+<div class="modal fade" id="userLoginModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only"></span></button>
+        <h4 class="modal-title" id="myModalLabel">Go Creative Signup Page</h4>
+      </div>
+      <div class="modal-body">
+        <%= form_for(:user, url: user_session_path, remote: true) do |f| %>
+          <div class="input-prepend">
+            <span class="add-on">@</span>
+            <%= f.email_field :email, class: 'span2', placeholder: 'Username', size: 16, required: true %>
+          </div>
+          <div class="input-prepend">
+            <span class="add-on">P</span>
+            <%= f.password_field :password, autocomplete: "off", class: 'span2', size: 18, placeholder: 'Password', required: true %>
+            <% if @validatable %>
+            <em>(<%= @minimum_password_length %> characters minimum)</em>
+            <% end %><br />
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id='signupModalButton' class="btn btn-large" onclick='switchModalWindow("userLoginModal", "userRegistrationModal")'>Signup</button>
+        <%= f.submit 'Login', class: 'btn btn-large btn-inverse' %>
+      </div>
+      <% end %>
+    </div>
+  </div>
+</div>
