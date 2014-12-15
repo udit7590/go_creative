@@ -1,6 +1,9 @@
 Gocreative::Application.routes.draw do
 
   root 'home#index'
+
+  devise_for :users, controllers: { registrations: 'registrations', confirmations: 'confirmations', sessions: 'sessions' }
+
   devise_for :admin_users,
               controllers: { sessions: 'admin/sessions', passwords: 'admin/passwords' },
               path: 'admin',
