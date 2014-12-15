@@ -7,3 +7,4 @@
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
 AdminUser.create!(email: 'udit@vinsol.com', password: 'admin123', password_confirmation: 'admin123')
+AdminUser.create!(email: 'akhil.gupta@vinsol.com', password: 'admin123', password_confirmation: 'admin123')
