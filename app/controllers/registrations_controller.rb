@@ -1,17 +1,6 @@
 class RegistrationsController < Devise::RegistrationsController
   respond_to :html, :json
 
-  def new
-    build_resource({})
-    @validatable = devise_mapping.validatable?
-    if @validatable
-      @minimum_password_length = resource_class.password_length.min
-    end
-    yield resource if block_given?
-    # respond_with self.resource
-    render 'abc'
-  end
-
   def create
     build_resource(sign_up_params)
     resource_saved = resource.save
@@ -32,11 +21,12 @@ class RegistrationsController < Devise::RegistrationsController
         end
       end
     else
+      # Errors occurred while registration
       clean_up_passwords resource
       @validatable = devise_mapping.validatable?
-      if @validatable
-        @minimum_password_length = resource_class.password_length.min
-      end
+      
+      @minimum_password_length = resource_class.password_length.min if @validatable
+
       respond_to do |format|
         format.js { render 'registrations/error_registration' }
       end
