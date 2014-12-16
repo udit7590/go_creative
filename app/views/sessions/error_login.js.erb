@@ -1,14 +1,21 @@
 
 var $errorBox = $('<div>', { class: 'alert alert-error' }),
-    $modalErrorBox = $("div.modal-body div.alert-error"),
-    errorMessages = null;
+    $modalBoxBody = $("#userLoginModal .modal-body"),
+    $modalErrorBox = $modalBoxBody.find("div.alert-error"),
+    errorMessage = null;
 
-$errorBox.html('Invalid credentials, please try again.');
+<% if user_confirmed %>
+  errorMessage = 'Invalid credentials, please try again.';
+<% else %>
+  errorMessage = 'Please confirm your email first.';
+<% end %>
+
+$errorBox.html(errorMessage);
 
 // Displays the error box on the modal registration box
 if ($modalErrorBox.length != 0) {
-  $modalErrorBox.html(errorMessages);
+  $modalErrorBox.html(errorMessage);
 } else {
-  $('div.modal-body').prepend($errorBox);
+  $modalBoxBody.prepend($errorBox);
 }
   

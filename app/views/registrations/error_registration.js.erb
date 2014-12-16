@@ -1,7 +1,8 @@
 alert('We found some errors in the form.');
 
 var $errorBox = $('<div>', { class: 'alert alert-error' }),
-    $modalErrorBox = $("div.modal-body div.alert-error"),
+    $modalBoxBody = $("#userRegistrationModal .modal-body"),
+    $modalErrorBox = $modalBoxBody.find("div.alert-error"),
     errorMessages = null;
 
 // Generates a list of error messages found while registering the user
@@ -18,6 +19,6 @@ $errorBox.html(errorMessages);
 if ($modalErrorBox.length != 0) {
   $modalErrorBox.html(errorMessages);
 } else {
-  $('div.modal-body').prepend($errorBox);
+  $modalBoxBody.prepend($errorBox);
 }
   
