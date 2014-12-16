@@ -1,4 +1,4 @@
-<!-- Modal -->
+  <!-- Modal -->
 <div class="modal fade" id="userLoginModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -10,7 +10,7 @@
         <%= form_for(:user, url: user_session_path, remote: true) do |f| %>
           <div class="input-prepend">
             <span class="add-on">@</span>
-            <%= f.email_field :email, class: 'span2', placeholder: 'Email Address', size: 16, required: true %>
+            <%= f.email_field :email, class: 'span2', placeholder: 'Username', size: 16, required: true %>
           </div>
           <div class="input-prepend">
             <span class="add-on">P</span>
@@ -19,6 +19,9 @@
             <em>(<%= @minimum_password_length %> characters minimum)</em>
             <% end %><br />
           </div>
+          <%- if devise_mapping.recoverable? && (!controller_name.in? %w(passwords registrations)) %>
+          <%= link_to 'Forgot your password?', new_password_path(resource_name) %><br />
+          <% end -%>
       </div>
       <div class="modal-footer">
         <button type="button" id='signupModalButton' class="btn btn-large" onclick='switchModalWindow("userLoginModal", "userRegistrationModal")'>Signup</button>
