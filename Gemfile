@@ -55,3 +55,8 @@ gem 'thin'
 
 # Required for deployment on heroku
 gem 'rails_12factor', group: :production
+
+group :development, :test do
+  gem 'rspec-rails', '~> 3.0'
+  gem 'shoulda-matchers'
+end

@@ -11,10 +11,10 @@
 
   <!-- Favicons (Customize)
   ================================================== -->
-  <link rel="shortcut icon" href="/assets/img/favicon.ico">
-  <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
-  <link rel="apple-touch-icon" sizes="72x72" href="/assets/img/apple-touch-icon-72x72.png">
-  <link rel="apple-touch-icon" sizes="114x114" href="/assets/img/apple-touch-icon-114x114.png">
+  <%= favicon_link_tag 'img/favicon.ico', rel: 'shortcut icon' %>
+  <%= favicon_link_tag 'img/apple-touch-icon.png', rel: 'apple-touch-icon' %>
+  <%= favicon_link_tag 'img/apple-touch-icon-72x72.png', rel: 'apple-touch-icon' %>
+  <%= favicon_link_tag 'img/apple-touch-icon-114x114.png', rel: 'apple-touch-icon' %>
 
   <!-- JS -->
   <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
@@ -36,7 +36,7 @@
         <!-- Logo
         ================================================== -->
         <div class="span5 logo">
-          <a href="index.htm"><img src="/assets/img/go-creative-logo.png" alt="" /></a>
+          <a href="index.htm"><%= image_tag 'img/go-creative-logo.png' %></a>
             <h5>Big Greams... Global Way</h5>
         </div>
         
