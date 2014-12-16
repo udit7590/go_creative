@@ -15,6 +15,8 @@ class RegistrationsController < Devise::RegistrationsController
         expire_data_after_sign_in!
       end
 
+      @redirect_to_path = request.referer
+      
       respond_to do |format|
         format.js { render 'registrations/success_registration' }
       end

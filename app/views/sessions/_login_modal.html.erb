@@ -10,7 +10,7 @@
         <%= form_for(:user, url: user_session_path, remote: true) do |f| %>
           <div class="input-prepend">
             <span class="add-on">@</span>
-            <%= f.email_field :email, class: 'span2', placeholder: 'Username', size: 16, required: true %>
+            <%= f.email_field :email, class: 'span2', placeholder: 'Email Address', size: 16, required: true %>
           </div>
           <div class="input-prepend">
             <span class="add-on">P</span>
@@ -20,7 +20,7 @@
             <% end %><br />
           </div>
           <%- if devise_mapping.recoverable? && (!controller_name.in? %w(passwords registrations)) %>
-          <%= link_to 'Forgot your password?', new_password_path(resource_name) %><br />
+          <%= link_to 'Forgot your password?', new_user_password_path(resource_name) %><br />
           <% end -%>
       </div>
       <div class="modal-footer">

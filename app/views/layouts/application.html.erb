@@ -60,6 +60,7 @@
           </div>
           <%= render '/sessions/login_modal' %>
           <%= render '/registrations/register_modal' %>
+          <%= render '/shared/loader_modal' %>
 
           <!-- Mobile Nav
           ================================================== -->
@@ -142,6 +143,10 @@
       $('#' + secondModal).modal('show');
       $('.modal').find('.alert.alert-error').remove();
     }
+    $('.js-loading-bar').modal({
+      backdrop: 'static',
+      show: false
+    });
     $('.modal').on('hidden.bs.modal', function (e) {
       $(this).find('form').trigger('reset');
       $(this).find('.alert.alert-error').remove();

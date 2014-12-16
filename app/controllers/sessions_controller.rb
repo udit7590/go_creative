@@ -33,6 +33,7 @@ class SessionsController < ::Devise::SessionsController
 
     def check_user_confirmation
       user = User.find_by_email(params[:user][:email])
+      return if user.nil?
       unless user && user.confirmed?
         render 'sessions/error_login', locals: { user_confirmed: false }
       end
