@@ -1,6 +1,8 @@
 class SessionsController < ::Devise::SessionsController
   layout 'dashboard_login'
 
+  before_action :check_user_confirmation, only: :create
+
   def create
     resource = warden.authenticate!(scope: resource_name, recall: 'sessions#failure')
     sign_in_and_redirect(resource_name, resource)
@@ -18,7 +20,7 @@ class SessionsController < ::Devise::SessionsController
   end
  
   def failure
-    return render 'sessions/error_login'
+    render 'sessions/error_login', locals: { user_confirmed: true }
   end
 
   protected
@@ -28,6 +30,13 @@ class SessionsController < ::Devise::SessionsController
 
     def after_sign_out_path_for(resource_or_scope)
       root_path
+    end
+
+    def check_user_confirmation
+      user = User.find_by_email(params[:user][:email])
+      unless user && user.confirmed?
+        render 'sessions/error_login', locals: { user_confirmed: false }
+      end
     end
 
 end
