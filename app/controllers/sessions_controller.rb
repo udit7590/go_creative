@@ -18,7 +18,7 @@ class SessionsController < ::Devise::SessionsController
   end
  
   def failure
-    return render js: "alert('Invalid credentials, please try again.')"
+    return render 'sessions/error_login'
   end
 
   protected

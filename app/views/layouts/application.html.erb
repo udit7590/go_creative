@@ -11,22 +11,16 @@
 
   <!-- Favicons (Customize)
   ================================================== -->
-  <link rel="shortcut icon" href="assets/img/favicon.ico">
-  <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
-  <link rel="apple-touch-icon" sizes="72x72" href="assets/img/apple-touch-icon-72x72.png">
-  <link rel="apple-touch-icon" sizes="114x114" href="assets/img/apple-touch-icon-114x114.png">
+  <link rel="shortcut icon" href="/assets/img/favicon.ico">
+  <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/assets/img/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/assets/img/apple-touch-icon-114x114.png">
 
   <!-- JS -->
   <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
 
   <%= csrf_meta_tags %>
-  <script>
-    function switchModalWindow(firstModal, secondModal){
-      $('#' + firstModal).modal('hide');
-      $('#' + secondModal).modal('show');
-    }
 
-  </script>
 </head>
 
 <body class="home">
@@ -42,7 +36,7 @@
         <!-- Logo
         ================================================== -->
         <div class="span5 logo">
-          <a href="index.htm"><img src="assets/img/go-creative-logo.png" alt="" /></a>
+          <a href="index.htm"><img src="/assets/img/go-creative-logo.png" alt="" /></a>
             <h5>Big Greams... Global Way</h5>
         </div>
         
@@ -57,8 +51,8 @@
               <li><a href="#">Projects</a></li>
               <li><a href="#">Contact</a></li>
               <% if !signed_in? %>
-              <li><a href="#userLoginModal" role="button" data-toggle="modal">Login</a></li>
-              <li><a href="#userRegistrationModal" role="button" data-toggle="modal">Signup</a></li>
+              <li><a href="#userLoginModal" role="button" data-backdrop="static" data-toggle="modal">Login</a></li>
+              <li><a href="#userRegistrationModal" data-backdrop="static" role="button" data-toggle="modal">Signup</a></li>
               <% else %>
               <li><%= link_to :Logout, destroy_user_session_path, method: :delete %></li>
               <% end%>
@@ -141,6 +135,18 @@
 
     <!-- Scroll to Top -->  
     <div id="toTop" class="hidden-phone hidden-tablet">Back to Top</div>
-    
+
+    <script>
+    function switchModalWindow(firstModal, secondModal){
+      $('#' + firstModal).modal('hide');
+      $('#' + secondModal).modal('show');
+      $('.modal').find('.alert.alert-error').remove();
+    }
+    $('.modal').on('hidden.bs.modal', function (e) {
+      $(this).find('form').trigger('reset');
+      $(this).find('.alert.alert-error').remove();
+    });
+
+  </script>
 </body>
 </html>
