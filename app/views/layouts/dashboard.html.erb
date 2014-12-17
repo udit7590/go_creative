@@ -16,7 +16,7 @@
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="#">Dashboard</a></li>
+            <li><%= link_to :Dashboard, admin_root_path, method: :get %></li>
             <li><%= link_to :Logout, destroy_admin_user_session_path, method: :delete %></li>
           </ul>
         </div>
@@ -29,7 +29,14 @@
         <div class="col-sm-3 col-md-2 sidebar-offcanvas" id="sidebar" role="navigation">
          
           <ul class="nav nav-sidebar">
-            <li class="active"><a href="#">Overview</a></li>
+            <li><%= link_to_if !current_page?(admin_root_path), :Overview, admin_root_path, method: :get do %>
+                <a href="#" class="active">Overview</a>
+                <% end %>
+            </li>
+            <li><%= link_to_if !current_page?(admin_users_path), :Users, admin_users_path, method: :get do %>
+              <a href="#" class="active">Users</a>
+              <% end %>
+            </li>
             <li><a href="#">Projects</a></li>
           </ul>
         

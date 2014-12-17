@@ -2,6 +2,10 @@ Gocreative::Application.routes.draw do
 
   root 'home#index'
 
+  concern :paginatable do
+    get '(page/:page)', action: :index, on: :collection, as: ''
+  end
+
   devise_for :users, controllers: { 
                 registrations: 'registrations', 
                 confirmations: 'confirmations', 
@@ -16,6 +20,7 @@ Gocreative::Application.routes.draw do
 
   namespace :admin do
     root 'dashboard#index', controller: 'admin/dashboard'
+    resources :users, only: :index, concerns: :paginatable
   end
 
 end
