@@ -1,7 +1,8 @@
 alert('We found some errors in the form.');
 
 var $errorBox = $('<div>', { class: 'alert alert-error' }),
-    $modalBoxBody = $("#userRegistrationModal .modal-body"),
+    $modalBox = $("#userRegistrationModal"),
+    $modalBoxBody = $modalBox.find(".modal-body"),
     $modalErrorBox = $modalBoxBody.find("div.alert-error"),
     errorMessages = null;
 
@@ -21,4 +22,7 @@ if ($modalErrorBox.length != 0) {
 } else {
   $modalBoxBody.prepend($errorBox);
 }
+
+$modalBox.find('input[type=submit]').removeAttr("disabled");
+$modalBox.find('input[type=submit]').attr('value', "Sign up");
   
