@@ -6,13 +6,7 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable, :confirmable
 
   def name
-    if(first_name && last_name)
-      first_name + ' ' + last_name
-    elsif first_name
-      first_name
-    else
-      'User'
-    end
+    [first_name, last_name].join(' ').presence || 'Admin'
   end
 
 end

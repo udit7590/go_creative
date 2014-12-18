@@ -13,7 +13,6 @@
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
-//= require js/jquery.validate.js
 //= require 'js/bootstrap.js'
 //= require 'js/jquery.prettyPhoto.js'
 //= require 'js/jquery.flexslider.js'
