@@ -8,7 +8,7 @@
       </div>
       <div class="modal-body">
 
-        <%= form_for(:user, url: user_registration_path, class: 'form-signin', remote: true) do |f| %>
+        <%= form_for(User.new, url: user_registration_path, class: 'form-signin', remote: true) do |f| %>
 
             <div class="input-prepend">
               <span class="add-on">F</span>

@@ -7,7 +7,7 @@
         <h4 class="modal-title" id="myModalLabel">Go Creative Sign In Page</h4>
       </div>
       <div class="modal-body">
-        <%= form_for(:user, url: user_session_path, remote: true) do |f| %>
+        <%= form_for(User.new, url: user_session_path, remote: true) do |f| %>
           <div class="input-prepend">
             <span class="add-on">@</span>
             <%= f.email_field :email, class: 'span2', placeholder: 'Email Address*', size: 16, required: true, pattern: '^[-a-z0-9_+]+(\.?[-a-z0-9_+]+)*@[a-z0-9][-a-z0-9]*(\.?[-a-z0-9]+)*\.[a-z]{2,}$', title: 'Please provide a valid email address.' %>
