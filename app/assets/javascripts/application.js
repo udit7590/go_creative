@@ -14,6 +14,7 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require 'js/bootstrap.js'
+//= require 'js/dropzone.js'
 //= require 'js/jquery.prettyPhoto.js'
 //= require 'js/jquery.flexslider.js'
 //= require 'js/jquery.easing.1.3.js'

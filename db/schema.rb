@@ -18,18 +18,22 @@ ActiveRecord::Schema.define(version: 20141218055549) do
 
   create_table "addresses", force: true do |t|
     t.boolean  "primary"
-    t.integer  "user_id_id"
+    t.integer  "user_id"
     t.string   "country"
     t.string   "state"
     t.string   "city"
     t.integer  "pincode"
     t.text     "full_address"
-    t.string   "address_proof_file_name"
-    t.string   "address_proof_content_type"
-    t.integer  "address_proof_file_size"
-    t.datetime "address_proof_updated_at"
+    t.string   "primary_address_proof_file_name"
+    t.string   "primary_address_proof_content_type"
+    t.integer  "primary_address_proof_file_size"
+    t.datetime "primary_address_proof_updated_at"
+    t.string   "current_address_proof_file_name"
+    t.string   "current_address_proof_content_type"
+    t.integer  "current_address_proof_file_size"
+    t.datetime "current_address_proof_updated_at"
     t.datetime "verified_at"
-    t.integer  "admin_user_id_id"
+    t.integer  "admin_user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -76,6 +80,11 @@ ActiveRecord::Schema.define(version: 20141218055549) do
     t.string   "profile_picture_content_type"
     t.integer  "profile_picture_file_size"
     t.datetime "profile_picture_updated_at"
+    t.string   "pan_card"
+    t.string   "pan_card_copy_file_name"
+    t.string   "pan_card_copy_content_type"
+    t.integer  "pan_card_copy_file_size"
+    t.datetime "pan_card_copy_updated_at"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

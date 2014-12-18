@@ -1,0 +1,45 @@
+var AccountsPage = (function() {
+
+  function AccountsPage(panCardUploadBoxName, addressProofUploadBoxName) {
+
+    this.panCardUploadBoxName = "#" + panCardUploadBoxName;
+    this.addressProofUploadBoxName= "#" + addressProofUploadBoxName;
+
+    this.pancardDropzone = null;
+    this.addressProofDropzone = null;
+  }
+
+  AccountsPage.prototype.createDropZonesForUpload = function() {
+    this.pancardDropzone = new Dropzone(this.panCardUploadBoxName, {
+      maxFilesize: 2, // MB
+      maxFiles: 1
+    });
+
+    this.addressProofDropzone = new Dropzone(this.addressProofUploadBoxName, {
+      maxFilesize: 2, // MB
+      maxFiles: 1
+    });
+  };
+
+  AccountsPage.prototype.bindEventsForDropzones = function() {
+    this.pancardDropzone.on('success', function() {
+      alert('Your pancard copy is successfully uploaded.');
+      this.disable();
+    });
+    this.addressProofDropzone.on('success', function() {
+      alert('Your address proof copy is successfully uploaded.');
+      this.disable();
+    });
+  };
+
+  //Return the class
+  return AccountsPage;
+})();
+
+$(function() {
+  var $dropboxes = $('.dropbox'),
+      accountsPage = new AccountsPage('pancard_upload', 'address_proof_upload');
+
+  accountsPage.createDropZonesForUpload();
+  accountsPage.bindEventsForDropzones();
+});

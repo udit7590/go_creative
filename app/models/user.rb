@@ -8,7 +8,16 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable, :confirmable
 
   has_many :addresses
+  has_attached_file :pan_card_copy, styles: { thumbnail: '60x60#' }
 
+  validates_attachment_content_type :pan_card_copy, content_type: %w(image/jpg image/jpeg image/png)
+  validates_attachment_file_name :pan_card_copy, matches: %w(/png\Z/ /jpe?g\Z/)
+
+  accepts_nested_attributes_for :addresses
+  
+  #-----------------------------------------------------
+  # => Section for methods
+  #-----------------------------------------------------
   def name
     [first_name, last_name].join(' ').presence || 'User'
   end

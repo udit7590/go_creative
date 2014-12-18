@@ -1,0 +1,26 @@
+<div class="span4 sidebar page-sidebar"><!-- Begin sidebar column -->
+
+  <!--Latest News-->
+  <h2 class="title-bg">Hi <%= @user.first_name%></h2>
+  <center><%= image_tag 'site/user_profile1.png' %></center>
+  <br />
+
+  <!--Navigation-->
+  <h5 class="title-bg">More Settings</h5>
+  <ul class="post-category-list">
+    <li><a href="#">Reset my password</a></li>
+    <li><a href="#">Update address and PAN card info</a></li>
+    <li><a href="#">Change Profile Picture</a></li>
+  </ul>
+
+  <!--Comments and Messages-->
+  <h5 class="title-bg">Messages &amp; Comments</h5> 
+  <ul class="popular-posts">
+    <li>
+      <%= image_tag 'img/gallery/gallery-img-2-thumb.jpg', alt: 'Popular Post' %></a>
+      <h6><a href="#">Lorem ipsum dolor sit amet consectetur adipiscing elit</a></h6>
+      <em>Posted on 09/01/15</em>
+    </li>
+  </ul>
+
+</div><!-- End sidebar column -->
