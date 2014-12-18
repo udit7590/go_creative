@@ -46,15 +46,24 @@
           <div class="navbar hidden-phone">
             <ul class="nav">
               <li class="active">
-                  <a href="#">Home </b></a>
+                  <%= link_to :Home, root_path, method: :get %></a>
               </li>
               <li><a href="#">Projects</a></li>
               <li><a href="#">Contact</a></li>
               <% if !signed_in? %>
-              <li><a href="#userLoginModal" role="button" data-backdrop="static" data-toggle="modal">Login</a></li>
-              <li><a href="#userRegistrationModal" data-backdrop="static" role="button" data-toggle="modal">Signup</a></li>
+                <li><a href="#userLoginModal" role="button" data-backdrop="static" data-toggle="modal">Login</a></li>
+                <li><a href="#userRegistrationModal" data-backdrop="static" role="button" data-toggle="modal">Signup</a></li>
               <% else %>
-              <li><%= link_to :Logout, destroy_user_session_path, method: :delete %></li>
+                
+                <li class="dropdown">
+                  <a class="dropdown-toggle" data-toggle="dropdown" href="index.htm">My Account <b class="caret"></b></a>
+                  <ul class="dropdown-menu">
+                      <li><%= link_to :Settings, edit_account_path, method: :get %></li>
+                      <li><a href="#">My Projects</a></li>
+                      <li><a href="#">Profile</a></li>
+                      <li><%= link_to :Logout, destroy_user_session_path, method: :delete %></li>
+                  </ul>
+                </li>
               <% end%>
             </ul>
           </div>

@@ -27,5 +27,20 @@ div.field_with_errors {
   vertical-align: bottom;
 }
 
-input:required {
+.control-group {
+  font-family: "Oswald", sans-serif;
+}
+
+.control-group > label {
+  font-weight: bold;
+}
+
+.text-special {
+  color: #d8450b;
+  font-family: "Oswald", sans-serif;
+}
+
+.text-warning {
+  color: #b94a48;
+  font-weight: bold;
 }
