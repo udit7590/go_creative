@@ -21,11 +21,12 @@ class AccountsController < ApplicationController
   end
 
   def upload_pan_card_image
-    # TODO: Upload pan card
-  end
-
-  def upload_address_proof
-    # TODO: Upload address proof
+    @user.pan_card_copy = params[:file]
+    if(@user.save)
+      render json: { message: "success", fileID: '1' }, :status => 200
+    else
+      render json: { error: @user.errors.full_messages.join(',')}, :status => 400
+    end
   end
 
   private

@@ -14,10 +14,7 @@ class User < ActiveRecord::Base
   validates_attachment_file_name :pan_card_copy, matches: %w(/png\Z/ /jpe?g\Z/)
 
   accepts_nested_attributes_for :addresses
-  
-  #-----------------------------------------------------
-  # => Section for methods
-  #-----------------------------------------------------
+
   def name
     [first_name, last_name].join(' ').presence || 'User'
   end
