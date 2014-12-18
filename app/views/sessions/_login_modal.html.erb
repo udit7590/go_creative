@@ -4,23 +4,25 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only"></span></button>
-        <h4 class="modal-title" id="myModalLabel">Go Creative Signup Page</h4>
+        <h4 class="modal-title" id="myModalLabel">Go Creative Sign In Page</h4>
       </div>
       <div class="modal-body">
         <%= form_for(:user, url: user_session_path, remote: true) do |f| %>
           <div class="input-prepend">
             <span class="add-on">@</span>
-            <%= f.email_field :email, class: 'span2', placeholder: 'Username', size: 16, required: true %>
+            <%= f.email_field :email, class: 'span2', placeholder: 'Email Address*', size: 16, required: true, pattern: '^[-a-z0-9_+]+(\.?[-a-z0-9_+]+)*@[a-z0-9][-a-z0-9]*(\.?[-a-z0-9]+)*\.[a-z]{2,}$', title: 'Please provide a valid email address.' %>
+            <span rel="popover" data-content="Valid examples: abc@xyz.com<br />Invalid examples: ab @xy.com, abc@xyz, abc@xyz.co" data-animation="true" data-original-title="Email Instructions"><i class="icon-question-sign"></i></span>
           </div>
           <div class="input-prepend">
             <span class="add-on">P</span>
-            <%= f.password_field :password, autocomplete: "off", class: 'span2', size: 18, placeholder: 'Password', required: true %>
-            <% if @validatable %>
-            <em>(<%= @minimum_password_length %> characters minimum)</em>
-            <% end %><br />
+            <%= f.password_field :password, autocomplete: "off", class: 'span2', size: 18, placeholder: 'Password*', required: true, min: 8 %>
+            <span rel="popover" data-content="Must have atleast 8 characters" data-animation="true" data-original-title="Password Instructions"><i class="icon-question-sign"></i></span>
           </div>
           <%- if devise_mapping.recoverable? && (!controller_name.in? %w(passwords registrations)) %>
-          <%= link_to 'Forgot your password?', new_password_path(resource_name) %><br />
+          <%= link_to 'Forgot your password?', new_user_password_path(resource_name) %><br />
+          <% end -%>
+          <%- if devise_mapping.confirmable? && controller_name != 'confirmations' %>
+            <%= link_to "Didn't receive confirmation instructions?", new_user_confirmation_path(resource_name) %><br />
           <% end -%>
       </div>
       <div class="modal-footer">

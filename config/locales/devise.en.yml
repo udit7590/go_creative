@@ -4,8 +4,10 @@ en:
   devise:
     confirmations:
       confirmed: "Your email address has been successfully confirmed."
-      send_instructions: "You will receive an email with instructions for how to confirm your email address in a few minutes."
+      send_instructions: "You will receive an email with instructions for how to confirm your email address in a few minutes. The token is valid only for one day."
       send_paranoid_instructions: "If your email address exists in our database, you will receive an email with instructions for how to confirm your email address in a few minutes."
+      already_confirmed_resource: "Your account has already been confirmed."
+      confirm_token_expired: "The confirm token has been expired. Please provide your email again to send confirmation token"
     failure:
       already_authenticated: "You are already signed in."
       inactive: "Your account is not activated yet."

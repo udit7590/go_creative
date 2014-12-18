@@ -2,3 +2,30 @@
   background-color: white;
   padding: 20px;
 }
+
+div.field_with_errors {
+  display: inline;
+}
+
+.input-prepend > em {
+  display: inline;
+  font-size: 12px;
+  color: blue;
+  vertical-align: bottom;
+  margin-left: 10px;
+}
+
+.input-prepend > span {
+  margin-left: 10px;
+}
+
+.input-prepend .required-after {
+  display: inline;
+  font-size: 12px;
+  font-style: italic;
+  margin-left: 10px;
+  vertical-align: bottom;
+}
+
+input:required {
+}
