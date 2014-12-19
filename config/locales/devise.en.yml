@@ -8,6 +8,7 @@ en:
       send_paranoid_instructions: "If your email address exists in our database, you will receive an email with instructions for how to confirm your email address in a few minutes."
       already_confirmed_resource: "Your account has already been confirmed."
       confirm_token_expired: "The confirm token has been expired. Please provide your email again to send confirmation token"
+      invalid_user: "You have not signed up with us till now. Please click the signup button to register."
     failure:
       already_authenticated: "You are already signed in."
       inactive: "Your account is not activated yet."
@@ -35,6 +36,7 @@ en:
       updated: "Your password has been changed successfully. You are now signed in."
       updated_not_active: "Your password has been changed successfully."
       reset_password_needs_confirmation: "You need to confirm your account first before you can reset your password. If you have not received confirmation instructions, please provide your email again."
+      invalid_token: "Your password token is invalid. Please request for your password again."
     registrations:
       destroyed: "Bye! Your account has been successfully cancelled. We hope to see you again soon."
       signed_up: "Welcome! You have signed up successfully."

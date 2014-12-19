@@ -4,21 +4,21 @@ class ConfirmationsController < Devise::ConfirmationsController
   def show
     @resource = resource_class.find_by_confirmation_token Devise.token_generator.
     digest(self, :confirmation_token, @original_token)
-
     if @resource
-      set_flash_message :notice, :already_confirmed_resource
-      @resource = User.find_by_email(params[:email])
-      sign_in_and_redirect resource_name, @resource
-    elsif @resource.valid?
-      if @resource.confirm!
-        set_flash_message :notice, :confirmed
-        sign_in_and_redirect resource_name, @resource
-      else
-        set_flash_message :notice, :confirm_token_expired
-        redirect_to action: :new
+      if @resource.valid?
+        if @resource.confirm!
+          set_flash_message :notice, :confirmed
+          sign_in_and_redirect resource_name, @resource
+        else
+          set_flash_message :alert, :confirm_token_expired
+          redirect_to action: :new
+        end
       end
     else
-      render action: :show
+      if !sign_in_if_confirmed(params[:email])
+        set_flash_message :alert, :invalid_user
+        redirect_to action: :index, controller: :home
+      end
     end
 
   end
@@ -41,6 +41,15 @@ class ConfirmationsController < Devise::ConfirmationsController
 
     def after_resending_confirmation_instructions_path_for(resource_name)
       root_path
+    end
+
+    def sign_in_if_confirmed(email)
+      @resource = User.find_by_email(email)
+      if @resource && @resource.confirmed?
+        set_flash_message :notice, :already_confirmed_resource
+        sign_in_and_redirect resource_name, @resource
+      end
+      @resource
     end
 
 end
