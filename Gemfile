@@ -62,3 +62,6 @@ group :development, :test do
 end
 
 gem 'non-stupid-digest-assets', group: :production
+
+#For Pagination
+gem 'kaminari'
