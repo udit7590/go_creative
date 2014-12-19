@@ -30,8 +30,8 @@
          
           <ul class="nav nav-sidebar">
             <li><%= link_to_if !current_page?(admin_root_path), :Overview, admin_root_path, method: :get do %>
-                <a href="#" class="active">Overview</a>
-                <% end %>
+              <a href="#" class="active">Overview</a>
+              <% end %>
             </li>
             <li><%= link_to_if !current_page?(admin_users_path), :Users, admin_users_path, method: :get do %>
               <a href="#" class="active">Users</a>
