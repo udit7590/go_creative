@@ -1,5 +1,5 @@
 module AccountHelper
-  def address_string(index)
-    index == 0 ? 'Current Address' : 'Permanent Address'
+  def address_string(is_primary)
+    is_primary ? 'Permanent Address' : 'Current Address'
   end
 end

@@ -1,17 +1,18 @@
 class Address < ActiveRecord::Base
   belongs_to :user
 
-  scope :primary_address, -> { where(primary: true) }
+  attr_accessor :same_as_primary
 
-  has_attached_file :primary_address_proof, styles: { thumbnail: '60x60#' }
-  has_attached_file :current_address_proof, styles: { thumbnail: '60x60#' }
+  has_attached_file :address_proof, styles: { thumbnail: '60x60#' }
 
+  validates_attachment_content_type :address_proof, content_type: %w(image/jpg image/jpeg image/png image/gif)
 
-  validates_attachment :primary_address_proof, 
-                        content_type: { content_type: %w(image/jpg image/jpeg image/png) },
-                        size: { in: 0..2.megabytes }
+  def self.current_address
+    where(primary: false).first
+  end
 
-  validates_attachment :current_address_proof, 
-                        content_type: { content_type: %w(image/jpg image/jpeg image/png) },
-                        size: { in: 0..2.megabytes }                        
+  def self.primary_address
+    where(primary: true).first
+  end
+
 end

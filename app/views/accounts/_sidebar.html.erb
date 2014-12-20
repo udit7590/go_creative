@@ -8,8 +8,8 @@
   <!--Navigation-->
   <h5 class="title-bg">More Settings</h5>
   <ul class="post-category-list">
-    <li><a href="#">Reset my password</a></li>
-    <li><a href="#">Update address and PAN card info</a></li>
+    <li><%= link_to 'Update Profile', edit_account_path, method: :get %></li>
+    <li><%= link_to 'Reset my password', edit_user_registration_path, method: :get %></li>
     <li><a href="#">Change Profile Picture</a></li>
   </ul>
 

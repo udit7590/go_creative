@@ -39,4 +39,8 @@ class RegistrationsController < Devise::RegistrationsController
       devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(:first_name, :last_name, :email, :password, :password_confirmation, :country, :state, :city, :pincode, :address_line_1, :address_line_2, :phone_number) }
     end
 
+    def after_update_path_for(resource)
+      edit_account_path
+    end
+
 end
