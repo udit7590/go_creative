@@ -1,0 +1,22 @@
+<div class="row">
+  <div class="span4">
+    <h5>PAN Card Attachment</h5>
+    <p>This is the copy available with us. You can upload a new attachment to replace this file.</p>
+    <%= image_tag @user.pan_card_copy, size: '104x52' %>
+    <% if @user.pan_card_copy %>
+    <%= form_tag('/account/upload_pan_card_image', method: :post, multipart: true, class: 'dropzone', id: 'pancard_upload') do %>
+    <% end %>
+    <% else %>
+    <h5>PAN Card Attachment</h5>
+    <p class="text-warning">You have not attached any proof for your PAN card till now. Please provide us the proof if you want to start a project on our website. The details will be kept confidential with us.</p>
+    <%= form_tag('/account/upload_pan_card_image', method: :post, multipart: true, class: 'dropzone', id: 'pancard_upload') do %>
+    <% end %>
+    <% end %>
+  </div>
+  <div class="span4">
+    <h5>Address Proof Attachment</h5>
+    <p class="text-warning">You have not attached any proof for your address till now. Please provide us the proof if you want to start a project on our website. The details will be kept confidential with us.</p>
+    <%= form_tag('/upload', multipart: true, class: 'dropzone', id: 'address_proof_upload') do %>
+    <% end %>
+  </div>
+</div>

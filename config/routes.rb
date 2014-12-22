@@ -23,4 +23,12 @@ Gocreative::Application.routes.draw do
     resources :users, only: :index, concerns: :paginatable
   end
 
+  #Singular resource for account
+  resource :account, only: [:show, :edit, :destroy, :update] do
+    # For PAN Card upload
+    post :upload_pan_card_image
+    # For Address Proof upload
+    post :upload_address_proof
+  end
+
 end

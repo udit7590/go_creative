@@ -1,0 +1,64 @@
+<!-- Page Content
+================================================== --> 
+<div class="row"><!--Container row-->
+
+  <!-- Page Sidebar
+  ================================================== --> 
+  <%= render partial: 'sidebar' %>
+
+  <!-- Page Content
+  ================================================== --> 
+  <div class="span8"><!--Begin page content column-->
+
+    <h2 class="title-bg">Your Account Settings <%= image_tag 'site/account_settings.png', size: '42x42', class: 'pull-right' %></h2>
+
+    <%= form_for(@user, url: account_path, method: :patch, html: { class: 'form-horizontal' }) do |f| %>
+    <fieldset>
+      <!-- Form Name -->
+      <legend>Your Email ID: <span class='text-special'><%= @user.email %></span></legend>
+
+      <div class="control-group">
+        <%= f.label :first_name, 'First Name', class: 'control-label' %>
+        <div class="controls">
+          <%= f.text_field :first_name, autofocus: true, class: 'input-xlarge', placeholder: 'First Name', size: 16, required: true %>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <%= f.label :last_name, 'Last Name', class: 'control-label' %>
+        <div class="controls">
+          <%= f.text_field :last_name, class: 'input-xlarge', placeholder: 'Last Name', size: 16, required: true %>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <%= f.label :phone_number, 'Phone Number', class: 'control-label' %>
+        <div class="controls">
+          <%= f.phone_field :phone_number, class: 'input-xlarge', placeholder: 'Phone Number', size: 16 %>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <%= f.label :pan_card, 'PAN', class: 'control-label' %>
+        <div class="controls">
+          <%= f.text_field :pan_card, class: 'input-xlarge', placeholder: 'PAN Card Number', size: 16 %>
+          <p class="help-block">Required if you want to start a project here.</p>
+        </div>
+      </div>
+
+      <%= render partial: 'address_fields_for_form', locals: { form: f } %>
+
+      <div class="control-group">
+        <div class="controls">
+          <%= f.submit 'Save Settings', class: 'btn btn-large btn-inverse' %>
+        </div>
+      </div>
+
+    </fieldset>
+    <% end %>
+    
+    <%= render partial: 'upload_boxes' %>
+
+  </div> <!--End page content column--> 
+
+</div><!-- End container row -->

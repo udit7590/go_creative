@@ -1,0 +1,48 @@
+<%= form.fields_for :addresses do |addresses_form| %>
+<hr/>
+
+<%if addresses_form.index == 1 %>
+<div class="control-group">
+  <%= addresses_form.label :primary, 'Same as current address', class: 'control-label' %>
+  <div class="controls">
+    <%= addresses_form.check_box :primary, class: 'input-xlarge' %>
+  </div>
+</div>
+<% end %>
+
+<div class="control-group">
+  <%= addresses_form.label :full_address, address_string(addresses_form.index), class: 'control-label' %>
+  <div class="controls">
+    <%= addresses_form.text_area :full_address, class: 'input-xlarge', placeholder: 'Address', size: 24 %>
+  </div>
+</div>
+
+<div class="control-group">
+  <%= addresses_form.label :city, class: 'control-label' %>
+  <div class="controls">
+    <%= addresses_form.text_field :city, class: 'input-xlarge', placeholder: 'City', size: 24 %>
+  </div>
+</div>
+
+<div class="control-group">
+  <%= addresses_form.label :pincode, class: 'control-label' %>
+  <div class="controls">
+    <%= addresses_form.number_field :pincode, class: 'input-xlarge', placeholder: 'Pincode', size: 24 %>
+  </div>
+</div>
+
+<div class="control-group">
+  <%= addresses_form.label :state, class: 'control-label' %>
+  <div class="controls">
+    <%= addresses_form.text_field :state, class: 'input-xlarge', placeholder: 'State', size: 24 %>
+  </div>
+</div>
+
+<div class="control-group">
+  <%= addresses_form.label :country, class: 'control-label' %>
+  <div class="controls">
+    <%= addresses_form.text_field :country, class: 'input-xlarge', placeholder: 'Country', size: 24 %>
+  </div>
+</div>
+
+<% end %>
