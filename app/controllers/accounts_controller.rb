@@ -9,7 +9,6 @@ class AccountsController < ApplicationController
   end
 
   def update
-    @user.save
     respond_to do |format|
       if @user.update(account_params)
         format.html { redirect_to action: :edit, notice: 'Your account has successfully been updated.' }
@@ -22,28 +21,20 @@ class AccountsController < ApplicationController
   end
 
   def upload_pan_card_image
-    @user.pan_card_copy = params[:file]
-    if(@user.save)
-      render json: { message: "success", fileID: '1' }, :status => 200
-    else
-      render json: { error: @user.errors.full_messages.join(',')}, :status => 400
-    end
+    # TODO: Upload pan card
   end
 
   def upload_address_proof
-    if @user.addresses.primary_address
-    @user.primary_address_proof = params[:file]
-    if(@user.save)
-      render json: { message: "success", fileID: '1' }, :status => 200
-    else
-      render json: { error: @user.errors.full_messages.join(',')}, :status => 400
-    end
+    # TODO: Upload address proof
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_account
       @user = current_user || User.find(params[:id])
+
+    rescue ActiveRecord::RecordNotFound
+      redirect_to root_path, alert: 'Cannot find the user in our system.'
     end
 
     # Never trust parameters from the scary internet, only allow the white
