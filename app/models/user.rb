@@ -10,6 +10,10 @@ class User < ActiveRecord::Base
   has_many :addresses
   has_attached_file :pan_card_copy, styles: { thumbnail: '60x60#' }
 
+  has_many :projects
+
+  validates_attachment_content_type :pan_card_copy, content_type: %w(image/jpg image/jpeg image/png)
+
   accepts_nested_attributes_for :addresses,  reject_if: :all_blank, limit: 2
 
   # -------------- SECTION FOR CALLBACKS ------------------------

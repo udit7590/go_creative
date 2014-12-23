@@ -1,0 +1,86 @@
+
+<%= form_for([:users, @project], html: { class: 'form-horizontal', multipart: true }) do |f| %>
+<fieldset>
+
+  <%= render 'errors' %>
+
+  <div class="control-group">
+    <%= f.label :type, 'Type of project', class: 'control-label' %>
+    <div class="form-group controls">
+      <%= f.select :type, [['Charity','CharityProject'], ['Investment','InvestmentProject']], class: 'form-control' %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :title, 'Title', class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :title, autofocus: true, class: 'input-xlarge', placeholder: 'Project Title*', size: 16, required: true %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :amount_required, 'Amount', class: 'control-label' %>
+    <div class="controls">
+      <%= f.number_field :amount_required, class: 'input-xlarge', placeholder: 'Amount to be raised*', size: 16, required: true, step: 100 %>
+      <p class="help-block">Should be in multiples of 100</p>
+    </div>
+    
+  </div>
+
+  <div class="control-group">
+    <%= f.label :end_date, 'End Date', class: 'control-label' %>
+    <div class="controls">
+      <div id="endDateTimePicker" class="input-append date">
+        <%= f.text_field :end_date, class: 'input-xlarge', data: { format: 'dd/MM/yyyy' }, size: 16, required: true, readonly: true %>
+        <span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
+      </div>
+      <p class="help-block">Should be a future date greater than 5 days.</p>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :description, 'Description', class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_area :description, autofocus: true, class: 'input-xlarge', placeholder: 'Project Description', size: 16, rows: 7 %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :video_link, 'Video Link', class: 'control-label' %>
+    <div class="controls">
+      <%= f.url_field :video_link, class: 'input-xlarge', placeholder: 'Video Link', size: 16 %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :minimum_amount_per_contribution, 'Min amount per contribution', class: 'control-label' %>
+    <div class="controls">
+      <%= f.number_field :minimum_amount_per_contribution, class: 'input-xlarge', placeholder: 'Min amount per contribution', size: 16, readonly: true %>
+      <p class="help-block">This indicate the number of users who has to fund your project for its success. (Your amount / 10)</p>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :images, 'Images', class: 'control-label' %>
+    <div class="controls">
+      <%= f.file_field :images, multiple: true, name: 'project[images_attributes][][image]' %>
+      <p class="help-block">Max file size: 2MB. Valid Image Types: PNG, JPEG, GIF</p>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :legal_documents, 'Legal Documents', class: 'control-label' %>
+    <div class="controls">
+      <%= f.file_field :legal_documents, multiple: true, name: 'project[legal_documents_attributes][][image]', class: 'input-xlarge' %>
+      <p class="help-block text-special">Please provide us any legal documents related to your project so that we can verify that your project is legitimate.<br />For eg. In case of charity project, it can be your NGO certificate.</p>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <div class="controls">
+      <%= f.submit 'Save', class: 'btn btn-large btn-inverse' %>
+    </div>
+  </div>
+
+</fieldset>
+<% end %>

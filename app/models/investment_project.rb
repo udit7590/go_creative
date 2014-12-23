@@ -1,0 +1,1 @@
+class InvestmentProject < Project; end

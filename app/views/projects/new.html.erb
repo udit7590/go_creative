@@ -1,0 +1,20 @@
+<!-- Page Content
+================================================== --> 
+<div class="row"><!--Container row-->
+
+  <!-- Title Header -->
+  <div class="span8"><!--Begin page content column-->
+
+    <h2 class="title-bg">Start a project: </h2>
+    <legend>Your Email ID: <span class='text-special'><%= @user.email %></span></legend>
+    <p class="lead">Please select the project type.</p>
+    
+    <%= render 'project_form' %>
+
+  </div> <!--End page content column-->
+
+  <!-- Blog Sidebar
+  ================================================== --> 
+  <%= render 'right_sidebar' %>
+
+</div><!-- End container row -->

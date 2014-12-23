@@ -1,43 +1,40 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <title>Go Creative: Home</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Go Creative: Home</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- CSS  -->
-  <link href='http://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
-  <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
+    <!-- CSS  -->
+    <link href='http://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
 
-  <!-- Favicons (Customize)
-  ================================================== -->
-  <%= favicon_link_tag 'img/favicon.ico', rel: 'shortcut icon' %>
-  <%= favicon_link_tag 'img/apple-touch-icon.png', rel: 'apple-touch-icon' %>
-  <%= favicon_link_tag 'img/apple-touch-icon-72x72.png', rel: 'apple-touch-icon' %>
-  <%= favicon_link_tag 'img/apple-touch-icon-114x114.png', rel: 'apple-touch-icon' %>
+    <!-- Favicons (Customize)
+    ================================================== -->
+    <%= favicon_link_tag 'img/favicon.ico', rel: 'shortcut icon' %>
+    <%= favicon_link_tag 'img/apple-touch-icon.png', rel: 'apple-touch-icon' %>
+    <%= favicon_link_tag 'img/apple-touch-icon-72x72.png', rel: 'apple-touch-icon' %>
+    <%= favicon_link_tag 'img/apple-touch-icon-114x114.png', rel: 'apple-touch-icon' %>
 
-  <!-- JS -->
-  <%= javascript_include_tag 'application', "data-turbolinks-track" => true %>
+    <%= csrf_meta_tags %>
 
-  <%= csrf_meta_tags %>
+  </head>
 
-</head>
-
-<body class="home">
-  <!-- Color Bars (above header)-->
-  <div class="color-bar-1"></div>
-  <div class="color-bar-2 color-bg"></div>
-  <%= render 'shared/flash_message' %>
+  <body class="home">
+    <!-- Color Bars (above header)-->
+    <div class="color-bar-1"></div>
+    <div class="color-bar-2 color-bg"></div>
+    <%= render 'shared/flash_message' %>
 
     <div class="container">
-    
+      
       <div class="row header"><!-- Begin Header -->
       
         <!-- Logo
         ================================================== -->
         <div class="span5 logo">
           <a href="index.htm"><%= image_tag 'img/go-creative-logo.png' %></a>
-            <h5>Big Greams... Global Way</h5>
+          <h5>Big Greams... Global Way</h5>
         </div>
         
         <!-- Main Navigation
@@ -46,23 +43,24 @@
           <div class="navbar hidden-phone">
             <ul class="nav">
               <li class="active">
-                  <%= link_to :Home, root_path, method: :get %></a>
+                <%= link_to :Home, root_path, method: :get %></a>
               </li>
               <li><a href="#">Projects</a></li>
               <li><a href="#">Contact</a></li>
               <% if !signed_in? %>
-                <li><a href="#userLoginModal" role="button" data-backdrop="static" data-toggle="modal">Login</a></li>
-                <li><a href="#userRegistrationModal" data-backdrop="static" role="button" data-toggle="modal">Signup</a></li>
+              <li><a href="#userLoginModal" role="button" data-backdrop="static" data-toggle="modal">Login</a></li>
+              <li><a href="#userRegistrationModal" data-backdrop="static" role="button" data-toggle="modal">Signup</a></li>
               <% else %>
-                
-                <li class="dropdown">
-                  <a class="dropdown-toggle" href="#account">My Account <b class="caret"></b></a>
-                  <ul class="dropdown-menu">
-                      <li><%= link_to :Profile, edit_account_path, method: :get %></li>
-                      <li><a href="#">Projects</a></li>
-                      <li><%= link_to :Logout, destroy_user_session_path, method: :delete %></li>
-                  </ul>
-                </li>
+              
+              <li class="dropdown">
+                <a class="dropdown-toggle" href="#account">My Account <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li><%= link_to :Profile, edit_account_path, method: :get %></li>
+                  <li><a href="#">Projects</a></li>
+                  <li><%= link_to :Start_a_project, new_users_project_path, method: :get %></li>
+                  <li><%= link_to :Logout, destroy_user_session_path, method: :delete %></li>
+                </ul>
+              </li>
               <% end%>
             </ul>
           </div>
@@ -73,77 +71,80 @@
           <!-- Mobile Nav
           ================================================== -->
           <form action="#" id="mobile-nav" class="visible-phone">
-              <div class="mobile-nav-select">
+            <div class="mobile-nav-select">
               <select onchange="window.open(this.options[this.selectedIndex].value,'_top')">
-                  <option value="">Navigate...</option>
-                  <option value="index.htm">Home</option>
-                      <option value="index.htm">- Full Page</option>
-                      <option value="index-gallery.htm">- Gallery Only</option>
-                      <option value="index-slider.htm">- Slider Only</option>
-                  <option value="features.htm">Features</option>
-                  <option value="page-full-width.htm">Pages</option>
-                      <option value="page-full-width.htm">- Full Width</option>
-                      <option value="page-right-sidebar.htm">- Right Sidebar</option>
-                      <option value="page-left-sidebar.htm">- Left Sidebar</option>
-                      <option value="page-double-sidebar.htm">- Double Sidebar</option>
-                  <option value="gallery-4col.htm">Gallery</option>
-                      <option value="gallery-3col.htm">- 3 Column</option>
-                      <option value="gallery-4col.htm">- 4 Column</option>
-                      <option value="gallery-6col.htm">- 6 Column</option>
-                      <option value="gallery-4col-circle.htm">- Gallery 4 Col Round</option>
-                      <option value="gallery-single.htm">- Gallery Single</option>
-                  <option value="blog-style1.htm">Blog</option>
-                      <option value="blog-style1.htm">- Blog Style 1</option>
-                      <option value="blog-style2.htm">- Blog Style 2</option>
-                      <option value="blog-style3.htm">- Blog Style 3</option>
-                      <option value="blog-style4.htm">- Blog Style 4</option>
-                      <option value="blog-single.htm">- Blog Single</option>
-                  <option value="page-contact.htm">Contact</option>
+                <option value="">Navigate...</option>
+                <option value="index.htm">Home</option>
+                <option value="index.htm">- Full Page</option>
+                <option value="index-gallery.htm">- Gallery Only</option>
+                <option value="index-slider.htm">- Slider Only</option>
+                <option value="features.htm">Features</option>
+                <option value="page-full-width.htm">Pages</option>
+                <option value="page-full-width.htm">- Full Width</option>
+                <option value="page-right-sidebar.htm">- Right Sidebar</option>
+                <option value="page-left-sidebar.htm">- Left Sidebar</option>
+                <option value="page-double-sidebar.htm">- Double Sidebar</option>
+                <option value="gallery-4col.htm">Gallery</option>
+                <option value="gallery-3col.htm">- 3 Column</option>
+                <option value="gallery-4col.htm">- 4 Column</option>
+                <option value="gallery-6col.htm">- 6 Column</option>
+                <option value="gallery-4col-circle.htm">- Gallery 4 Col Round</option>
+                <option value="gallery-single.htm">- Gallery Single</option>
+                <option value="blog-style1.htm">Blog</option>
+                <option value="blog-style1.htm">- Blog Style 1</option>
+                <option value="blog-style2.htm">- Blog Style 2</option>
+                <option value="blog-style3.htm">- Blog Style 3</option>
+                <option value="blog-style4.htm">- Blog Style 4</option>
+                <option value="blog-single.htm">- Blog Single</option>
+                <option value="page-contact.htm">Contact</option>
               </select>
-              </div>
+            </div>
           </form>
-            
+          
         </div>
         
       </div><!-- End Header -->
-     
-    <%= yield %>
-    
+      
+      <%= yield %>
+      
     </div> <!-- End Container -->
 
     <!-- Footer Area
-        ================================================== -->
+    ================================================== -->
 
-  <div class="footer-container"><!-- Begin Footer -->
+    <div class="footer-container"><!-- Begin Footer -->
       <div class="container">
-          <div class="row footer-row">
-                <div class="span3 footer-col">
-                    <h5>About Us</h5>
-                   <%= image_tag 'img/go-creative-logo.png' %><br /><br>
-                    <address>
-                        <strong>Design Team</strong><br />
-                        Vinsol<br />
-                        Patel Nagar, Delhi<br />
-                    </address>
-                    
-               
-            </div>
+        <div class="row footer-row">
+          <div class="span3 footer-col">
+            <h5>About Us</h5>
+            <%= image_tag 'img/go-creative-logo.png' %><br /><br>
+            <address>
+              <strong>Design Team</strong><br />
+              Vinsol<br />
+              Patel Nagar, Delhi<br />
+            </address>
+            
+            
+          </div>
 
-            <div class="row"><!-- Begin Sub Footer -->
-                <div class="span12 footer-col footer-sub">
-                    <div class="row no-margin">
-                        <div class="span6"><span class="left">Copyright 2014 Go Creative. All Rights Reserved</span></div>
-                        <div class="span6">
-                        </div>
-                    </div>
+          <div class="row"><!-- Begin Sub Footer -->
+            <div class="span12 footer-col footer-sub">
+              <div class="row no-margin">
+                <div class="span6"><span class="left">Copyright 2014 Go Creative. All Rights Reserved</span></div>
+                <div class="span6">
                 </div>
-            </div><!-- End Sub Footer -->
+              </div>
+            </div>
+          </div><!-- End Sub Footer -->
 
         </div>
-    </div><!-- End Footer -->
+      </div><!-- End Footer -->
 
-    <!-- Scroll to Top -->  
-    <div id="toTop" class="hidden-phone hidden-tablet">Back to Top</div>
+      <!-- Scroll to Top -->  
+      <div id="toTop" class="hidden-phone hidden-tablet">Back to Top</div>
+
+    <!-- JS -->
+    <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
 
     <script>
     function switchModalWindow(firstModal, secondModal){
@@ -160,6 +161,6 @@
       $modalBox.find('input[type=submit]').attr('value', "Please wait...");
     });
 
-  </script>
-</body>
+    </script>
+  </body>
 </html>

@@ -12,6 +12,7 @@
  *= require 'css/bootstrap.css'
  *= require 'css/dropzone.css'
  *= require 'css/bootstrap-responsive.css'
+ *= require 'css/bootstrap-datetimepicker.min.css'
  *= require 'css/prettyPhoto.css'
  *= require 'css/flexslider.css'
  *= require 'css/custom-styles.css'
