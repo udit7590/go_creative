@@ -1,12 +1,17 @@
 var AccountsPage = (function() {
 
-  function AccountsPage(panCardUploadBoxName, addressProofUploadBoxName) {
+  function AccountsPage(panCardUploadBoxName, addressProofUploadBoxName, current_address_checkbox, permanent_address_container, current_address_container) {
 
     this.panCardUploadBoxName = "#" + panCardUploadBoxName;
     this.addressProofUploadBoxName= "#" + addressProofUploadBoxName;
 
     this.pancardDropzone = null;
     this.addressProofDropzone = null;
+
+    this.$current_address_checkbox = current_address_checkbox;
+    this.$permanent_address_container = permanent_address_container
+    this.$current_address_container = current_address_container
+
   }
 
   AccountsPage.prototype.createDropZonesForUpload = function() {
@@ -32,14 +37,42 @@ var AccountsPage = (function() {
     });
   };
 
+  AccountsPage.prototype.bindEventsForCurrentAddressCheckbox = function() {
+    var _this = this;
+
+    this.$current_address_checkbox.change(function() {
+      if(this.checked) {
+        
+        parentElements = _this.$permanent_address_container.find('input,textarea');
+        childElements = _this.$current_address_container.find('input,textarea');
+
+        //TODO: OPTIMIZE ME
+        _this.$current_address_container.find('.full-address-field').val(_this.$permanent_address_container.find('.full-address-field').val());
+        _this.$current_address_container.find('.city-field').val(_this.$permanent_address_container.find('.city-field').val());
+        _this.$current_address_container.find('.state-field').val(_this.$permanent_address_container.find('.state-field').val());
+        _this.$current_address_container.find('.pincode-field').val(_this.$permanent_address_container.find('.pincode-field').val());
+        _this.$current_address_container.find('.country-field').val(_this.$permanent_address_container.find('.country-field').val());
+      }
+    });
+  };
+
+  AccountsPage.prototype.bindEvents = function() {
+    this.bindEventsForDropzones();
+    this.bindEventsForCurrentAddressCheckbox();
+
+  };
+
   //Return the class
   return AccountsPage;
 })();
 
 $(function() {
   var $dropboxes = $('.dropbox'),
-      accountsPage = new AccountsPage('pancard_upload', 'address_proof_upload');
+      $current_address_checkbox = $('#current_address_checkbox'),
+      $permanent_address_container = $('.primary-address'),
+      $current_address_container = $('.current-address'),
+      accountsPage = new AccountsPage('pancard_upload', 'address_proof_upload', $current_address_checkbox, $permanent_address_container, $current_address_container);
 
   accountsPage.createDropZonesForUpload();
-  accountsPage.bindEventsForDropzones();
+  accountsPage.bindEvents();
 });
