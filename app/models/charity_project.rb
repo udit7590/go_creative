@@ -1,3 +1,1 @@
-class CharityProject < Project
-
-end
+class CharityProject < Project; end

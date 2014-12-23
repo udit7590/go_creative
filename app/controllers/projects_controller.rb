@@ -1,7 +1,7 @@
 class ProjectsController < ApplicationController
 
   before_action :authenticate_user!, only: [:new, :create, :edit, :update, :delete]
-  before_action :set_project, only: [:new, :create]
+  before_action :load_project, only: [:new, :create]
 
   def new
     @project.images.build
@@ -25,7 +25,7 @@ class ProjectsController < ApplicationController
   
   protected
 
-    def set_project
+    def load_project
       @user = current_user
       @project = @user.projects.build
     end

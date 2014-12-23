@@ -1,3 +1,1 @@
-class InvestmentProject < Project
-
-end
+class InvestmentProject < Project; end
