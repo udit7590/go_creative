@@ -73,6 +73,10 @@ $(function() {
       $current_address_container = $('.current-address'),
       accountsPage = new AccountsPage('pancard_upload', 'address_proof_upload', $current_address_checkbox, $permanent_address_container, $current_address_container);
 
-  accountsPage.createDropZonesForUpload();
-  accountsPage.bindEvents();
+  try {
+    accountsPage.createDropZonesForUpload();
+    accountsPage.bindEvents();
+  } catch(err) {
+    console.log(err)
+  }
 });

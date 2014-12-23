@@ -32,4 +32,8 @@ Gocreative::Application.routes.draw do
     post :upload_address_proof
   end
 
+  resource :users do
+    resources :projects, shallow: true
+  end
+
 end

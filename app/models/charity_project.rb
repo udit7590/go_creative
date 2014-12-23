@@ -1,0 +1,3 @@
+class CharityProject < Project
+
+end

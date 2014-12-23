@@ -51,7 +51,7 @@ class AccountsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white
     # list through.
-    def account_params
+    def project_params
       params.require(:user).permit(:first_name, :last_name, :phone_number, :pan_card, addresses_attributes: [:id, :city, :full_address, :primary, :country, :state, :pincode])
     end
 
