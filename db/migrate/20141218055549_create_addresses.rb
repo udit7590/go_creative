@@ -9,7 +9,8 @@ class CreateAddresses < ActiveRecord::Migration
       t.integer  :pincode
       t.text :full_address
 
-      t.attachment :address_proof
+      t.attachment :primary_address_proof
+      t.attachment :current_address_proof
 
       # When the admin verifies the address
       t.datetime :verified_at
