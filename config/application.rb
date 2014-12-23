@@ -26,5 +26,6 @@ module Gocreative
     # config.i18n.default_locale = :de
 
     # config.force_ssl = true
+    config.autoload_paths << Rails.root.join('lib')
   end
 end

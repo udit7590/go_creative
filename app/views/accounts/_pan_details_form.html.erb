@@ -1,21 +1,21 @@
 <%= form_for(@user, url: account_path, method: :patch, html: { class: 'form-horizontal' }) do |f| %>
-<fieldset>
-  <div class="control-group">
-    <%= f.label :pan_card, 'PAN', class: 'control-label' %>
-    <div class="controls">
-      <%= f.text_field :pan_card, class: 'input-xlarge', placeholder: 'PAN Card Number', size: 16, pattern: '^[A-Za-z]{3}[AaBbCcFfGgHhLlJjPpTt]{1}[A-Za-z]{1}[0-9]{4}[A-Za-z]{1}', title:'Please provide a valid PAN detail.', required: true %>
-      <p class="help-block">Required if you want to start a project here.<br />
-      PAN card has 10 alphanumeric characters of format AAA[ABCFGHLJPT]A9999A. (One of alphabets in square brackets)</p>
+  <fieldset>
+    <div class="control-group">
+      <%= f.label :pan_card, 'PAN', class: 'control-label' %>
+      <div class="controls">
+        <%= f.text_field :pan_card, class: 'input-xlarge', placeholder: 'PAN Card Number', size: 16, pattern: '^[A-Za-z]{3}[AaBbCcFfGgHhLlJjPpTt]{1}[A-Za-z]{1}[0-9]{4}[A-Za-z]{1}', title:'Please provide a valid PAN detail.', required: true %>
+        <p class="help-block">Required if you want to start a project here.<br />
+        PAN card has 10 alphanumeric characters of format AAA[ABCFGHLJPT]A9999A. (One of alphabets in square brackets)</p>
+      </div>
     </div>
-  </div>
 
-  <div class="control-group">
-    <div class="controls">
-      <%= f.submit 'Save Settings', class: 'btn btn-large btn-inverse' %>
+    <div class="control-group">
+      <div class="controls">
+        <%= f.submit 'Save Settings', class: 'btn btn-large btn-inverse' %>
+      </div>
     </div>
-  </div>
 
-</fieldset>
+  </fieldset>
 <% end %>
 
 <%= render partial: 'pan_upload_box' %>
