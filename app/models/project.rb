@@ -27,6 +27,8 @@ class Project < ActiveRecord::Base
   # -------------------------------------------------------------
   scope :charity, -> { where(type: 'CharityProject') }
   scope :investment, -> { where(type: 'InvestmentProject') }
+  scope :order_by_creation, -> { order(created_at: :desc) }
+  scope :projects_to_be_approved, -> { where(verified_at: nil).order_by_creation }
 
   # To determine which all projects we can make
   def self.types

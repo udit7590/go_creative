@@ -37,7 +37,10 @@
               <a href="#" class="active">Users</a>
               <% end %>
             </li>
-            <li><a href="#">Projects</a></li>
+            <li><li><%= link_to_if !current_page?(admin_projects_path), :admin_projects_path, admin_projects_path, method: :get do %>
+              <a href="#" class="active">Projects</a>
+              <% end %>
+            </li>
           </ul>
         
         </div><!--/span SIDEBAR -->
