@@ -21,6 +21,8 @@ module AddressesFormHelper
         (number - address_count - 1).times { user.addresses.build }
       end
     end
+    #To make sure primary address always comes on top
+    user.addresses.order(primary: :desc)
   end
 
 end

@@ -15,6 +15,7 @@ class SessionsController < ::Devise::SessionsController
     set_flash_message :notice, :signed_in
     respond_to do |format|
       format.js { render 'sessions/login' }
+      format.html { redirect_to after_sign_in_path_for(resource) }
     end
   end
  
@@ -24,7 +25,7 @@ class SessionsController < ::Devise::SessionsController
 
   protected
     def after_sign_in_path_for(resource)
-      root_path
+      session[:previous_url] || root_path
     end
 
     def after_sign_out_path_for(resource_or_scope)

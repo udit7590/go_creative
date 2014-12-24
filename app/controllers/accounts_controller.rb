@@ -1,8 +1,9 @@
 class AccountsController < ApplicationController
   include AddressesFormHelper
 
+  before_action :store_location
   before_action :authenticate_user!
-  before_action :set_account, only: [:edit, :update, :upload_pan_card_image, :upload_address_proof]
+  before_action :set_account, only: [:edit, :update, :upload_pan_card_image, :upload_primary_address_proof, :upload_current_address_proof]
 
   def edit
     build_max_n_addresses(@user, 2)
@@ -21,16 +22,28 @@ class AccountsController < ApplicationController
   end
 
   def upload_pan_card_image
-    if(@user.update(pan_card_copy: params[:file]))
+    if(@user.update(pan_card_copy: params[:user][:pan_card_copy]))
       render json: { message: 'success' }, status: 200
     else
       render json: { error: @user.errors.full_messages.join(',') }, status: 400
     end
   end
 
-  def upload_address_proof
+  def upload_primary_address_proof
     if @user.addresses.primary_address
-      if(@user.addresses.primary_address.update(address_proof: params[:file]))
+      if(@user.addresses.primary_address.update(address_proof: params[:address][:address_proof]))
+        render json: { message: 'success' }, status: 200
+      else
+        render json: { error: @user.errors.full_messages.join(',') }, status: 400
+      end
+    else
+      render json: { error: 'Please provide address details first'}, status: 400
+    end
+  end
+
+  def upload_current_address_proof
+    if @user.addresses.current_address
+      if(@user.addresses.current_address.update(address_proof: params[:address][:address_proof]))
         render json: { message: 'success' }, status: 200
       else
         render json: { error: @user.errors.full_messages.join(',') }, status: 400
@@ -51,8 +64,8 @@ class AccountsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white
     # list through.
-    def project_params
-      params.require(:user).permit(:first_name, :last_name, :phone_number, :pan_card, addresses_attributes: [:id, :city, :full_address, :primary, :country, :state, :pincode])
+    def account_params
+      params.require(:user).permit(:first_name, :last_name, :phone_number, :pan_card, addresses_attributes: [:id, :city, :full_address, :primary, :country, :state, :pincode, :address_proof])
     end
 
 end

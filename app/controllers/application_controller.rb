@@ -4,19 +4,25 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   before_action :configure_permitted_parameters, if: :devise_controller?
-  
-  def after_sign_in_path_for(resource)
-    root_url
-  end
-
-  def after_sign_out_path_for(resource_or_scope)
-    root_url
-  end
 
   protected
   
-  #For permitting additional attributes to users devise model
-  def configure_permitted_parameters
-    devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(:first_name, :last_name, :email, :password, :password_confirmation, :country, :state, :city, :pincode, :address_line_1, :address_line_2, :phone_number) }
-  end
+    #For permitting additional attributes to users devise model
+    def configure_permitted_parameters
+      devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(:first_name, :last_name, :email, :password, :password_confirmation, :phone_number) }
+    end
+
+    def store_location
+      # store last url - this is needed for post-login redirect to whatever the user last visited.
+      return unless request.get? 
+      if (request.path != "/users/sign_in" &&
+          request.path != "/users/sign_up" &&
+          request.path != "/users/password/new" &&
+          request.path != "/users/password/edit" &&
+          request.path != "/users/confirmation" &&
+          request.path != "/users/sign_out" &&
+          !request.xhr?) # don't store ajax calls
+        session[:previous_url] = request.fullpath 
+      end
+    end
 end
