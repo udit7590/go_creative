@@ -17,7 +17,8 @@ class ProjectsController < ApplicationController
         format.json { head :no_content }
       else
         @project = @project.becomes!(Project)
-
+        @project.type = params[:project][:type]
+        
         format.html { render action: 'new' }
         format.json { render json: @project.errors, status: :unprocessable_entity }
       end

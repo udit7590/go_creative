@@ -37,7 +37,7 @@
               <a href="#" class="active">Users</a>
               <% end %>
             </li>
-            <li><li><%= link_to_if !current_page?(admin_projects_path), :admin_projects_path, admin_projects_path, method: :get do %>
+            <li><li><%= link_to_if !current_page?(admin_projects_path), :Projects, admin_projects_path, method: :get do %>
               <a href="#" class="active">Projects</a>
               <% end %>
             </li>
