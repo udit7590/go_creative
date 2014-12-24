@@ -15,6 +15,7 @@
 //= require turbolinks
 //= require 'js/bootstrap.js'
 //= require 'js/dropzone.js'
+//= require 'js/bootstrap-filestyle.js'
 //= require 'js/bootstrap-datetimepicker.min.js'
 //= require 'js/jquery.prettyPhoto.js'
 //= require 'js/jquery.flexslider.js'

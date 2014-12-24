@@ -63,7 +63,7 @@
   <div class="control-group">
     <%= f.label :images, 'Images', class: 'control-label' %>
     <div class="controls">
-      <%= f.file_field :images, multiple: true, name: 'project[images_attributes][][image]' %>
+      <%= f.file_field :images, multiple: true, class: 'filestyle', name: 'project[images_attributes][][image]', data: { buttonName: 'btn', buttonText: 'Select Files' } %>
       <p class="help-block">Max file size: 2MB. Valid Image Types: PNG, JPEG, GIF</p>
     </div>
   </div>
@@ -71,7 +71,7 @@
   <div class="control-group">
     <%= f.label :legal_documents, 'Legal Documents', class: 'control-label' %>
     <div class="controls">
-      <%= f.file_field :legal_documents, multiple: true, name: 'project[legal_documents_attributes][][image]', class: 'input-xlarge' %>
+      <%= f.file_field :legal_documents, multiple: true, class: 'filestyle', name: 'project[legal_documents_attributes][][image]', data: { buttonName: 'btn', buttonText: 'Select Files' } %>
       <p class="help-block">Max file size: 2MB. Valid Image Types: PNG, JPEG, GIF</p>
       <p class="help-block text-special">Please provide us any legal documents related to your project so that we can verify that your project is legitimate.<br />For eg. In case of charity project, it can be your NGO certificate.</p>
     </div>

@@ -11,6 +11,7 @@
  *= require_self
  *= require 'css/bootstrap.css'
  *= require 'css/dropzone.css'
+ *= require 'css/bootstrap-filestyle.css'
  *= require 'css/bootstrap-responsive.css'
  *= require 'css/bootstrap-datetimepicker.min.css'
  *= require 'css/prettyPhoto.css'
