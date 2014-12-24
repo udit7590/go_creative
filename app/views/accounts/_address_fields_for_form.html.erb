@@ -1,6 +1,6 @@
 <%= form_for(@user, url: account_path, method: :patch, html: { class: 'form-horizontal' }) do |f| %>
 <fieldset>
-  <%= f.fields_for :addresses do |addresses_form| %>
+  <%= f.fields_for :addresses, @user.addresses.order(primary: :desc) do |addresses_form| %>
   <hr/>
   <div class='<%if addresses_form.object.primary? %>primary-address <% else %> current-address<% end %>'>
     <%if !addresses_form.object.primary? %>
