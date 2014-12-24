@@ -1,6 +1,6 @@
 var AccountsPage = (function() {
 
-  function AccountsPage(panCardUploadBoxName, addressProofUploadBoxName, currentAddressProofUploadBoxName, current_address_checkbox, permanent_address_container, current_address_container, pancard_warn_text) {
+  function AccountsPage(panCardUploadBoxName, addressProofUploadBoxName, currentAddressProofUploadBoxName, current_address_checkbox, permanent_address_container, current_address_container, pancard_warn_text, primary_address_warn_text, current_address_warn_text) {
 
     this.panCardUploadBoxName = "#" + panCardUploadBoxName;
     this.addressProofUploadBoxName= "#" + addressProofUploadBoxName;
@@ -14,6 +14,8 @@ var AccountsPage = (function() {
     this.$permanent_address_container = permanent_address_container;
     this.$current_address_container = current_address_container;
     this.$pancard_warn_text = pancard_warn_text;
+    this.$primary_address_warn_text = primary_address_warn_text;
+    this.$current_address_warn_text = current_address_warn_text;
 
   }
 
@@ -42,28 +44,50 @@ var AccountsPage = (function() {
 
   AccountsPage.prototype.bindEventsForDropzones = function() {
     var _this = this;
+
     this.pancardDropzone.on('success', function() {
+      var image = _this.$pancard_warn_text.find('img');
+
       alert('Your pancard copy is successfully uploaded.');
-      _this.$pancard_warn_text.removeClass('text-warning').text('Your image uploaded successfully.')
-      this.disable();
+      if(image.length) {
+        image.replaceWith($(this.files[0].previewTemplate).find('img')[0]);
+      } else {
+        _this.$pancard_warn_text
+           .removeClass('text-warning').text('Your image uploaded successfully.')
+           .prepend($(this.files[0].previewTemplate).find('img')[0]);
+      }
+
+      this.removeAllFiles();
     });
 
     this.addressProofDropzone.on('success', function() {
+      var image = _this.$primary_address_warn_text.find('img');
+
       alert('Your address proof copy is successfully uploaded.');
-      this.disable();
-    });
-    this.addressProofDropzone.on('error', function() {
-      alert('Not able to upload your permanent address proof.');
-      this.reset();
+
+      if(image.length) {
+        image.replaceWith($(this.files[0].previewTemplate).find('img')[0]);
+      } else {
+        _this.$primary_address_warn_text
+           .removeClass('text-warning').text('Your image uploaded successfully.')
+           .prepend($(this.files[0].previewTemplate).find('img')[0]);
+      }
+      
+      this.removeAllFiles();
     });
 
     this.currentAddressProofDropzone.on('success', function() {
+      var image = _this.$current_address_warn_text.find('img');
       alert('Your current address proof copy is successfully uploaded.');
-      this.disable();
-    });
-    this.currentAddressProofDropzone.on('error', function() {
-      alert('Not able to upload your current address proof.');
-      this.reset();
+      if(image.length ) {
+        image.replaceWith($(this.files[0].previewTemplate).find('img')[0]);
+      } else {
+        _this.$current_address_warn_text
+           .removeClass('text-warning').text('Your image uploaded successfully.')
+           .prepend($(this.files[0].previewTemplate).find('img')[0]);
+      }
+
+      this.removeAllFiles();
     });
   };
 
@@ -101,8 +125,16 @@ $(function() {
       $current_address_checkbox = $('#current_address_checkbox'),
       $permanent_address_container = $('.primary-address'),
       $current_address_container = $('.current-address'),
-      accountsPage = new AccountsPage('pancard_upload', 'primary_address_proof_upload', 'current_address_proof_upload', $current_address_checkbox, $permanent_address_container, $current_address_container, $('#user_pan_card').find('p.text-warning'));
-
+      accountsPage = new AccountsPage('pancard_upload', 
+                                        'primary_address_proof_upload', 
+                                        'current_address_proof_upload', 
+                                        $current_address_checkbox, 
+                                        $permanent_address_container, 
+                                        $current_address_container, 
+                                        $('#user_pan_card').find('p.pancard-copy-upload'),
+                                        $('#user_address').find('p.primary-address-upload'),
+                                        $('#user_address').find('p.current-address-upload')
+                                      );
   try {
     accountsPage.createDropZonesForUpload();
     accountsPage.bindEvents();

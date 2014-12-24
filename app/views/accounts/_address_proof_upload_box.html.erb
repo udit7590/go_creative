@@ -1,29 +1,9 @@
 <h5>Address Proof Attachment(Permanent Address)</h5>
-<% if @user.addresses.primary_address %>
-  <% if @user.addresses.primary_address.address_proof.exists? %>
-    <%= image_tag @user.addresses.primary_address.address_proof %>
-    <p>This is the copy available with us. You can provide the proof again using the dropbox below.</p>
-  <% else %>
-    <p class="text-warning">You have not attached any proof for your address till now. Please provide us the proof if you want to start a project on our website. The details will be kept confidential with us.</p>
-    
-  <% end %>
-<% else %>
-  <p class="text-warning">You have not attached any proof for your primary address till now. Please provide us the proof if you want to start a project on our website. The details will be kept confidential with us.</p>
-<% end %>
+<%= address_upload_text_image(@user.addresses.primary_address) %>
 <%= form_tag('/account/upload_primary_address_proof', method: :post, class: 'dropzone', id: 'primary_address_proof_upload') {} %>
 
 <br />
 
 <h5>Address Proof Attachment(Current Address)</h5>
-<% if @user.addresses.current_address %>
-  <% if @user.addresses.current_address.address_proof.exists? %>
-    <%= image_tag @user.addresses.current_address.address_proof %>
-    <p>This is the copy available with us. You can provide the proof again using the dropbox below.</p>
-  <% else %>
-    <p class="text-warning">You have not attached any proof for your current address till now. Please provide us the proof if you want to start a project on our website. The details will be kept confidential with us.</p>
-    
-  <% end %>
-<% else %>
-  <p class="text-warning">You have not attached any proof for your address till now. Please provide us the proof if you want to start a project on our website. The details will be kept confidential with us.</p>
-<% end %>
+<%= address_upload_text_image(@user.addresses.current_address) %>
 <%= form_tag('/account/upload_current_address_proof', method: :post, class: 'dropzone', id: 'current_address_proof_upload') {} %>

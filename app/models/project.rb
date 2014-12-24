@@ -15,7 +15,7 @@ class Project < ActiveRecord::Base
   validates :type, presence: true
   validates :end_date, presence: true, date: { greater_than_or_equal_to: (5.days.from_now.beginning_of_day) }
   validates :title, uniqueness: true
-  validates :amount_required, numericality: { only_integer: true, greater_than: 0 }
+  validates :amount_required, numericality: { only_integer: true, greater_than: 0, less_than: 10000000 }
 
   validate :amount_multiple_of_100
 
