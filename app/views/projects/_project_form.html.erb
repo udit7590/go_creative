@@ -21,8 +21,8 @@
   <div class="control-group">
     <%= f.label :amount_required, 'Amount', class: 'control-label' %>
     <div class="controls">
-      <%= f.number_field :amount_required, class: 'input-xlarge', placeholder: 'Amount to be raised*', size: 16, required: true, step: 100 %>
-      <p class="help-block">Should be in multiples of 100</p>
+      <%= f.number_field :amount_required, class: 'input-xlarge', placeholder: 'Amount to be raised*', size: 16, required: true, step: 100, max: 10000000 %>
+      <p class="help-block">Should be in multiples of 100 and at max 10 million.</p>
     </div>
     
   </div>
@@ -41,7 +41,7 @@
   <div class="control-group">
     <%= f.label :description, 'Description', class: 'control-label' %>
     <div class="controls">
-      <%= f.text_area :description, autofocus: true, class: 'input-xlarge', placeholder: 'Project Description', size: 16, rows: 7 %>
+      <%= f.text_area :description, class: 'input-xlarge', placeholder: 'Project Description*', size: 16, rows: 7, required: true %>
     </div>
   </div>
 
@@ -72,6 +72,7 @@
     <%= f.label :legal_documents, 'Legal Documents', class: 'control-label' %>
     <div class="controls">
       <%= f.file_field :legal_documents, multiple: true, name: 'project[legal_documents_attributes][][image]', class: 'input-xlarge' %>
+      <p class="help-block">Max file size: 2MB. Valid Image Types: PNG, JPEG, GIF</p>
       <p class="help-block text-special">Please provide us any legal documents related to your project so that we can verify that your project is legitimate.<br />For eg. In case of charity project, it can be your NGO certificate.</p>
     </div>
   </div>
