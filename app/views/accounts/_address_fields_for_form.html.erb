@@ -5,7 +5,7 @@
   <div class='<%if addresses_form.object.primary? %>primary-address <% else %> current-address<% end %>'>
     <%if !addresses_form.object.primary? %>
     <div class="control-group">
-      <%= addresses_form.label :same_as_primary, 'Same as primary address', class: 'control-label' %>
+      <%= addresses_form.label :same_as_primary, 'Same as permanent address', class: 'control-label' %>
       <div class="controls">
         <%= addresses_form.check_box :same_as_primary, class: 'input-xlarge', id: 'current_address_checkbox' %>
       </div>

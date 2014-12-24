@@ -29,7 +29,8 @@ Gocreative::Application.routes.draw do
     post :upload_pan_card_image
 
     # For Address proof upload
-    post :upload_address_proof
+    post :upload_primary_address_proof
+    post :upload_current_address_proof
   end
 
   resource :users do

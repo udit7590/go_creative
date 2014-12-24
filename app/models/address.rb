@@ -9,7 +9,7 @@ class Address < ActiveRecord::Base
 
   # -------------- SECTION FOR CALLBACKS ------------------------
   # -------------------------------------------------------------
-  before_update :delete_address_proof, if: :changed?
+  before_update :delete_address_proof, if: :full_address_changed?
 
   # -------------- SECTION FOR VALIDATIONS ----------------------
   # -------------------------------------------------------------

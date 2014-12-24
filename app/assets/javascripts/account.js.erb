@@ -1,39 +1,69 @@
 var AccountsPage = (function() {
 
-  function AccountsPage(panCardUploadBoxName, addressProofUploadBoxName, current_address_checkbox, permanent_address_container, current_address_container) {
+  function AccountsPage(panCardUploadBoxName, addressProofUploadBoxName, currentAddressProofUploadBoxName, current_address_checkbox, permanent_address_container, current_address_container, pancard_warn_text) {
 
     this.panCardUploadBoxName = "#" + panCardUploadBoxName;
     this.addressProofUploadBoxName= "#" + addressProofUploadBoxName;
+    this.currentAddressProofUploadBoxName= "#" + currentAddressProofUploadBoxName;
 
     this.pancardDropzone = null;
     this.addressProofDropzone = null;
+    this.currentAddressProofDropzone = null;
 
     this.$current_address_checkbox = current_address_checkbox;
-    this.$permanent_address_container = permanent_address_container
-    this.$current_address_container = current_address_container
+    this.$permanent_address_container = permanent_address_container;
+    this.$current_address_container = current_address_container;
+    this.$pancard_warn_text = pancard_warn_text;
 
   }
 
   AccountsPage.prototype.createDropZonesForUpload = function() {
     this.pancardDropzone = new Dropzone(this.panCardUploadBoxName, {
       maxFilesize: 2, // MB
-      maxFiles: 1
+      maxFiles: 1,
+      addRemoveLinks: true,
+      paramName: "user[pan_card_copy]",
     });
 
     this.addressProofDropzone = new Dropzone(this.addressProofUploadBoxName, {
       maxFilesize: 2, // MB
-      maxFiles: 1
+      maxFiles: 1,
+      addRemoveLinks: true,
+      paramName: "address[address_proof]",
+    });
+
+    this.currentAddressProofDropzone = new Dropzone(this.currentAddressProofUploadBoxName, {
+      maxFilesize: 2, // MB
+      maxFiles: 1,
+      addRemoveLinks: true,
+      paramName: "address[address_proof]",
     });
   };
 
   AccountsPage.prototype.bindEventsForDropzones = function() {
+    var _this = this;
     this.pancardDropzone.on('success', function() {
       alert('Your pancard copy is successfully uploaded.');
+      _this.$pancard_warn_text.removeClass('text-warning').text('Your image uploaded successfully.')
       this.disable();
     });
+
     this.addressProofDropzone.on('success', function() {
       alert('Your address proof copy is successfully uploaded.');
       this.disable();
+    });
+    this.addressProofDropzone.on('error', function() {
+      alert('Not able to upload your permanent address proof.');
+      this.reset();
+    });
+
+    this.currentAddressProofDropzone.on('success', function() {
+      alert('Your current address proof copy is successfully uploaded.');
+      this.disable();
+    });
+    this.currentAddressProofDropzone.on('error', function() {
+      alert('Not able to upload your current address proof.');
+      this.reset();
     });
   };
 
@@ -71,7 +101,7 @@ $(function() {
       $current_address_checkbox = $('#current_address_checkbox'),
       $permanent_address_container = $('.primary-address'),
       $current_address_container = $('.current-address'),
-      accountsPage = new AccountsPage('pancard_upload', 'address_proof_upload', $current_address_checkbox, $permanent_address_container, $current_address_container);
+      accountsPage = new AccountsPage('pancard_upload', 'primary_address_proof_upload', 'current_address_proof_upload', $current_address_checkbox, $permanent_address_container, $current_address_container, $('#user_pan_card').find('p.text-warning'));
 
   try {
     accountsPage.createDropZonesForUpload();

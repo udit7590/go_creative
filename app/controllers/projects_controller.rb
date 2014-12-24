@@ -1,5 +1,6 @@
 class ProjectsController < ApplicationController
 
+  before_action :store_location
   before_action :authenticate_user!, only: [:new, :create, :edit, :update, :delete]
   before_action :load_project, only: [:new, :create]
 
