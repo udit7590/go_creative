@@ -21,6 +21,7 @@ Gocreative::Application.routes.draw do
   namespace :admin do
     root 'dashboard#index', controller: 'admin/dashboard'
     resources :users, only: :index, concerns: :paginatable
+    resources :projects, only: :index, concerns: :paginatable
   end
 
   #Singular resource for account

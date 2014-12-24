@@ -1,0 +1,21 @@
+<h2 class="sub-header">Go Creative Projects</h2>
+
+<div class="table-responsive">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Title</th>
+        <th>Type</th>
+        <th>Amount Required</th>
+        <th>Started By</th>
+        <th>End Date</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= render partial: 'project', collection: @projects %>
+    </tbody>
+  </table>
+  <%= paginate @projects %>
+</div>
