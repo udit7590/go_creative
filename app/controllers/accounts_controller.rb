@@ -4,6 +4,7 @@ class AccountsController < ApplicationController
   before_action :store_location
   before_action :authenticate_user!
   before_action :set_account, only: [:edit, :update, :upload_pan_card_image, :upload_primary_address_proof, :upload_current_address_proof]
+  before_action :set_user, only: [:update_pan_details, :update_address_details]
 
   def edit
     build_max_n_addresses(@user, 2)
@@ -54,9 +55,12 @@ class AccountsController < ApplicationController
   end
 
   def update_pan_details
+    render 'update_pan_details'
   end
 
   def update_address_details
+    build_max_n_addresses(@user, 2)
+    render 'update_address_details'
   end
 
   private
@@ -66,6 +70,10 @@ class AccountsController < ApplicationController
 
       rescue ActiveRecord::RecordNotFound
         redirect_to root_path, alert: 'Cannot find the user in our system.'
+    end
+
+    def set_user
+      @user = current_user || User.find_by_id(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white

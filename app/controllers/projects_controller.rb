@@ -52,12 +52,12 @@ class ProjectsController < ApplicationController
     # Takes format argument to redirect based on requested format.
     def check_user_details_and_redirect(format)
       @user = @project.user
-      unless user.pan_details_complete?
+      unless @user.pan_details_complete?
         flash[:notice] = I18n.t :pan_details_incomplete, scope: [:projects, :views]
         format.html { redirect_to controller: :accounts, action: :update_pan_details }
         format.json { head :no_content }
       else
-        unless user.primary_address_details_complete?
+        unless @user.primary_address_details_complete?
           flash[:notice] = I18n.t :address_details_incomplete, scope: [:projects, :views]
           format.html { redirect_to controller: :accounts, action: :update_address_details }
           format.json { head :no_content }
@@ -68,7 +68,5 @@ class ProjectsController < ApplicationController
         end
       end
     end
-
-    def 
 
 end

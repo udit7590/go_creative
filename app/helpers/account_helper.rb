@@ -3,6 +3,14 @@ module AccountHelper
     is_primary ? 'Permanent Address' : 'Current Address'
   end
 
+  def address_class(is_primary)
+    is_primary ? 'primary-address' : 'current-address'
+  end
+
+  def address_field_class(is_primary)
+    is_primary ? 'primary-address-field' : 'current-address-field'
+  end
+
   def address_upload_text_image(address)
 
     primary_address_class = 'primary-address-upload'

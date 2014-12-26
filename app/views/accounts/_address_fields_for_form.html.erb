@@ -1,9 +1,10 @@
 <%= form_for(@user, url: account_path, method: :patch, html: { class: 'form-horizontal' }) do |f| %>
 <fieldset>
   <%= f.fields_for :addresses do |addresses_form| %>
-  <hr/>
-  <div class='<%if addresses_form.object.primary? %>primary-address <% else %> current-address<% end %>'>
-    <%if !addresses_form.object.primary? %>
+  <% is_primary = addresses_form.object.primary? %>
+  <legend><%= address_string(is_primary) %></legend>
+  <div class='<%= address_class(is_primary) %>'>
+    <% if !is_primary %>
     <div class="control-group">
       <%= addresses_form.label :same_as_primary, 'Same as permanent address', class: 'control-label' %>
       <div class="controls">
@@ -18,35 +19,35 @@
     <div class="control-group">
       <%= addresses_form.label :full_address, address_string(addresses_form.object.primary?), class: 'control-label' %>
       <div class="controls">
-        <%= addresses_form.text_area :full_address, class: 'input-xlarge full-address-field', placeholder: 'Address', size: 24 %>
+        <%= addresses_form.text_area :full_address, class: 'input-xlarge full-address-field', placeholder: 'Address', size: 24, data: { field: 'full-address-field', class: address_field_class(is_primary) } %>
       </div>
     </div>
 
     <div class="control-group">
       <%= addresses_form.label :city, class: 'control-label' %>
       <div class="controls">
-        <%= addresses_form.text_field :city, class: 'input-xlarge city-field', placeholder: 'City', size: 24 %>
+        <%= addresses_form.text_field :city, class: 'input-xlarge city-field', placeholder: 'City', size: 24, data: { field: 'city-field', class: address_field_class(is_primary) } %>
       </div>
     </div>
 
     <div class="control-group">
       <%= addresses_form.label :pincode, class: 'control-label' %>
       <div class="controls">
-        <%= addresses_form.number_field :pincode, class: 'input-xlarge pincode-field', placeholder: 'Pincode', size: 24 %>
+        <%= addresses_form.number_field :pincode, class: 'input-xlarge pincode-field', placeholder: 'Pincode', size: 24, data: { field: 'pincode-field', class: address_field_class(is_primary) } %>
       </div>
     </div>
 
     <div class="control-group">
       <%= addresses_form.label :state, class: 'control-label' %>
       <div class="controls">
-        <%= addresses_form.text_field :state, class: 'input-xlarge state-field', placeholder: 'State', size: 24 %>
+        <%= addresses_form.text_field :state, class: 'input-xlarge state-field', placeholder: 'State', size: 24, data: { field: 'state-field', class: address_field_class(is_primary) } %>
       </div>
     </div>
 
     <div class="control-group">
       <%= addresses_form.label :country, class: 'control-label' %>
       <div class="controls">
-        <%= addresses_form.text_field :country, class: 'input-xlarge country-field', placeholder: 'Country', size: 24 %>
+        <%= addresses_form.text_field :country, class: 'input-xlarge country-field', placeholder: 'Country', size: 24, data: { field: 'country-field', class: address_field_class(is_primary) } %>
       </div>
     </div>
   </div>
