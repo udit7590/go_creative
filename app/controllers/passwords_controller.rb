@@ -1,7 +1,7 @@
 class PasswordsController < ::Devise::PasswordsController
 
   before_action :check_user_confirmed, only: :create
-  before_action :check_reset_password_token_valid, only: :edit
+  # before_action :check_reset_password_token_valid, only: :edit
 
   def after_resetting_password_path_for(resource)
     root_path
@@ -22,6 +22,7 @@ class PasswordsController < ::Devise::PasswordsController
     end
 
     def check_reset_password_token_valid
+      debugger
       original_token       = params[:reset_password_token]
       reset_password_token = Devise.token_generator.digest(self, :reset_password_token, original_token)
       @resource = resource_class.find_or_initialize_with_error_by(:reset_password_token, reset_password_token)

@@ -32,6 +32,10 @@ Gocreative::Application.routes.draw do
     # For Address proof upload
     post :upload_primary_address_proof
     post :upload_current_address_proof
+
+    # For updating address and PAN details
+    get :update_pan_details
+    get :update_address_details
   end
 
   resource :users do

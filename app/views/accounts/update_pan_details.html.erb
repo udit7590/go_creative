@@ -1,0 +1,21 @@
+<!-- Page Content
+================================================== --> 
+<div class="row"><!--Container row-->
+
+  <!-- Page Sidebar
+  ================================================== --> 
+  <%= render partial: 'sidebar' %>
+
+  <!-- Page Content
+  ================================================== --> 
+  <div class="span8"><!--Begin page content column-->
+
+    <h2 class="title-bg">Your Account Settings <%= image_tag 'site/account_settings.png', size: '42x42', class: 'pull-right' %></h2>
+
+      <!-- Form Name -->
+      <legend>Your Email ID: <span class='text-special'><%= @user.email %></span></legend>
+      <%= render partial: 'pan_details_form' %>
+      
+  </div> <!--End page content column--> 
+
+</div><!-- End container row -->

@@ -53,6 +53,12 @@ class AccountsController < ApplicationController
     end
   end
 
+  def update_pan_details
+  end
+
+  def update_address_details
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_account
