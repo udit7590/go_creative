@@ -3,6 +3,7 @@ class ProjectsController < ApplicationController
   before_action :store_location
   before_action :authenticate_user!, only: [:new, :create, :edit, :update, :delete]
   before_action :load_project, only: [:new, :create]
+  before_action :verify_project_approved_or_owner, only: :show
 
   def new
     @project.images.build
@@ -21,6 +22,11 @@ class ProjectsController < ApplicationController
         format.json { render json: @project.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  def show
+    @user = current_user
+    @project = Project.find_by_id(params[:id])
   end
   
   protected
@@ -65,6 +71,14 @@ class ProjectsController < ApplicationController
         format.html { redirect_to controller: :home, action: :index }
       end
       format.json { head :no_content }
+    end
+
+    def verify_project_approved_or_owner
+      @user = current_user
+      @project = Project.find_by_id(params[:id])
+      unless(@project.user == current_user || @project.verified_at)
+        redirect_to root_path, alert: 'Cannot find any such project'
+      end
     end
 
 end

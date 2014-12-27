@@ -1,0 +1,47 @@
+<!-- Blog Content
+  ================================================== --> 
+  <div class="row"><!--Container row-->
+
+        <!-- Blog Full Post
+        ================================================== --> 
+        <div class="span8 blog">
+
+          <!-- Blog Post 1 -->
+          <article>
+            <h3 class="title-bg"><%= @project.title %></h3>
+            <div class="post-content">
+              <a href="#"><%= image_tag 'img/gallery/post-img-1.jpg', alt: 'Post Thumb' %></a>
+
+              <div class="post-body">
+               <p class="lead"><%= @project.description %></p>
+
+                <blockquote>
+                  Maecenas felis tellus, fermentum vitae laoreet vitae, volutpat et urna. Nulla faucibus ligula eget ante varius ac euismod odio placerat.
+                </blockquote>
+               
+              </div>
+
+            </div>
+          </article>
+
+          <!-- About the Author -->
+          <section class="post-content">
+            <div class="post-body about-author">
+              <%= image_tag 'img/author-avatar.jpg', alt:'author' %>
+              <h4>About Nathan Brown</h4>
+              Proin tristique tellus in est vulputate luctus fermentum ipsum molestie. Vivamus tincidunt sem eu magna varius elementum. Maecenas felis tellus, fermentum vitae laoreet vitae, volutpat et urna. Nulla faucibus ligula eget ante varius ac euismod odio placerat. Nam sit amet felis non lorem faucibus rhoncus vitae id dui.
+            </div>
+          </section>
+
+        <!-- Post Comments
+        ================================================== --> 
+        <%= render 'project_comments' %>
+
+      </div><!--Close container row-->
+
+        <!-- Blog Sidebar
+        ================================================== --> 
+        <%= render 'project_sidebar' %>
+      </div>
+      
+    </div> <!-- End Container -->
