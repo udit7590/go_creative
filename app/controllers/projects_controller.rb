@@ -1,9 +1,10 @@
 class ProjectsController < ApplicationController
 
   before_action :store_location
-  before_action :authenticate_user!, only: [:new, :create, :edit, :update, :delete]
-  before_action :load_project, only: [:new, :create]
+  before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
   before_action :verify_project_approved_or_owner, only: :show
+  before_action :initialize_project, only: [:new, :create]
+  before_action :load_project, only: [:show, :edit, :update, :destroy]
 
   def new
     @project.images.build
@@ -24,16 +25,40 @@ class ProjectsController < ApplicationController
     end
   end
 
-  def show
+  def update
+    respond_to do |format|
+      if @project.update(project_params)
+        flash[:notice] = I18n.t :project_edited, scope: [:projects, :views]
+        format.html { redirect_to action: :show }
+        format.json { head :no_content }
+      else
+        format.html { render action: 'edit' }
+        format.json { render json: @project.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def destroy
+    #TODO: Delete the project
+    render text: 'TODO'
+  end
+
+  def user_projects
     @user = current_user
-    @project = Project.find_by_id(params[:id])
+    @projects = @user.projects
+    render 'user_projects'
   end
   
   protected
 
-    def load_project
+    def initialize_project
       @user = current_user
       @project = @user.projects.build
+    end
+
+    def load_project
+      @user = current_user
+      @project = Project.find_by_id(params[:id])
     end
 
     def project_params

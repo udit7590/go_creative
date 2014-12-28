@@ -18,7 +18,7 @@
         <a class="dropdown-toggle" href="#account">My Account <b class="caret"></b></a>
         <ul class="dropdown-menu">
           <li><%= link_to :Profile, edit_account_path, method: :get %></li>
-          <li><a href="#">Projects</a></li>
+          <li><%= link_to :Projects, current_users_projects_path, method: :get %></li>
           <li><%= link_to :Start_a_project, new_users_project_path, method: :get %></li>
           <li><%= link_to :Logout, destroy_user_session_path, method: :delete %></li>
         </ul>

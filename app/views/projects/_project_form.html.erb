@@ -1,5 +1,5 @@
 
-<%= form_for([:users, @project], html: { class: 'form-horizontal', multipart: true }) do |f| %>
+<%= form_for(project, html: { class: 'form-horizontal', multipart: true }) do |f| %>
 <fieldset>
 
   <%= render 'errors' %>
