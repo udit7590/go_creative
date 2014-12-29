@@ -48,7 +48,25 @@ class Project < ActiveRecord::Base
     errors[:min_amount_per_contribution] << 'should be a multiple of 5' if !(amount_required % 5 == 0)
   end
 
+  # It reduces and fixes the error messages for the attachments in an association.
   def filter_images_error_messages
+    new_error_messages = {}
+
+    errors.each do |attribute, msg|
+      if [:'images.image', :'legal_documents.image', :project_picture].include? attribute
+        errors.delete(attribute)
+      elsif attribute.match(/([A-z_0-9]+)(\.([A-z_0-9]+))+/)
+        key_index = $3.index('_') + 1
+        key_string = $3[key_index..-1].humanize + ' '
+        new_error_messages[$1] ||= key_string.downcase + errors[attribute].first
+        errors.delete(attribute)
+      end
+    end
+
+    new_error_messages.each do |key, value|
+      errors.add(key, value)
+    end
+    
   end
 
 end
