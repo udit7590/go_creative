@@ -89,7 +89,7 @@ class ProjectsController < ApplicationController
 
       unless @user.complete?
         flash[:notice] = I18n.t :pan_details_incomplete, scope: [:projects, :views]
-        missing_page = (@user.missing_info_page == :missing_pan) ? :pan_details_incomplete : :address_details_incomplete
+        missing_page = (@user.missing_info_page == :missing_pan) ? :update_pan_details : :update_address_details
         format.html { redirect_to controller: :accounts, action: missing_page }
       else
         flash[:notice] = I18n.t :project_created, scope: [:projects, :views]

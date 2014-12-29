@@ -1,5 +1,7 @@
 class User < ActiveRecord::Base
 
+  attr_accessor :missing_info_page
+  
   # -------------- SECTION FOR ASSOCAITIONS ---------------------
   # -------------------------------------------------------------
 
@@ -55,10 +57,12 @@ class User < ActiveRecord::Base
   def complete?
     if !pan_details_complete?
       @missing_info_page = :missing_pan
+      false
     elsif !primary_address_details_complete?
       @missing_info_page = :missing_address
+      false
     else
-      nil
+      true
     end   
   end
 

@@ -21,7 +21,10 @@ module AddressesFormHelper
         (number - address_count - 1).times { user.addresses.build }
       end
     end
-    user.addresses.sort
+
+    #Fixes out of order addresses by sorting the collection proxy object. 
+    #Collection proxy stores the associated objects in @association.target
+    user.addresses.instance_variable_get(:@association).target.sort! { |a, b| a.primary? ? -1 : 1 }
   end
 
 end
