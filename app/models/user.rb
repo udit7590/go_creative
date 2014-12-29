@@ -59,15 +59,7 @@ class User < ActiveRecord::Base
       @missing_info_page = :missing_address
     else
       nil
-    end
-        
-  end
-
-  def missing_info_page
-    if !pan_details_complete?
-      :update_pan_details
-    else
-
+    end   
   end
 
 end
