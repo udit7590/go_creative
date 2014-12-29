@@ -36,6 +36,7 @@ Gocreative::Application.routes.draw do
     # For updating address and PAN details
     get :update_pan_details
     get :update_address_details
+    patch :update_incomplete_details
   end
 
   resource :users do

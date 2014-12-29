@@ -1,4 +1,5 @@
 class ProjectsController < ApplicationController
+  include UserHelper
 
   before_action :store_location
   before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
@@ -81,21 +82,14 @@ class ProjectsController < ApplicationController
 
     # Checks if details of the user are complete and redirect accordingly.
     # Takes format argument to redirect based on requested format.
-    def check_user_details_and_redirect(format)
+    def check_project_user_details_and_redirect(format)
       @user = @project.user
       unless @user
         format.html { redirect_to controller: :home, action: :index, alert: 'This project has been deleted.' }
       end
 
-      unless @user.complete?
-        flash[:notice] = I18n.t :pan_details_incomplete, scope: [:projects, :views]
-        missing_page = (@user.missing_info_page == :missing_pan) ? :update_pan_details : :update_address_details
-        format.html { redirect_to controller: :accounts, action: missing_page }
-      else
-        flash[:notice] = I18n.t :project_created, scope: [:projects, :views]
-        format.html { redirect_to controller: :home, action: :index }
-      end
-      format.json { head :no_content }
+      check_user_details_and_redirect(format, @user)
+
     end
 
     def verify_project_approved_or_owner

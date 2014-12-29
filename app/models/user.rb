@@ -41,7 +41,7 @@ class User < ActiveRecord::Base
   end
 
   def pan_details_complete?
-    !!(pan_card && pan_card_copy)
+    !!(pan_card && pan_card_copy.exists?)
   end
 
   def primary_address_details_complete?

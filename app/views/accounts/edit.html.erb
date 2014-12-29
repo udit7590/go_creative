@@ -26,10 +26,10 @@
         <%= render partial: 'general_profile_form' %>
       </div>
       <div class="tab-pane" id="user_address">
-        <%= render partial: 'address_fields_for_form' %>
+        <%= render partial: 'address_fields_for_form', locals: { action_redirect: account_path } %>
       </div>
       <div class="tab-pane" id="user_pan_card">
-        <%= render partial: 'pan_details_form' %>
+        <%= render partial: 'pan_details_form', locals: { action_redirect: account_path } %>
       </div>
     </div>
       

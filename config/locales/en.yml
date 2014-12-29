@@ -31,7 +31,7 @@ en:
 
   projects:
     views:
-      pan_details_incomplete: 'Your pan details are incomplete. Please provide the following details to proceed further.'
-      address_details_incomplete: 'Your address details are incomplete. Please provide the following details to proceed further.'
+      pan_details_incomplete: 'Your pan details (PAN Card Number or PAN card proof) are incomplete. Please provide the following details to proceed further.'
+      address_details_incomplete: 'Your address or address proof details are incomplete. Please provide the following details to proceed further.'
       project_created: 'Your project is created.'
       project_edited: 'Your project details have successfully been updated.'

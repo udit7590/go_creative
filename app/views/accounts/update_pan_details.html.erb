@@ -14,7 +14,7 @@
 
       <!-- Form Name -->
       <legend>Your Email ID: <span class='text-special'><%= @user.email %></span></legend>
-      <%= render partial: 'pan_details_form' %>
+      <%= render partial: 'pan_details_form', locals: { action_redirect: update_incomplete_details_account_path } %>
       
   </div> <!--End page content column--> 
 

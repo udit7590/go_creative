@@ -1,4 +1,4 @@
-<%= form_for(@user, url: account_path, method: :patch, html: { class: 'form-horizontal' }) do |f| %>
+<%= form_for(@user, url: action_redirect, method: :patch, html: { class: 'form-horizontal' }) do |f| %>
 <fieldset>
   <%= f.fields_for :addresses do |addresses_form| %>
     <% is_primary = addresses_form.object.primary? %>

@@ -1,10 +1,10 @@
 class AccountsController < ApplicationController
-  include AddressesFormHelper
+  include AddressesFormHelper, UserHelper
 
   before_action :store_location
   before_action :authenticate_user!
   before_action :set_account, only: [:edit, :update, :upload_pan_card_image, :upload_primary_address_proof, :upload_current_address_proof]
-  before_action :set_user, only: [:update_pan_details, :update_address_details]
+  before_action :set_user, only: [:update_pan_details, :update_address_details, :update_incomplete_details]
 
   def edit
     build_max_n_addresses(@user, 2)
@@ -70,6 +70,17 @@ class AccountsController < ApplicationController
   def update_address_details
     build_max_n_addresses(@user, 2)
     render :update_address_details
+  end
+
+  def update_incomplete_details
+    respond_to do |format|
+      if @user.update(account_params)
+        check_user_details_and_redirect(format, @user)
+      else
+        format.html { render action: 'edit' }
+        format.json { render json: @user.errors, status: :unprocessable_entity }
+      end
+    end
   end
 
   private
