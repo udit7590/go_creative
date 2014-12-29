@@ -1,7 +1,7 @@
 class PasswordsController < ::Devise::PasswordsController
 
   before_action :check_user_confirmed, only: :create
-  # before_action :check_reset_password_token_valid, only: :edit
+  before_action :check_reset_password_token_valid, only: :edit
 
   def after_resetting_password_path_for(resource)
     root_path

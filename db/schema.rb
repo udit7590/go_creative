@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141222095225) do
+ActiveRecord::Schema.define(version: 20141229050212) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -66,8 +66,8 @@ ActiveRecord::Schema.define(version: 20141222095225) do
 
   create_table "projects", force: true do |t|
     t.string   "title"
-    t.integer  "amount_required"
-    t.integer  "min_amount_divisor", default: 10
+    t.decimal  "amount_required",              precision: 12, scale: 2
+    t.integer  "min_amount_divisor",                                    default: 10
     t.text     "description"
     t.datetime "end_date"
     t.string   "video_link"
@@ -77,6 +77,11 @@ ActiveRecord::Schema.define(version: 20141222095225) do
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.decimal  "min_amount_per_contribution",  precision: 12, scale: 2
+    t.string   "project_picture_file_name"
+    t.string   "project_picture_content_type"
+    t.integer  "project_picture_file_size"
+    t.datetime "project_picture_updated_at"
   end
 
   create_table "users", force: true do |t|
