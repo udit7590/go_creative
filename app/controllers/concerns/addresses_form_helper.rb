@@ -21,6 +21,7 @@ module AddressesFormHelper
         (number - address_count - 1).times { user.addresses.build }
       end
     end
+    user.addresses.sort
   end
 
 end
