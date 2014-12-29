@@ -53,10 +53,19 @@
   </div>
 
   <div class="control-group">
-    <%= f.label :minimum_amount_per_contribution, 'Min amount per contribution', class: 'control-label' %>
+    <%= f.label :min_amount_per_contribution, 'Min amount per contribution', class: 'control-label' %>
     <div class="controls">
-      <%= f.number_field :minimum_amount_per_contribution, class: 'input-xlarge', placeholder: 'Min amount per contribution', size: 16, readonly: true %>
+      <%= f.number_field :min_amount_per_contribution, class: 'input-xlarge', placeholder: 'Min amount per contribution', size: 16, step: 5, required: true, max: 10000000 %>
       <p class="help-block">This indicate the number of users who has to fund your project for its success. (Your amount / 10)</p>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :project_picture, 'Project Picture', class: 'control-label' %>
+    <div class="controls">
+      <%= f.file_field :project_picture, multiple: false, class: 'filestyle', data: { buttonName: 'btn', buttonText: 'Select File' } %>
+      <p class="help-block">Max file size: 2MB. Valid Image Types: PNG, JPEG, GIF<br />
+        This will be the main display pic of your project page.</p>
     </div>
   </div>
 
@@ -64,7 +73,8 @@
     <%= f.label :images, 'Images', class: 'control-label' %>
     <div class="controls">
       <%= f.file_field :images, multiple: true, class: 'filestyle', name: 'project[images_attributes][][image]', data: { buttonName: 'btn', buttonText: 'Select Files' } %>
-      <p class="help-block">Max file size: 2MB. Valid Image Types: PNG, JPEG, GIF</p>
+      <p class="help-block">Max file size: 2MB. Valid Image Types: PNG, JPEG, GIF<br /></p>
+      These images will be used to build a gallery for your project or style your project page.
     </div>
   </div>
 

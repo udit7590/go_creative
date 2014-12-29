@@ -31,7 +31,7 @@ class ProjectsController < ApplicationController
     end
 
     def project_params
-      params.require(:project).permit(:type, :title, :description, :end_date, :amount_required, :video_link, images_attributes: [:id, :image], legal_documents_attributes: [:id, :image])
+      params.require(:project).permit(:type, :title, :description, :end_date, :amount_required, :video_link, :min_amount_per_contribution, :project_picture, images_attributes: [:id, :image], legal_documents_attributes: [:id, :image])
     end
 
     def upload_images_and_documents

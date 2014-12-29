@@ -10,7 +10,7 @@ var ProjectsPage = (function() {
     var _this = this;
     if(this.$amountRequired) {
       this.$amountRequired.change(function() {
-        _this.$minAmountPerContribution.val(this.value / 10);
+        _this.$minAmountPerContribution.attr('max', _this.$amountRequired.val());
       });
     }
   };
@@ -37,7 +37,7 @@ var ProjectsPage = (function() {
 })();
 
 $(document).ready(function() {
-  var projectsPage = new ProjectsPage($('#endDateTimePicker'),$('#project_amount_required'), $('#project_minimum_amount_per_contribution'));
+  var projectsPage = new ProjectsPage($('#endDateTimePicker'),$('#project_amount_required'), $('#project_min_amount_per_contribution'));
 
   try {
     projectsPage.configureDateTimePicker();
