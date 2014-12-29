@@ -27,7 +27,7 @@ class Project < ActiveRecord::Base
   validates :min_amount_per_contribution, numericality: { greater_than: 0, less_than_or_equal_to: :amount_required }
 
   validate :amount_multiple_of_100
-  validate :min_amount_multiple_of_5
+  validate :min_amount_multiple_of_10
   validates_attachment_content_type :project_picture, content_type: %w(image/jpg image/jpeg image/png image/gif)
 
   # -------------- SECTION FOR SCOPES AND METHODS ---------------
@@ -46,8 +46,8 @@ class Project < ActiveRecord::Base
     errors[:amount_required] << 'should be a multiple of 100' if !(amount_required % 100 == 0)
   end
 
-  def min_amount_multiple_of_5
-    errors[:min_amount_per_contribution] << 'should be a multiple of 5' if !(amount_required % 5 == 0)
+  def min_amount_multiple_of_10
+    errors[:min_amount_per_contribution] << 'should be a multiple of 5' if !(amount_required % 10 == 0)
   end
 
   # It reduces and fixes the error messages for the attachments in an association.

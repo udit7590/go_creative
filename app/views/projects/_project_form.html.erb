@@ -7,14 +7,14 @@
   <div class="control-group">
     <%= f.label :type, 'Type of project', class: 'control-label' %>
     <div class="form-group controls">
-      <%= f.select :type, [['Select',''],['Charity','CharityProject'], ['Investment','InvestmentProject']], class: 'form-control' %>
+      <%= f.select :type, [['Select',''],['Charity','CharityProject'], ['Investment','InvestmentProject']], class: 'form-control', autofocus: true %>
     </div>
   </div>
 
   <div class="control-group">
     <%= f.label :title, 'Title', class: 'control-label' %>
     <div class="controls">
-      <%= f.text_field :title, autofocus: true, class: 'input-xlarge', placeholder: 'Project Title*', size: 16, required: true %>
+      <%= f.text_field :title, class: 'input-xlarge', placeholder: 'Project Title*', size: 16, required: true %>
     </div>
   </div>
 
@@ -55,8 +55,8 @@
   <div class="control-group">
     <%= f.label :min_amount_per_contribution, 'Min amount per contribution', class: 'control-label' %>
     <div class="controls">
-      <%= f.number_field :min_amount_per_contribution, class: 'input-xlarge', placeholder: 'Min amount per contribution', size: 16, step: 5, required: true, max: 10000000 %>
-      <p class="help-block">This indicate the number of users who has to fund your project for its success. (Your amount / 10)</p>
+      <%= f.number_field :min_amount_per_contribution, class: 'input-xlarge', placeholder: 'Min amount per contribution*', size: 16, step: 10, required: true, max: 10000000 %>
+      <p class="help-block">Minimum amount you want the user to contribute.</p>
     </div>
   </div>
 
