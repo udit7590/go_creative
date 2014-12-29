@@ -52,21 +52,19 @@ class ProjectsController < ApplicationController
     # Takes format argument to redirect based on requested format.
     def check_user_details_and_redirect(format)
       @user = @project.user
-      unless @user.pan_details_complete?
-        flash[:notice] = I18n.t :pan_details_incomplete, scope: [:projects, :views]
-        format.html { redirect_to controller: :accounts, action: :update_pan_details }
-        format.json { head :no_content }
-      else
-        unless @user.primary_address_details_complete?
-          flash[:notice] = I18n.t :address_details_incomplete, scope: [:projects, :views]
-          format.html { redirect_to controller: :accounts, action: :update_address_details }
-          format.json { head :no_content }
-        else
-          flash[:notice] = I18n.t :project_created, scope: [:projects, :views]
-          format.html { redirect_to controller: :home, action: :index }
-          format.json { head :no_content }
-        end
+      unless @user
+        format.html { redirect_to controller: :home, action: :index, alert: 'This project has been deleted.' }
       end
+
+      unless @user.complete?
+        flash[:notice] = I18n.t :pan_details_incomplete, scope: [:projects, :views]
+        missing_page = (@user.missing_info_page == :missing_pan) ? :pan_details_incomplete : :address_details_incomplete
+        format.html { redirect_to controller: :accounts, action: missing_page }
+      else
+        flash[:notice] = I18n.t :project_created, scope: [:projects, :views]
+        format.html { redirect_to controller: :home, action: :index }
+      end
+      format.json { head :no_content }
     end
 
 end

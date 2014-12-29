@@ -60,7 +60,7 @@ class AccountsController < ApplicationController
 
   def update_address_details
     build_max_n_addresses(@user, 2)
-    render 'update_address_details'
+    render :update_address_details
   end
 
   private
@@ -73,7 +73,7 @@ class AccountsController < ApplicationController
     end
 
     def set_user
-      @user = current_user || User.find_by_id(params[:id])
+      @user = current_user
     end
 
     # Never trust parameters from the scary internet, only allow the white
