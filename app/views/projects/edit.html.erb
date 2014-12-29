@@ -5,11 +5,10 @@
   <!-- Title Header -->
   <div class="span8"><!--Begin page content column-->
 
-    <h2 class="title-bg">Start a project: </h2>
+    <h2 class="title-bg">Edit your project details: </h2>
     <legend>Your Email ID: <span class='text-special'><%= @user.email %></span></legend>
-    <p class="lead">Please provide us the details of the project.</p>
     
-    <%= render partial: 'project_form', locals: { project: [:users, @project] } %>
+     <%= render partial: 'project_form', locals: { project: @project.becomes(Project) } %>
 
   </div> <!--End page content column-->
 

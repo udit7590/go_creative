@@ -10,6 +10,8 @@ class Project < ActiveRecord::Base
   accepts_nested_attributes_for :images, :legal_documents
 
   after_validation :filter_images_error_messages
+  before_create :set_time_to_midnight
+  before_update :set_time_to_midnight
   
   # -------------- SECTION FOR VALIDATIONS ----------------------
   # -------------------------------------------------------------
@@ -68,5 +70,10 @@ class Project < ActiveRecord::Base
     end
     
   end
+
+  protected
+    def set_time_to_midnight
+      self.end_date = self.end_date.at_end_of_day
+    end
 
 end

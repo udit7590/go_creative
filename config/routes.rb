@@ -39,7 +39,9 @@ Gocreative::Application.routes.draw do
   end
 
   resource :users do
-    resources :projects, shallow: true
+    resources :projects, shallow: true do
+      get :user_projects, path: 'my', on: :collection, as: 'current'
+    end
   end
 
 end

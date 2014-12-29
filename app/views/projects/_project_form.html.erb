@@ -1,5 +1,5 @@
 
-<%= form_for([:users, @project], html: { class: 'form-horizontal', multipart: true }) do |f| %>
+<%= form_for(project, html: { class: 'form-horizontal', multipart: true }) do |f| %>
 <fieldset>
 
   <%= render 'errors' %>
@@ -7,7 +7,7 @@
   <div class="control-group">
     <%= f.label :type, 'Type of project', class: 'control-label' %>
     <div class="form-group controls">
-      <%= f.select :type, [['Charity','CharityProject'], ['Investment','InvestmentProject']], class: 'form-control' %>
+      <%= f.select :type, [['Select',''],['Charity','CharityProject'], ['Investment','InvestmentProject']], class: 'form-control' %>
     </div>
   </div>
 

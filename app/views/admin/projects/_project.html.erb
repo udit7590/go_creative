@@ -1,9 +1,9 @@
 <tr>
-  <td><%= project_counter + 1 %></td>
   <td><%= project.title %></td>
   <td><%= humanize_sti_class(project.type) %></td>
-  <td><%= number_to_currency(number_to_human(project.amount_required), unit: "INR ") %></td>
+  <td><%= number_to_currency(project.amount_required, unit: 'INR ') %></td>
   <td><a href="#" data-toggle="tooltip" data-placement="bottom" data-original-title="<%= project.user.email %>"><%= project.user.name %></a></td>
+  <td><%= project.created_at.to_s(:short) %></td>
   <td><%= project.end_date.to_s(:long) %></td>
   <td>
     <%= link_to (image_tag 'dashboard/view.png' ,title: 'View', data: { toggle: 'tooltip', placement: 'bottom' }, size: '24x24'), { action: :index } %>

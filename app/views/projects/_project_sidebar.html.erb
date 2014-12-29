@@ -1,0 +1,33 @@
+<div class="span4 sidebar">
+
+  <!--Starter Info-->
+  <center><h2 class="title-bg">Project Starter: <%= @user.first_name%></h2>
+  <%= image_tag 'site/user_profile1.png' %></center>
+  <br />
+
+  <!--Project Info-->
+  <center><h2 class="title-bg">End Date: <%= @project.end_date.to_s(:short) %></h2>
+  <h2>Amount: <%= number_to_currency(@project.amount_required, unit: 'INR ') %></h2></center>
+  <div class="control-group">
+    <div class="controls">
+      <center><%= button_tag 'Contribute', class: 'btn btn-primary btn-large btn-block' %></center>
+    </div>
+  </div>
+  <br />
+
+  <!--Video Widget-->
+  <h5 class="title-bg">Project Video</h5>
+  <iframe src="http://player.vimeo.com/video/24496773" width="370" height="208"></iframe>
+
+  <!--Categories-->
+  <h5 class="title-bg">Inquiry</h5>
+  <ul class="post-category-list">
+    <li><a href="#"><i class="icon-plus-sign"></i>Gifts</a></li>
+    <li><a href="#"><i class="icon-plus-sign"></i>Contact Project Starter</a></li>
+    <li><a href="#"><i class="icon-plus-sign"></i>FAQs</a></li>
+  </ul>
+
+  <!--Tabbed Content-->
+  <h5 class="title-bg">More Info</h5>
+  
+</div>
