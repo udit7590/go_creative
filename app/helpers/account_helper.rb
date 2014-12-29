@@ -19,7 +19,8 @@ module AccountHelper
     if address
       image_available = %{
       <p class="#{ address.primary? ? primary_address_class : current_address_class }">
-        <img src = "#{ address.address_proof }" /><br />
+      <a href="#{ address.address_proof }" data-lightbox="#{ address.address_proof_file_name
+ }" data-title="Your Address Proof"><img src = "#{ address.address_proof }", width="100", height="100" /></a><br />
         This is the copy available with us. You can provide the proof again using the dropbox below.<p>
       }
 
@@ -43,7 +44,8 @@ module AccountHelper
     pan_card_copy_class = 'pancard-copy-upload'
     pan_card_copy_available = %{
       <p class="#{ pan_card_copy_class }">
-        <img src = "#{ pan_card_copy }" /><br />
+        <a href="#{ pan_card_copy }" data-lightbox="#{ pan_card_copy.instance.pan_card_copy_file_name
+ }" data-title="PAN Card"><img src = "#{ pan_card_copy }", width="100", height="100"/></a><br />
         This is the copy available with us. You can provide the proof again using the dropbox below.<p>
     }
 

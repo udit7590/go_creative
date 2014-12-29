@@ -13,7 +13,7 @@ class AccountsController < ApplicationController
   def update
     respond_to do |format|
       if @user.update(account_params)
-        format.html { redirect_to edit_account_path(@user), notice: 'Your account has successfully been updated.' }
+        format.html { redirect_to edit_account_path(@user) + '#user_address', notice: 'Your account has successfully been updated.' }
         format.json { head :no_content }
       else
         format.html { render action: 'edit' }
@@ -24,33 +24,42 @@ class AccountsController < ApplicationController
 
   def upload_pan_card_image
     if(@user.update(pan_card_copy: params[:user][:pan_card_copy]))
-      render json: { message: 'success' }, status: 200
+      render json: { 
+                  message: 'success', 
+                  filename: @user.pan_card_copy 
+                }, status: 200
     else
-      render json: { error: @user.errors.full_messages.join(',') }, status: 400
+      render json: { error: @user.errors.full_messages.join(',') }, status: :bad_request
     end
   end
 
   def upload_primary_address_proof
     if @user.addresses.primary_address
       if(@user.addresses.primary_address.update(address_proof: params[:address][:address_proof]))
-        render json: { message: 'success' }, status: 200
+        render json: { 
+                  message: 'success', 
+                  filename: @user.addresses.primary_address.address_proof
+                }, status: 200
       else
-        render json: { error: @user.errors.full_messages.join(',') }, status: 400
+        render json: { error: @user.errors.full_messages.join(',') }, status: :bad_request
       end
     else
-      render json: { error: 'Please provide address details first'}, status: 400
+      render json: { error: 'Please provide address details first' }, status: :bad_request
     end
   end
 
   def upload_current_address_proof
     if @user.addresses.current_address
       if(@user.addresses.current_address.update(address_proof: params[:address][:address_proof]))
-        render json: { message: 'success' }, status: 200
+        render json: { 
+                  message: 'success', 
+                  filename: @user.addresses.current_address.address_proof 
+                }, status: 200
       else
-        render json: { error: @user.errors.full_messages.join(',') }, status: 400
+        render json: { error: @user.errors.full_messages.join(',') }, status: :bad_request
       end
     else
-      render json: { error: 'Please provide address details first'}, status: 400
+      render json: { error: 'Please provide address details first' }, status: :bad_request
     end
   end
 

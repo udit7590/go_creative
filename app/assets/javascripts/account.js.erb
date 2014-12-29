@@ -55,53 +55,23 @@ var AccountsPage = (function() {
     var _this = this;
 
     if(this.pancardDropzone) {
-      this.pancardDropzone.on('success', function() {
-        var image = _this.$pancard_warn_text.find('img');
-
+      this.pancardDropzone.on('success', function(file, response) {
         alert('Your pancard copy is successfully uploaded.');
-        if(image.length) {
-          image.replaceWith($(this.files[0].previewTemplate).find('img')[0]);
-        } else {
-          _this.$pancard_warn_text
-             .removeClass('text-warning').text('Your image uploaded successfully.')
-             .prepend($(this.files[0].previewTemplate).find('img')[0]);
-        }
-
-        this.removeAllFiles();
+        replaceImageAfterUpload(_this.$pancard_warn_text, response.filename, this);
       });
     }
 
     if(this.addressProofDropzone) {
-      this.addressProofDropzone.on('success', function() {
-        var image = _this.$primary_address_warn_text.find('img');
-
+      this.addressProofDropzone.on('success', function(file, response) {
         alert('Your address proof copy is successfully uploaded.');
-
-        if(image.length) {
-          image.replaceWith($(this.files[0].previewTemplate).find('img')[0]);
-        } else {
-          _this.$primary_address_warn_text
-             .removeClass('text-warning').text('Your image uploaded successfully.')
-             .prepend($(this.files[0].previewTemplate).find('img')[0]);
-        }
-        
-        this.removeAllFiles();
+        replaceImageAfterUpload(_this.$primary_address_warn_text, response.filename, this);
       });
     }
 
     if(this.currentAddressProofDropzone) {
-      this.currentAddressProofDropzone.on('success', function() {
-        var image = _this.$current_address_warn_text.find('img');
+      this.currentAddressProofDropzone.on('success', function(file, response) {
         alert('Your current address proof copy is successfully uploaded.');
-        if(image.length ) {
-          image.replaceWith($(this.files[0].previewTemplate).find('img')[0]);
-        } else {
-          _this.$current_address_warn_text
-             .removeClass('text-warning').text('Your image uploaded successfully.')
-             .prepend($(this.files[0].previewTemplate).find('img')[0]);
-        }
-
-        this.removeAllFiles();
+        replaceImageAfterUpload(_this.$current_address_warn_text, response.filename, this);
       });
     }
   };
@@ -120,12 +90,14 @@ var AccountsPage = (function() {
           childElements.filter('[data-field=' + $(this).data('field') + ']').val(this.value);
         });
 
+        //Hide current address form fields and disable the dropzone
         _this.$current_address_container.find('div.control-group:not(:first)').hide();
         if(_this.currentAddressProofDropzone) {
           _this.currentAddressProofDropzone.disable();
         }
         
       } else {
+        //Show current address form fields and Enable the dropzone
         _this.$current_address_container.find('div.control-group:not(:first)').show();
         if(_this.currentAddressProofDropzone) {
           _this.currentAddressProofDropzone.enable();
@@ -139,6 +111,29 @@ var AccountsPage = (function() {
     this.bindEventsForCurrentAddressCheckbox();
 
   };
+
+  //-----------------------------------
+  //Section for private Functions
+  //-----------------------------------
+
+  function replaceImageAfterUpload(container, imagePath, dropzone) {
+    var $imageLink = container.find('a');
+
+    if($imageLink.length ) {
+      $imageLink.attr('href', imagePath);
+      $imageLink.children('img').attr('src', imagePath).attr('width', '100px').attr('height', '100px');
+    } else {
+      $imageLink = $('<a>', { href: imagePath })
+                  .data('lightbox', imagePath)
+                  .html($('<img>', { src: imagePath }));
+
+      container.removeClass('text-warning').text('Your image uploaded successfully.')
+         .prepend($imageLink);
+    }
+
+    dropzone.removeAllFiles();
+
+  }
 
   //Return the class
   return AccountsPage;
@@ -168,4 +163,13 @@ $(function() {
   } catch(err) {
     console.log(err)
   }
+
+  //Select Tab based on url hash
+  $('ul.nav a').click(function() {
+    window.location.hash = $(this).attr('href');
+  });
+  if(window.location.hash) {
+    $('ul.nav a[href="' + window.location.hash + '"]').tab('show');
+  }
+  
 });
