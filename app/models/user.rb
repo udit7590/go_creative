@@ -37,4 +37,37 @@ class User < ActiveRecord::Base
   def delete_pan_card_copy
     self.pan_card_copy = nil
   end
+
+  def pan_details_complete?
+    !!(pan_card && pan_card_copy)
+  end
+
+  def primary_address_details_complete?
+    primary_address = addresses.primary_address
+    !!(primary_address && primary_address.address_proof.exists?)
+  end
+
+  def current_address_details_complete?
+    current_address = addresses.current_address
+    !!(current_address && current_address.address_proof.exists?)
+  end
+
+  def complete?
+    if !pan_details_complete?
+      @missing_info_page = :missing_pan
+    elsif !primary_address_details_complete?
+      @missing_info_page = :missing_address
+    else
+      nil
+    end
+        
+  end
+
+  def missing_info_page
+    if !pan_details_complete?
+      :update_pan_details
+    else
+
+  end
+
 end

@@ -9,6 +9,8 @@ class Project < ActiveRecord::Base
   belongs_to :user
 
   accepts_nested_attributes_for :images, :legal_documents
+
+  after_validation :filter_images_error_messages
   
   # -------------- SECTION FOR VALIDATIONS ----------------------
   # -------------------------------------------------------------
@@ -37,6 +39,9 @@ class Project < ActiveRecord::Base
 
   def amount_multiple_of_100
     errors[:amount_required] << 'should be a multiple of 100' if (!(amount_required % 100).is_a? Fixnum)
+  end
+
+  def filter_images_error_messages
   end
 
 end

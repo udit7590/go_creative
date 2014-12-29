@@ -8,23 +8,27 @@ var ProjectsPage = (function() {
 
   ProjectsPage.prototype.bindChangeEventForAmountField = function() {
     var _this = this;
-    this.$amountRequired.change(function() {
-      _this.$minAmountPerContribution.val(this.value / 10);
-    });
+    if(this.$amountRequired) {
+      this.$amountRequired.change(function() {
+        _this.$minAmountPerContribution.val(this.value / 10);
+      });
+    }
   };
   
   ProjectsPage.prototype.configureDateTimePicker = function() {
     var currentDate = new Date(),
         dateAfterFiveDays = currentDate.setDate(currentDate.getDate() + 5);
 
-    this.$datetimepicker.datetimepicker({
-      pickTime: false,
-      startDate: currentDate,      // set a minimum date
-      endDate: dateAfterFiveDays
-    });
+    if(this.$datetimepicker.length) {
+      this.$datetimepicker.datetimepicker({
+        pickTime: false,
+        startDate: currentDate,      // set a minimum date
+        endDate: dateAfterFiveDays
+      });
 
-    //Set initial date after five days
-    this.$datetimepicker.data('datetimepicker').setDate(dateAfterFiveDays);
+      //Set initial date after five days
+      this.$datetimepicker.data('datetimepicker').setDate(dateAfterFiveDays);
+    }
 
   };
 
@@ -35,7 +39,11 @@ var ProjectsPage = (function() {
 $(document).ready(function() {
   var projectsPage = new ProjectsPage($('#endDateTimePicker'),$('#project_amount_required'), $('#project_minimum_amount_per_contribution'));
 
-  projectsPage.configureDateTimePicker();
-  projectsPage.bindChangeEventForAmountField();
+  try {
+    projectsPage.configureDateTimePicker();
+    projectsPage.bindChangeEventForAmountField();
+  } catch(err) {
+    console.log(err)
+  }
 
 });

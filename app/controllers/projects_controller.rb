@@ -12,9 +12,7 @@ class ProjectsController < ApplicationController
     respond_to do |format|
       @project = current_user.projects.build(project_params)
       if @project.save
-        flash[:notice] = 'Your project is created.'
-        format.html { redirect_to controller: :home, action: :index }
-        format.json { head :no_content }
+        check_user_details_and_redirect(format)
       else
         @project = @project.becomes!(Project)
         @project.type = params[:project][:type]
@@ -48,6 +46,25 @@ class ProjectsController < ApplicationController
           @project.images.create(image: project_doc, document: true)
         end
       end
+    end
+
+    # Checks if details of the user are complete and redirect accordingly.
+    # Takes format argument to redirect based on requested format.
+    def check_user_details_and_redirect(format)
+      @user = @project.user
+      unless @user
+        format.html { redirect_to controller: :home, action: :index, alert: 'This project has been deleted.' }
+      end
+
+      unless @user.complete?
+        flash[:notice] = I18n.t :pan_details_incomplete, scope: [:projects, :views]
+        missing_page = (@user.missing_info_page == :missing_pan) ? :pan_details_incomplete : :address_details_incomplete
+        format.html { redirect_to controller: :accounts, action: missing_page }
+      else
+        flash[:notice] = I18n.t :project_created, scope: [:projects, :views]
+        format.html { redirect_to controller: :home, action: :index }
+      end
+      format.json { head :no_content }
     end
 
 end

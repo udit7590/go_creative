@@ -20,92 +20,116 @@ var AccountsPage = (function() {
   }
 
   AccountsPage.prototype.createDropZonesForUpload = function() {
-    this.pancardDropzone = new Dropzone(this.panCardUploadBoxName, {
-      maxFilesize: 2, // MB
-      maxFiles: 1,
-      addRemoveLinks: true,
-      paramName: "user[pan_card_copy]",
-    });
+    try {
+      this.pancardDropzone = new Dropzone(this.panCardUploadBoxName, {
+        maxFilesize: 2, // MB
+        maxFiles: 1,
+        addRemoveLinks: true,
+        paramName: "user[pan_card_copy]",
+      });
+    } catch (err) {
+      console.log(err)
+    }
 
-    this.addressProofDropzone = new Dropzone(this.addressProofUploadBoxName, {
-      maxFilesize: 2, // MB
-      maxFiles: 1,
-      addRemoveLinks: true,
-      paramName: "address[address_proof]",
-    });
+    try {
+      this.addressProofDropzone = new Dropzone(this.addressProofUploadBoxName, {
+        maxFilesize: 2, // MB
+        maxFiles: 1,
+        addRemoveLinks: true,
+        paramName: "address[address_proof]",
+      });
 
-    this.currentAddressProofDropzone = new Dropzone(this.currentAddressProofUploadBoxName, {
-      maxFilesize: 2, // MB
-      maxFiles: 1,
-      addRemoveLinks: true,
-      paramName: "address[address_proof]",
-    });
+      this.currentAddressProofDropzone = new Dropzone(this.currentAddressProofUploadBoxName, {
+        maxFilesize: 2, // MB
+        maxFiles: 1,
+        addRemoveLinks: true,
+        paramName: "address[address_proof]",
+      });
+    } catch (err) {
+      console.log(err)
+    }
+
   };
 
   AccountsPage.prototype.bindEventsForDropzones = function() {
     var _this = this;
 
-    this.pancardDropzone.on('success', function() {
-      var image = _this.$pancard_warn_text.find('img');
+    if(this.pancardDropzone) {
+      this.pancardDropzone.on('success', function() {
+        var image = _this.$pancard_warn_text.find('img');
 
-      alert('Your pancard copy is successfully uploaded.');
-      if(image.length) {
-        image.replaceWith($(this.files[0].previewTemplate).find('img')[0]);
-      } else {
-        _this.$pancard_warn_text
-           .removeClass('text-warning').text('Your image uploaded successfully.')
-           .prepend($(this.files[0].previewTemplate).find('img')[0]);
-      }
+        alert('Your pancard copy is successfully uploaded.');
+        if(image.length) {
+          image.replaceWith($(this.files[0].previewTemplate).find('img')[0]);
+        } else {
+          _this.$pancard_warn_text
+             .removeClass('text-warning').text('Your image uploaded successfully.')
+             .prepend($(this.files[0].previewTemplate).find('img')[0]);
+        }
 
-      this.removeAllFiles();
-    });
+        this.removeAllFiles();
+      });
+    }
 
-    this.addressProofDropzone.on('success', function() {
-      var image = _this.$primary_address_warn_text.find('img');
+    if(this.addressProofDropzone) {
+      this.addressProofDropzone.on('success', function() {
+        var image = _this.$primary_address_warn_text.find('img');
 
-      alert('Your address proof copy is successfully uploaded.');
+        alert('Your address proof copy is successfully uploaded.');
 
-      if(image.length) {
-        image.replaceWith($(this.files[0].previewTemplate).find('img')[0]);
-      } else {
-        _this.$primary_address_warn_text
-           .removeClass('text-warning').text('Your image uploaded successfully.')
-           .prepend($(this.files[0].previewTemplate).find('img')[0]);
-      }
-      
-      this.removeAllFiles();
-    });
+        if(image.length) {
+          image.replaceWith($(this.files[0].previewTemplate).find('img')[0]);
+        } else {
+          _this.$primary_address_warn_text
+             .removeClass('text-warning').text('Your image uploaded successfully.')
+             .prepend($(this.files[0].previewTemplate).find('img')[0]);
+        }
+        
+        this.removeAllFiles();
+      });
+    }
 
-    this.currentAddressProofDropzone.on('success', function() {
-      var image = _this.$current_address_warn_text.find('img');
-      alert('Your current address proof copy is successfully uploaded.');
-      if(image.length ) {
-        image.replaceWith($(this.files[0].previewTemplate).find('img')[0]);
-      } else {
-        _this.$current_address_warn_text
-           .removeClass('text-warning').text('Your image uploaded successfully.')
-           .prepend($(this.files[0].previewTemplate).find('img')[0]);
-      }
+    if(this.currentAddressProofDropzone) {
+      this.currentAddressProofDropzone.on('success', function() {
+        var image = _this.$current_address_warn_text.find('img');
+        alert('Your current address proof copy is successfully uploaded.');
+        if(image.length ) {
+          image.replaceWith($(this.files[0].previewTemplate).find('img')[0]);
+        } else {
+          _this.$current_address_warn_text
+             .removeClass('text-warning').text('Your image uploaded successfully.')
+             .prepend($(this.files[0].previewTemplate).find('img')[0]);
+        }
 
-      this.removeAllFiles();
-    });
+        this.removeAllFiles();
+      });
+    }
   };
 
   AccountsPage.prototype.bindEventsForCurrentAddressCheckbox = function() {
     var _this = this;
 
     this.$current_address_checkbox.change(function() {
+
       if(this.checked) {
         
-        parentElements = _this.$permanent_address_container.find('input,textarea');
-        childElements = _this.$current_address_container.find('input,textarea');
+        parentElements = _this.$permanent_address_container.find('[data-class="primary-address-field"]');
+        childElements = _this.$current_address_container.find('[data-class="current-address-field"]');
 
-        //TODO: OPTIMIZE ME
-        _this.$current_address_container.find('.full-address-field').val(_this.$permanent_address_container.find('.full-address-field').val());
-        _this.$current_address_container.find('.city-field').val(_this.$permanent_address_container.find('.city-field').val());
-        _this.$current_address_container.find('.state-field').val(_this.$permanent_address_container.find('.state-field').val());
-        _this.$current_address_container.find('.pincode-field').val(_this.$permanent_address_container.find('.pincode-field').val());
-        _this.$current_address_container.find('.country-field').val(_this.$permanent_address_container.find('.country-field').val());
+        parentElements.each(function() {
+          childElements.filter('[data-field=' + $(this).data('field') + ']').val(this.value);
+        });
+
+        _this.$current_address_container.find('div.control-group:not(:first)').hide();
+        if(_this.currentAddressProofDropzone) {
+          _this.currentAddressProofDropzone.disable();
+        }
+        
+      } else {
+        _this.$current_address_container.find('div.control-group:not(:first)').show();
+        if(_this.currentAddressProofDropzone) {
+          _this.currentAddressProofDropzone.enable();
+        }
       }
     });
   };
@@ -121,6 +145,9 @@ var AccountsPage = (function() {
 })();
 
 $(function() {
+  //To fix dropzone already initialized error
+  Dropzone.autoDiscover = false;
+
   var $dropboxes = $('.dropbox'),
       $current_address_checkbox = $('#current_address_checkbox'),
       $permanent_address_container = $('.primary-address'),
