@@ -65,3 +65,6 @@ gem 'non-stupid-digest-assets', group: :production
 
 #For Pagination
 gem 'kaminari'
+
+#For State Machine
+gem 'aasm', '~> 4.0.7'
