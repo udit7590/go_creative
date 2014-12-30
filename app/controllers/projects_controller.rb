@@ -15,7 +15,7 @@ class ProjectsController < ApplicationController
     respond_to do |format|
       @project = current_user.projects.build(project_params)
       if @project.save
-        check_user_details_and_redirect(format)
+        check_project_user_details_and_redirect(format)
       else
         @project = @project.becomes!(Project)
         @project.type = params[:project][:type]
