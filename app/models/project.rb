@@ -5,7 +5,14 @@ class Project < ActiveRecord::Base
   has_many :images, -> { where document: false }, as: :imageable
   has_many :legal_documents, -> { where document: true }, as: :imageable, class_name: 'Image'
   belongs_to :user
-  has_attached_file :project_picture
+  has_attached_file :project_picture, styles: {
+                              thumbnail: '270x220^',
+                              large: { geometry: '770x300^', quality: 100 }
+                            },
+                            convert_options: {
+                              thumbnail: " -gravity center -crop '270x220+0+0'",
+                              large: " -gravity Center -extent 770x300"
+                            }
 
   accepts_nested_attributes_for :images, :legal_documents
 
