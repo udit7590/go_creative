@@ -1,0 +1,38 @@
+<div class="row gallery-row"><!-- Begin Gallery Row --> 
+  <div class="span12">
+    <br />
+    <h5 class="title-bg">Our Best Projects
+      <small>That we are most proud of</small>
+      <button class="btn btn-mini btn-inverse hidden-phone" type="button">View All</button>
+      <button class="btn btn-mini btn-inverse hidden-phone" type="button">View Charity Projects</button>
+      <button class="btn btn-mini btn-inverse hidden-phone" type="button">View Investment Projects</button>
+    </h5>
+
+    <!-- Gallery Thumbnails
+    ================================================== -->
+
+    <div class="row clearfix no-margin">
+      <ul class="gallery-post-grid holder">
+        <% cache 'our_best_products' do %>
+          <% @projects.each do |project| %>
+            <!-- Gallery Item -->
+            <li  class="span3 gallery-item" data-id="id-1" data-type="illustration">
+              <span class="gallery-hover-4col hidden-phone hidden-tablet">
+                <span class="gallery-icons">
+                  <a href="<%= project.project_picture.url %>" data-lightbox="<%= project.id %>" class="item-zoom-link"></a>
+                  <%= link_to '', project_path(project), class: 'item-details-link', title: 'View' %>
+                </span>
+              </span>
+               
+                <a href="gallery-single.htm"><%= image_tag project.project_picture.url(:thumbnail) %></a>
+              <span class="project-details"><%= link_to truncate(project.title,  length: 40, omission: '...') %>
+                0% of INR <%= project.amount_required %></span>
+            </li>
+          <% end %>
+        <% end %>
+
+      </ul>
+    </div>
+  </div>
+
+</div><!-- End Gallery Row -->
