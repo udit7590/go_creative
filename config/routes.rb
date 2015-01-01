@@ -42,6 +42,13 @@ Gocreative::Application.routes.draw do
     patch :update_incomplete_details
   end
 
+  scope '/projects', as: 'projects' do
+    get 'all', to: 'projects_display#all'
+    get 'charity', to: 'projects_display#charity'
+    get 'investment', to: 'projects_display#investment'
+    get 'load_more', to: 'projects_display#load_more'
+  end
+
   resource :users do
     resources :projects, shallow: true do
       get :user_projects, path: 'my', on: :collection, as: 'current'

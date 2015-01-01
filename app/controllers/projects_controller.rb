@@ -6,6 +6,7 @@ class ProjectsController < ApplicationController
   before_action :verify_project_approved_or_owner, only: :show
   before_action :initialize_project, only: [:new, :create]
   before_action :load_project, only: [:show, :edit, :update, :destroy]
+  before_action :check_if_published, only: [:edit, :update]
 
   def new
     @project.images.build
@@ -97,6 +98,13 @@ class ProjectsController < ApplicationController
       @project = Project.find_by_id(params[:id])
       unless(@project.user == current_user || @project.verified_at)
         redirect_to root_path, alert: 'Cannot find any such project'
+      end
+    end
+
+    def check_if_published
+      if @project.verified_at
+        flash[:alert] = 'This project cannot be edited now'
+        redirect_to action: :show
       end
     end
 

@@ -17,12 +17,7 @@
           <article>
             <h3 class="title-bg"><%= @project.title %></h3>
             <div class="post-content">
-              <% if @project.project_picture.exists? %>
-                <%= image_tag @project.project_picture.url(:large) %>
-              <% else %>
-                <a href="#"><%= image_tag 'img/gallery/post-img-1.jpg', alt: 'Post Thumb' %></a>
-              <% end %>
-
+              <%= image_tag @project.project_picture.url(:large) %>
             </div>
           </article>
 

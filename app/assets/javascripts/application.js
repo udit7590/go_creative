@@ -20,6 +20,7 @@
 //= require 'js/jquery.prettyPhoto.js'
 //= require 'js/jquery.flexslider.js'
 //= require 'js/jquery.easing.1.3.js'
+//= require 'js/mustache.js'
 //= require 'js/jquery.custom.js'
 //= require 'js/lightbox.js'
 

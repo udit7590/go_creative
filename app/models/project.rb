@@ -1,7 +1,8 @@
 class Project < ActiveRecord::Base
   include AASM
 
-  BEST_PROJECTS_LIMIT = 16
+  BEST_PROJECTS_LIMIT           = 16
+  INITIAL_PROJECT_DISPLAY_LIMIT = 30
 
   # -------------- SECTION FOR ASSOCIATIONS ---------------------
   # -------------------------------------------------------------
@@ -10,13 +11,15 @@ class Project < ActiveRecord::Base
   belongs_to :user
   has_attached_file :project_picture, styles: {
                               thumbnail: '270x220^',
+                              medium: { geometry: '370x300^', quality: 100 },
                               large: { geometry: '770x300^', quality: 100 }
                             },
                             convert_options: {
                               thumbnail: " -gravity center -crop '270x220+0+0'",
+                              medium: " -gravity center -crop '370x300+0+0'",
                               large: " -gravity Center -extent 770x300"
                             },
-                            default_url: '/images/img/gallery/gallery-img-1-4col.jpg'
+                            default_url: '/images/img/gallery/default_project_:style.jpg'
 
   accepts_nested_attributes_for :images, :legal_documents
 
@@ -68,6 +71,9 @@ class Project < ActiveRecord::Base
   scope :order_by_creation, -> { order(created_at: :desc) }
   scope :projects_to_be_approved, -> { where(verified_at: nil).order_by_creation }
   scope :best_projects, -> { where.not(verified_at: nil).limit(BEST_PROJECTS_LIMIT) }
+  scope :published_projects, -> (page = 1) { where('verified_at IS NOT NULL').limit(INITIAL_PROJECT_DISPLAY_LIMIT).offset((page - 1) * INITIAL_PROJECT_DISPLAY_LIMIT + 1) }
+  scope :published_charity_projects, -> (page = 1) { published_projects.where(type: 'CharityProject').limit(INITIAL_PROJECT_DISPLAY_LIMIT).offset((page - 1) * INITIAL_PROJECT_DISPLAY_LIMIT + 1) }
+  scope :published_investment_projects, -> (page = 1) { published_projects.where(type: 'InvestmentProject').limit(INITIAL_PROJECT_DISPLAY_LIMIT).offset((page - 1) * INITIAL_PROJECT_DISPLAY_LIMIT + 1) }
 
   # To determine which all projects we can make
   def self.types
