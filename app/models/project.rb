@@ -19,11 +19,8 @@ class Project < ActiveRecord::Base
                               medium: " -gravity center -crop '370x300+0+0'",
                               large: " -gravity Center -extent 770x300"
                             },
-<<<<<<< HEAD
                             default_url: '/images/img/gallery/default_project_:style.jpg'
-=======
-                            default_url: '/images/img/gallery/gallery-img-1-4col.jpg'
->>>>>>> S3 Adds Home page functionality
+
 
   accepts_nested_attributes_for :images, :legal_documents
 
@@ -74,14 +71,10 @@ class Project < ActiveRecord::Base
   scope :investment, -> { where(type: 'InvestmentProject') }
   scope :order_by_creation, -> { order(created_at: :desc) }
   scope :projects_to_be_approved, -> { where(verified_at: nil).order_by_creation }
-<<<<<<< HEAD
   scope :best_projects, -> { where.not(verified_at: nil).limit(BEST_PROJECTS_LIMIT) }
   scope :published_projects, -> (page = 1) { where('verified_at IS NOT NULL').limit(INITIAL_PROJECT_DISPLAY_LIMIT).offset((page - 1) * INITIAL_PROJECT_DISPLAY_LIMIT + 1) }
   scope :published_charity_projects, -> (page = 1) { published_projects.where(type: 'CharityProject').limit(INITIAL_PROJECT_DISPLAY_LIMIT).offset((page - 1) * INITIAL_PROJECT_DISPLAY_LIMIT + 1) }
   scope :published_investment_projects, -> (page = 1) { published_projects.where(type: 'InvestmentProject').limit(INITIAL_PROJECT_DISPLAY_LIMIT).offset((page - 1) * INITIAL_PROJECT_DISPLAY_LIMIT + 1) }
-=======
-  scope :best_projects, -> { where('verified_at IS NOT NULL').limit(BEST_PROJECTS_LIMIT) }
->>>>>>> S3 Adds Home page functionality
 
   # To determine which all projects we can make
   def self.types
