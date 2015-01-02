@@ -6,8 +6,11 @@
   <td><%= project.created_at.to_s(:short) %></td>
   <td><%= project.end_date.to_s(:long) %></td>
   <td>
-    <%= link_to (image_tag 'dashboard/view.png' ,title: 'View', data: { toggle: 'tooltip', placement: 'bottom' }, size: '24x24'), { action: :index } %>
-    <%= link_to (image_tag 'dashboard/shutdown1.png', title: 'Reject', data: { toggle: 'tooltip', placement: 'bottom' },  size: '24x24'), { action: :index } %>
-    <%= link_to (image_tag 'dashboard/check.png' ,title: 'Approve', data: { toggle: 'tooltip', placement: 'bottom' }, size: '24x24'), { action: :index } %>
+    <%= link_to (button_tag 'View'), { action: :index } %>
+    <% if !project.verified_at %>
+      <%= link_to (button_tag 'Publish'), admin_project_publish_path(project), remote: true, data: { project_id: project.id }, class: 'publish' %>
+    <% else %>
+      <%= link_to (button_tag 'Unpublish'), admin_project_unpublish_path(project), remote: true, data: { project_id: project.id }, class: 'publish' %>
+    <% end %>
   </td>
 </tr>

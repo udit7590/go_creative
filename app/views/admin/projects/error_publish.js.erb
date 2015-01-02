@@ -1,0 +1,8 @@
+alert('Not able to publish.');
+<% if !project %>
+  alert('Could not find any such project');
+<% elsif already_published %>
+  alert('This project is already published');
+<% else  %>
+  alert('<%= errors %>');
+<% end %>

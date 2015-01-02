@@ -1,4 +1,5 @@
 class Project < ActiveRecord::Base
+  include AASM
 
   # -------------- SECTION FOR ASSOCIATIONS ---------------------
   # -------------------------------------------------------------
@@ -12,7 +13,27 @@ class Project < ActiveRecord::Base
   after_validation :filter_images_error_messages
   before_create :set_time_to_midnight
   before_update :set_time_to_midnight
-  
+
+  # -------------- SECTION FOR STATE MACHINE --------------------
+  # -------------------------------------------------------------
+  aasm column: 'state'.freeze do
+    state :created, initial: true
+    state :publish
+    state :unpublish
+    state :success
+    state :failure
+    state :fraud
+    state :payment_pending
+
+    event :publish do
+      transitions from: [:created, :unpublish], to: :publish
+    end
+
+    event :unpublish do
+      transitions from: [:created, :publish], to: :unpublish
+    end
+  end
+
   # -------------- SECTION FOR VALIDATIONS ----------------------
   # -------------------------------------------------------------
   validates :type, presence: true
@@ -21,10 +42,10 @@ class Project < ActiveRecord::Base
   validates :amount_required, presence: true
   validates :min_amount_per_contribution, presence: true
 
-  validates :end_date, presence: true, date: { greater_than_or_equal_to: (5.days.from_now.beginning_of_day) }
-  validates :title, uniqueness: true
-  validates :amount_required, numericality: { greater_than: 0, less_than_or_equal_to: 10000000 }
-  validates :min_amount_per_contribution, numericality: { greater_than: 0, less_than_or_equal_to: :amount_required }
+  validates :end_date, presence: true, date: { greater_than_or_equal_to: (5.days.from_now.beginning_of_day) }, if: :end_date_changed?
+  validates :title, uniqueness: true, allow_blank: true
+  validates :amount_required, allow_blank: true, numericality: { greater_than: 0, less_than_or_equal_to: 10000000 }
+  validates :min_amount_per_contribution, allow_blank: true, numericality: { greater_than: 0, less_than_or_equal_to: :amount_required }
 
   validate :amount_multiple_of_100
   validate :min_amount_multiple_of_10
@@ -43,11 +64,11 @@ class Project < ActiveRecord::Base
   end
 
   def amount_multiple_of_100
-    errors[:amount_required] << 'should be a multiple of 100' if !(amount_required % 100 == 0)
+    errors[:amount_required] << 'should be a multiple of 100' if (amount_required % 100).nonzero?
   end
 
   def min_amount_multiple_of_10
-    errors[:min_amount_per_contribution] << 'should be a multiple of 5' if !(amount_required % 10 == 0)
+    errors[:min_amount_per_contribution] << 'should be a multiple of 10' if (amount_required % 10).nonzero?
   end
 
   # It reduces and fixes the error messages for the attachments in an association.
@@ -70,6 +91,10 @@ class Project < ActiveRecord::Base
     end
     
   end
+
+  # -------------- STATE MACHINE METHODS START------------
+
+  # -------------- STATE MACHINE METHODS END --------------
 
   protected
     def set_time_to_midnight
