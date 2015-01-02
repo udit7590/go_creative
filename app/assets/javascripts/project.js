@@ -26,8 +26,15 @@ var ProjectsPage = (function() {
         endDate: dateAfterFiveDays
       });
 
-      //Set initial date after five days
-      this.$datetimepicker.data('datetimepicker').setDate(dateAfterFiveDays);
+      //Set initial date after five days if empty
+      endDateTimePicker = this.$datetimepicker.data('datetimepicker');
+      initialDate = endDateTimePicker._date;
+
+      if(initialDate) {
+        endDateTimePicker.setDate(initialDate);
+      } else {
+        endDateTimePicker.setDate(dateAfterFiveDays);
+      }
     }
 
   };
