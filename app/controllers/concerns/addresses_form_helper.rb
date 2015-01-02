@@ -1,30 +1,23 @@
 module AddressesFormHelper
 
   # Also builds one of the address as primary
-  def build_max_n_addresses(user, number) 
-    address_count = user.addresses.count
-    case address_count
-    when 0
-      number.times { user.addresses.build }
-      user.addresses[0].primary = true
-    when 1
-      user.addresses.build
-      user.addresses[1].primary = (user.addresses[0].primary? ? true : false)
-      (number - address_count - 2).times { user.addresses.build }
-    else
-      no_primary = true
-      user.addresses.each { |address| no_primary = false if address.primary? }
-      if !no_primary
-        (number - address_count).times { user.addresses.build }
-      else
-        user.addresses.build.primary = true
-        (number - address_count - 1).times { user.addresses.build }
-      end
+  def build_max_n_addresses(user, number)
+    return [] if number < 1
+
+    existing = user.addresses.count
+
+    unless  primary_address = user.addresses.detect(&:primary?)
+      primary_address = user.addresses.build(primary: true)
+      existing += 1
     end
+
+    (number - existing).times { user.addresses.build }
 
     #Fixes out of order addresses by sorting the collection proxy object. 
     #Collection proxy stores the associated objects in @association.target
-    user.addresses.instance_variable_get(:@association).target.sort! { |a, b| a.primary? ? -1 : 1 }
+    addresses = user.addresses.instance_variable_get(:@association).target
+    index = addresses.index(primary_address)
+    addresses[0], addresses[1] = addresses[1], addresses[0] if index.nonzero?
   end
 
 end

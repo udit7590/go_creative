@@ -1,3 +1,10 @@
+<% if !@project.verified_at %>
+  <div class="alert alert-error">
+    <button type="button" class="close" data-dismiss="alert">×</button>
+    <center><strong>Your project has not been published yet.</strong></center>
+  </div>
+<% end %>
+  
 <!-- Blog Content
   ================================================== --> 
   <div class="row"><!--Container row-->
@@ -10,19 +17,19 @@
           <article>
             <h3 class="title-bg"><%= @project.title %></h3>
             <div class="post-content">
-              <a href="#"><%= image_tag 'img/gallery/post-img-1.jpg', alt: 'Post Thumb' %></a>
-
-              <div class="post-body">
-               <p class="lead"><%= @project.description %></p>
-
-                <blockquote>
-                  Maecenas felis tellus, fermentum vitae laoreet vitae, volutpat et urna. Nulla faucibus ligula eget ante varius ac euismod odio placerat.
-                </blockquote>
-               
-              </div>
+              <% if @project.project_picture.exists? %>
+                <%= image_tag @project.project_picture.url(:large) %>
+              <% else %>
+                <a href="#"><%= image_tag 'img/gallery/post-img-1.jpg', alt: 'Post Thumb' %></a>
+              <% end %>
 
             </div>
           </article>
+
+          <div>
+            <h4 class="title-bg">Project Description</h4>
+            <p class="lead"><%= @project.description %></p>
+          </div>
 
           <!-- About the Author -->
           <section class="post-content">
@@ -33,13 +40,17 @@
             </div>
           </section>
 
+        <!-- Gallery
+        ================================================== --> 
+        <%= render 'project_gallery' %>
+
         <!-- Post Comments
         ================================================== --> 
         <%= render 'project_comments' %>
 
       </div><!--Close container row-->
 
-        <!-- Blog Sidebar
+        <!-- Sidebar
         ================================================== --> 
         <%= render 'project_sidebar' %>
       </div>

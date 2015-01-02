@@ -2,7 +2,7 @@ class ProjectsController < ApplicationController
   include UserHelper
 
   before_action :store_location
-  before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
+  before_action :authenticate_user!, except: [:index, :show]
   before_action :verify_project_approved_or_owner, only: :show
   before_action :initialize_project, only: [:new, :create]
   before_action :load_project, only: [:show, :edit, :update, :destroy]
