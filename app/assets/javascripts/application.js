@@ -22,6 +22,6 @@
 //= require 'js/jquery.easing.1.3.js'
 //= require 'js/jquery.custom.js'
 //= require 'js/lightbox.js'
-//= require 'init_theme.js'
 
-//= require_directory .
+//= require 'init_theme.js'
+//= require constants.js

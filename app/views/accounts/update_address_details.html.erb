@@ -19,3 +19,9 @@
   </div> <!--End page content column--> 
 
 </div><!-- End container row -->
+
+<!-- JS --> 
+<% content_for :javascripts do %>
+  <%= javascript_include_tag 'accounts_page', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'add_account_details', 'data-turbolinks-track' => true %>
+<% end %>        

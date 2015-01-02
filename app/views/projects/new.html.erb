@@ -18,3 +18,8 @@
   <%= render 'right_sidebar' %>
 
 </div><!-- End container row -->
+
+<!-- JS --> 
+<% content_for :javascripts do %>
+  <%= javascript_include_tag 'project', 'data-turbolinks-track' => true %>
+<% end %>  
