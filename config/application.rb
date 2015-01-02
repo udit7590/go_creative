@@ -27,6 +27,6 @@ module Gocreative
 
     # config.force_ssl = true
     config.autoload_paths << Rails.root.join('lib')
-    config.autoload_paths << Rails.root.join('/app/sweepers')
+    config.autoload_paths << Rails.root.join('app/sweepers')
   end
 end
