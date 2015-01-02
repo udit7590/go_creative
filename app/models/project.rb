@@ -67,7 +67,7 @@ class Project < ActiveRecord::Base
   scope :investment, -> { where(type: 'InvestmentProject') }
   scope :order_by_creation, -> { order(created_at: :desc) }
   scope :projects_to_be_approved, -> { where(verified_at: nil).order_by_creation }
-  scope :best_projects, -> { where('verified_at IS NOT NULL').limit(BEST_PROJECTS_LIMIT) }
+  scope :best_projects, -> { where.not(verified_at: nil).limit(BEST_PROJECTS_LIMIT) }
 
   # To determine which all projects we can make
   def self.types
