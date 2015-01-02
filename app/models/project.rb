@@ -1,6 +1,8 @@
 class Project < ActiveRecord::Base
   include AASM
 
+  BEST_PROJECTS_LIMIT = 16
+
   # -------------- SECTION FOR ASSOCIATIONS ---------------------
   # -------------------------------------------------------------
   has_many :images, -> { where document: false }, as: :imageable
@@ -13,7 +15,8 @@ class Project < ActiveRecord::Base
                             convert_options: {
                               thumbnail: " -gravity center -crop '270x220+0+0'",
                               large: " -gravity Center -extent 770x300"
-                            }
+                            },
+                            default_url: '/images/img/gallery/gallery-img-1-4col.jpg'
 
   accepts_nested_attributes_for :images, :legal_documents
 
@@ -64,6 +67,7 @@ class Project < ActiveRecord::Base
   scope :investment, -> { where(type: 'InvestmentProject') }
   scope :order_by_creation, -> { order(created_at: :desc) }
   scope :projects_to_be_approved, -> { where(verified_at: nil).order_by_creation }
+  scope :best_projects, -> { where.not(verified_at: nil).limit(BEST_PROJECTS_LIMIT) }
 
   # To determine which all projects we can make
   def self.types
