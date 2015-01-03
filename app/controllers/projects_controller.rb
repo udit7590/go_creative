@@ -27,6 +27,11 @@ class ProjectsController < ApplicationController
     end
   end
 
+  def show
+    @comments = @project.comments.latest
+    @comment_count = @project.comments.deleted(false).count
+  end
+
   def update
     respond_to do |format|
       if @project.update(project_params)

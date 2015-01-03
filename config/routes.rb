@@ -52,6 +52,12 @@ Gocreative::Application.routes.draw do
   resource :users do
     resources :projects, shallow: true do
       get :user_projects, path: 'my', on: :collection, as: 'current'
+      resources :comments, shallow: true, except: [:show, :update, :destroy, :create] do
+        get 'delete'
+        get 'undo_delete'
+        get 'report_abuse'
+        get 'load_more', to: 'comments#load_more', on: :collection
+      end
     end
   end
 

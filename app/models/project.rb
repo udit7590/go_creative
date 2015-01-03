@@ -9,6 +9,7 @@ class Project < ActiveRecord::Base
   has_many :images, -> { where document: false }, as: :imageable
   has_many :legal_documents, -> { where document: true }, as: :imageable, class_name: 'Image'
   belongs_to :user
+  has_many :comments
   has_attached_file :project_picture, styles: {
                               thumbnail: '270x220^',
                               medium: { geometry: '370x300^', quality: 100 },
@@ -72,9 +73,9 @@ class Project < ActiveRecord::Base
   scope :order_by_creation, -> { order(created_at: :desc) }
   scope :projects_to_be_approved, -> { where(verified_at: nil).order_by_creation }
   scope :best_projects, -> { where.not(verified_at: nil).limit(BEST_PROJECTS_LIMIT) }
-  scope :published_projects, -> (page = 1) { where('verified_at IS NOT NULL').limit(INITIAL_PROJECT_DISPLAY_LIMIT).offset((page - 1) * INITIAL_PROJECT_DISPLAY_LIMIT + 1) }
-  scope :published_charity_projects, -> (page = 1) { published_projects.where(type: 'CharityProject').limit(INITIAL_PROJECT_DISPLAY_LIMIT).offset((page - 1) * INITIAL_PROJECT_DISPLAY_LIMIT + 1) }
-  scope :published_investment_projects, -> (page = 1) { published_projects.where(type: 'InvestmentProject').limit(INITIAL_PROJECT_DISPLAY_LIMIT).offset((page - 1) * INITIAL_PROJECT_DISPLAY_LIMIT + 1) }
+  scope :published_projects, -> (page = 1) { where('verified_at IS NOT NULL').limit(INITIAL_PROJECT_DISPLAY_LIMIT).offset((page - 1) * INITIAL_PROJECT_DISPLAY_LIMIT) }
+  scope :published_charity_projects, -> (page = 1) { published_projects.where(type: 'CharityProject').limit(INITIAL_PROJECT_DISPLAY_LIMIT).offset((page - 1) * INITIAL_PROJECT_DISPLAY_LIMIT) }
+  scope :published_investment_projects, -> (page = 1) { published_projects.where(type: 'InvestmentProject').limit(INITIAL_PROJECT_DISPLAY_LIMIT).offset((page - 1) * INITIAL_PROJECT_DISPLAY_LIMIT) }
 
   # To determine which all projects we can make
   def self.types

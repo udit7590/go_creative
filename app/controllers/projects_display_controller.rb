@@ -26,7 +26,7 @@ class ProjectsDisplayController < ApplicationController
     else
       @projects = Project.published_projects(params[:page].to_i)
     end
-    @is_more_available = @projects.length == 3
+    @is_more_available = @projects.length == Project::INITIAL_PROJECT_DISPLAY_LIMIT
     render 'load'
   end
 

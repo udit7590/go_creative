@@ -1,52 +1,48 @@
 <section class="comments">
-  <h4 class="title-bg"><a name="comments"></a>5 Comments so far</h4>
+  <h4 class="title-bg"><a name="comments"></a><%= @comment_count %> Comments so far</h4>
   <ul>
-    <li>
-      <%= image_tag 'img/user-avatar.jpg' %>
-      <span class="comment-name">John Doe</span>
-      <span class="comment-date">March 15, 2015 | <a href="#">Reply</a></span>
-      <div class="comment-content">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam venenatis, ligula quis sagittis euismod, odio ante molestie tortor, eget ullamcorper lacus nunc a ligula. Donec est lacus, aliquet in interdum id, rutrum ac tellus. Ut rutrum, justo et lobortis commodo, est metus ornare tortor, vitae luctus turpis leo sed magna. In leo dolor, suscipit non mattis in.</div>
-      <!-- Reply -->
-      <ul>
-        <li>
-          <%= image_tag 'img/user-avatar.jpg' %>
-          <span class="comment-name">Jason Doe</span>
-          <span class="comment-date">March 15, 2015 | <a href="#">Reply</a></span>
-          <div class="comment-content">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam venenatis, ligula quis sagittis euismod, odio ante molestie tortor, eget ullamcorper lacus nunc a ligula. Donec est lacus, aliquet in interdum id, rutrum ac tellus. Ut rutrum, justo et lobortis commodo, est metus ornare tortor, vitae luctus turpis leo sed magna. In leo dolor, suscipit non mattis in.</div>
-        </li>
-        <li>
-          <%= image_tag 'img/user-avatar.jpg' %>
-          <span class="comment-name">Jason Doe</span>
-          <span class="comment-date">March 15, 2015 | <a href="#">Reply</a></span>
-          <div class="comment-content">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam venenatis, ligula quis sagittis euismod, odio ante molestie tortor, eget ullamcorper lacus nunc a ligula. Donec est lacus, aliquet in interdum id, rutrum ac tellus. Ut rutrum, justo et lobortis commodo, est metus ornare tortor, vitae luctus turpis leo sed magna. In leo dolor, suscipit non mattis in.</div>
-        </li>
-      </ul>
-    </li>
-    
+    <% @comments.each do |comment| %>
+      <li class="comment" data-project-id="<%= @project.id %>" data-comment-id="<%= comment.id %>">
+        <%= image_tag 'img/user-avatar.jpg' %>
+        <span class="comment-name"><%= comment.user.name %></span>
+        <span class="comment-date">
+          <%= comment.updated_at.to_s(:short) %>
+           | <%= link_to 'Report Abuse', comment_report_abuse_path(comment.id), remote: true, class: 'abuse-comment' %> (Count: <%= comment.abused_count %>)
+           <% if current_user.id == comment.user.id %>
+           | <%= link_to 'Delete', comment_delete_path(comment.id), remote: true, class: 'delete-comment', data: { confirm: 'Are you sure?' } %>
+           <% end %>
+        </span>
+        <div class="comment-content"><%= comment.description %></div>
+      </li>
+    <% end %>
   </ul>
+
+  <% if @comment_count > (Comment::INITIAL_COMMENT_DISPLAY_LIMIT - 1) %>
+    <%= button_tag 'More Comments', path: load_more_project_comments_path(@project.id), action: 'load_more', id: 'comments_load_more_button', class: 'btn btn-block', data: { page: 1 } %>
+  <% end %>
   
-  <!-- Comment Form -->
-  <div class="comment-form-container">
-    <h6>Leave a Comment</h6>
-    <form action="#" id="comment-form">
-      <div class="input-prepend">
-        <span class="add-on"><i class="icon-user"></i></span>
-        <input class="span4" id="prependedInput" size="16" type="text" placeholder="Name">
-      </div>
-      <div class="input-prepend">
-        <span class="add-on"><i class="icon-envelope"></i></span>
-        <input class="span4" id="prependedInput" size="16" type="text" placeholder="Email Address">
-      </div>
-      <div class="input-prepend">
-        <span class="add-on"><i class="icon-globe"></i></span>
-        <input class="span4" id="prependedInput" size="16" type="text" placeholder="Website URL">
-      </div>
-      <textarea class="span6"></textarea>
-      <div class="row">
-        <div class="span2">
-          <input type="submit" class="btn btn-inverse" value="Post My Comment">
+  <% if @user %>
+    <!-- Comment Form -->
+    <div class="comment-form-container">
+      <h6>Leave a Comment</h6>
+      <form action="<%= new_project_comment_path(@project) %>" id="comment-form" method="get">
+        <div class="input-prepend">
+          <span class="add-on"><i class="icon-user"></i></span>
+          <input class="span4" id="prependedInput" size="16" type="text" placeholder="Name" value="<%= @user.name %>" readonly="readonly" name="comment[name]">
         </div>
-      </div>
-    </form>
-  </div>
-        </section><!-- Close comments section-->
+        <div class="input-prepend">
+          <span class="add-on"><i class="icon-envelope"></i></span>
+          <input class="span4" id="prependedInput" size="16" type="text" placeholder="Email Address" value="<%= @user.email %>" readonly="readonly" name="comment[email]">
+        </div>
+        <textarea name="comment[description]" class="span6" placeholder="Please share your views and comments.*"></textarea>
+        <input type="hidden" value="<%= @user.id %>" name="user_id" />
+        <div class="row">
+          <div class="span2">
+            <input type="button" class="btn btn-inverse add-comment" value="Post My Comment">
+          </div>
+        </div>
+        
+      </form>
+    </div>
+  <% end %>
+</section><!-- Close comments section-->
