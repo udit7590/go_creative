@@ -59,9 +59,10 @@ class Project < ActiveRecord::Base
 
   validates :end_date, presence: true, date: { greater_than_or_equal_to: (5.days.from_now.beginning_of_day) }, if: :end_date_changed?
   validates :title, uniqueness: true, allow_blank: true
+  validates :title, length: { maximum: 250 }
   validates :amount_required, allow_blank: true, numericality: { greater_than: 0, less_than_or_equal_to: 10000000 }
   validates :min_amount_per_contribution, allow_blank: true, numericality: { greater_than: 0, less_than_or_equal_to: :amount_required }
-
+  validates :description, length: { maximum: 10000 }
   validate :amount_multiple_of_100
   validate :min_amount_multiple_of_10
   validates_attachment_content_type :project_picture, content_type: %w(image/jpg image/jpeg image/png image/gif)
