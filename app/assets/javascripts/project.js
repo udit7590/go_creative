@@ -28,10 +28,10 @@ var ProjectsPage = (function() {
 
       //Set initial date after five days if empty
       endDateTimePicker = this.$datetimepicker.data('datetimepicker');
-      initialDate = endDateTimePicker._date;
+      initialDate = this.$datetimepicker.find('#project_end_date').val();
 
-      if(initialDate) {
-        endDateTimePicker.setDate(initialDate);
+      if(initialDate != '') {
+        endDateTimePicker.setDate(new Date(initialDate));
       } else {
         endDateTimePicker.setDate(dateAfterFiveDays);
       }

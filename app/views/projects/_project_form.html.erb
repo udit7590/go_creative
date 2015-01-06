@@ -48,7 +48,7 @@
   <div class="control-group">
     <%= f.label :video_link, 'Video Link', class: 'control-label' %>
     <div class="controls">
-      <%= f.url_field :video_link, class: 'input-xlarge', placeholder: 'Video Link', size: 16 %>
+      <%= f.text_field :video_link, class: 'input-xlarge', placeholder: 'Video Link', size: 16, data: { embed: 'video' } %>
     </div>
   </div>
 
