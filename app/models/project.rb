@@ -127,4 +127,11 @@ class Project < ActiveRecord::Base
       self.end_date = self.end_date.at_end_of_day
     end
 
+    
+
+  private
+    def self.abc
+      scope :load_more_pagination, -> (page = 1) { limit(INITIAL_PROJECT_DISPLAY_LIMIT).offset((page - 1) * INITIAL_PROJECT_DISPLAY_LIMIT) }
+    end
+
 end

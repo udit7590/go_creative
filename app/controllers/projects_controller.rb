@@ -107,6 +107,9 @@ class ProjectsController < ApplicationController
     def load_project
       @user = current_user
       @project = Project.find_by(id: params[:id])
+      unless @project
+        # TODO
+      end
     end
 
     def project_params
