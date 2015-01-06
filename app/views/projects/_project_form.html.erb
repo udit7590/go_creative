@@ -63,7 +63,7 @@
   <div class="control-group">
     <%= f.label :project_picture, 'Project Picture', class: 'control-label' %>
     <div class="controls">
-      <%= f.file_field :project_picture, multiple: false, class: 'filestyle', data: { buttonName: 'btn', buttonText: 'Select File' } %>
+      <%= f.file_field :project_picture, multiple: false, class: 'filestyle', data: { buttonName: 'btn', buttonText: 'Select File', uploader: 'single', width: '290', height: '290' } %>
       <p class="help-block">Max file size: 2MB. Valid Image Types: PNG, JPEG, GIF<br />
         This will be the main display pic of your project page.</p>
     </div>

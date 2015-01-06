@@ -73,4 +73,8 @@ module AccountHelper
     end
   end
 
+  def image_path(image)
+    image.exists? ? image.url : nil
+  end
+
 end
