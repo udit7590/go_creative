@@ -114,6 +114,10 @@ class Project < ActiveRecord::Base
     
   end
 
+  def check_end_date
+    self.end_date >= 5.days.from_now.beginning_of_day
+  end
+
   # -------------- STATE MACHINE METHODS START------------
 
   # -------------- STATE MACHINE METHODS END --------------

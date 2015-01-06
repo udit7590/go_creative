@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150103174718) do
+ActiveRecord::Schema.define(version: 20150105154841) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -73,6 +73,7 @@ ActiveRecord::Schema.define(version: 20150103174718) do
     t.datetime "deleted_at"
     t.integer  "deleted_by"
     t.integer  "abused_count",   default: 0
+    t.integer  "admin_user_id"
   end
 
   create_table "images", force: true do |t|
@@ -139,6 +140,8 @@ ActiveRecord::Schema.define(version: 20150103174718) do
     t.string   "pan_card_copy_content_type"
     t.integer  "pan_card_copy_file_size"
     t.datetime "pan_card_copy_updated_at"
+    t.datetime "pan_verified_at"
+    t.integer  "pan_verified_by"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

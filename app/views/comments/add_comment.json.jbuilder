@@ -3,9 +3,15 @@ json.error false
 json.comment do
   
   json.user do
-    json.name @comment.user.name
-    json.email @comment.user.email
-    json.id @comment.user.id
+    if @comment.user
+      json.name @comment.user.name
+      json.email @comment.user.email
+      json.id @comment.user.id
+    else
+      json.name 'Admin'
+      json.email 'admin@gocreative.com'
+      json.id @comment.admin_user_id
+    end
   end
 
   json.project do
@@ -18,7 +24,12 @@ json.comment do
   json.updated_at @comment.updated_at.to_s(:short)
   json.visible_to_all @comment.visible_to_all
   json.spam @comment.spam
-
-  json.delete_path comment_delete_path(@comment.id)
+  json.admin_user_id @comment.admin_user_id
+  
+  if @admin
+    json.delete_path comment_path(@comment.id)
+  else
+    json.delete_path comment_delete_path(@comment.id)
+  end
 
 end

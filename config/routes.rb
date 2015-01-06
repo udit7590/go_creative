@@ -20,8 +20,10 @@ Gocreative::Application.routes.draw do
 
   namespace :admin do
     root 'dashboard#index', controller: 'admin/dashboard'
-    resources :users, only: :index, concerns: :paginatable
-    resources :projects, only: :index, concerns: :paginatable do
+    resources :users, only: :index, concerns: :paginatable do
+      post :verify
+    end
+    resources :projects, only: [:index, :show], concerns: :paginatable do
       get :publish
       get :unpublish
     end
@@ -52,7 +54,7 @@ Gocreative::Application.routes.draw do
   resource :users do
     resources :projects, shallow: true, except: :index do
       get :user_projects, path: 'my', on: :collection, as: 'current'
-      resources :comments, shallow: true, except: [:show, :update, :destroy, :create] do
+      resources :comments, shallow: true, except: [:show, :update, :create] do
         get :delete
         get :undo_delete
         get :report_abuse

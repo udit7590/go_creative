@@ -57,4 +57,20 @@ module AccountHelper
     (pan_card_copy.exists? ? pan_card_copy_available : pan_card_copy_not_available).html_safe
   end
 
+  def pan_status(user)
+    if(user.pan_details_verified?)
+      '<span class="success">Verified</span>'.html_safe
+    else
+      '<span class="warning">Not Verified</span>'.html_safe
+    end
+  end
+
+  def address_status(address)
+    if(address.verified_at)
+      '<span class="success">Verified</span>'.html_safe
+    else
+      '<span class="warning">Not Verified</span>'.html_safe
+    end
+  end
+
 end

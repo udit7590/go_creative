@@ -6,7 +6,7 @@
   <td><%= project.created_at.to_s(:short) %></td>
   <td><%= project.end_date.to_s(:long) %></td>
   <td>
-    <%= link_to (button_tag 'View'), { action: :index } %>
+    <%= link_to (button_tag 'View'), admin_project_path(project) %>
     <% if !project.verified_at %>
       <%= link_to (button_tag 'Publish'), admin_project_publish_path(project), remote: true, data: { project_id: project.id }, class: 'publish' %>
     <% else %>

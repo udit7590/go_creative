@@ -28,7 +28,11 @@ class ProjectsController < ApplicationController
   end
 
   def show
-    @comments = @project.comments.latest
+    if @project.user == current_user
+      @comments = @project.comments.order_by_date
+    else
+      @comments = @project.comments.latest.visible_to_all(true)
+    end
     @comment_count = @project.comments.deleted(false).count
   end
 
