@@ -6,6 +6,7 @@ class ProjectsController < ApplicationController
   before_action :verify_project_approved_or_owner, only: :show
   before_action :initialize_project, only: [:new, :create]
   before_action :load_project, only: [:show, :edit, :update, :destroy]
+  before_action :check_if_published, only: [:edit, :update]
 
   def new
     @project.images.build
@@ -24,6 +25,11 @@ class ProjectsController < ApplicationController
         format.json { render json: @project.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  def show
+    @comments = @project.comments.latest
+    @comment_count = @project.comments.deleted(false).count
   end
 
   def update
@@ -49,7 +55,44 @@ class ProjectsController < ApplicationController
     @projects = @user.projects
     render 'user_projects'
   end
-  
+
+  # --------------------------- SECTION FOR PROJECTS PUBLIC VIEW --------------------
+  # ---------------------------------------------------------------------------------
+  def index
+    @projects = Project.published_projects
+    @page_title = 'Projects'
+    render :all
+  end
+
+  def charity_projects
+    @projects = Project.published_charity_projects
+    @page_title = 'Charity Projects'
+    render :all
+  end
+
+  def investment_projects
+    @projects = Project.published_investment_projects
+    @page_title = 'Investment Projects'
+    render :all
+  end
+
+  def load_more_projects
+    case params[:for_action]
+    when 'charity_projects'
+      @projects = Project.published_charity_projects(params[:page].to_i)
+    when 'investment_projects'
+      @projects = Project.published_investment_projects(params[:page].to_i)
+    else
+      @projects = Project.published_projects(params[:page].to_i)
+    end
+    # @projects = Project.public_send("published_#{ params[:for_action] }projects", params[:page].to_i)
+    @is_more_available = @projects.length == Project::INITIAL_PROJECT_DISPLAY_LIMIT
+    render 'load'
+  end
+
+  # ---------------------------------------------------------------------------------
+  # ---------------------------------------------------------------------------------
+
   protected
 
     def initialize_project
@@ -59,7 +102,7 @@ class ProjectsController < ApplicationController
 
     def load_project
       @user = current_user
-      @project = Project.find_by_id(params[:id])
+      @project = Project.find_by(id: params[:id])
     end
 
     def project_params
@@ -94,9 +137,16 @@ class ProjectsController < ApplicationController
 
     def verify_project_approved_or_owner
       @user = current_user
-      @project = Project.find_by_id(params[:id])
+      @project = Project.find_by(id: params[:id])
       unless(@project.user == current_user || @project.verified_at)
         redirect_to root_path, alert: 'Cannot find any such project'
+      end
+    end
+
+    def check_if_published
+      if @project.published?
+        flash[:alert] = 'This project cannot be edited now'
+        redirect_to action: :show
       end
     end
 

@@ -14,7 +14,7 @@ class PasswordsController < ::Devise::PasswordsController
   protected
 
     def check_user_confirmed
-      user = User.find_by_email(params[:user][:email])
+      user = User.find_by(email: params[:user][:email])
       unless user
         set_flash_message :notice, :reset_password_needs_confirmation
         redirect_to new_confirmation_path(:user) unless user.try(:confirmed?)

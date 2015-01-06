@@ -1,0 +1,8 @@
+var $commentContainer = $('section.comments').children('ul').find('li[data-comment-id="<%= @comment.id %>"]'),
+    $deleteCommentButton = $commentContainer.find('a.delete-comment');
+
+<% if deleted %>
+  $deleteCommentButton.text('Undo').attr('href', '<%= comment_undo_delete_path(@comment.id) %>')
+<% else %>
+  $deleteCommentButton.text('Delete').attr('href', '<%= comment_delete_path(@comment.id) %>')
+<% end %>

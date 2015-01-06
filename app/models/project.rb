@@ -1,22 +1,27 @@
 class Project < ActiveRecord::Base
   include AASM
 
-  BEST_PROJECTS_LIMIT = 16
+  BEST_PROJECTS_LIMIT           = 16
+  INITIAL_PROJECT_DISPLAY_LIMIT = 30
 
   # -------------- SECTION FOR ASSOCIATIONS ---------------------
   # -------------------------------------------------------------
   has_many :images, -> { where document: false }, as: :imageable
   has_many :legal_documents, -> { where document: true }, as: :imageable, class_name: 'Image'
   belongs_to :user
+  has_many :comments
   has_attached_file :project_picture, styles: {
                               thumbnail: '270x220^',
+                              medium: { geometry: '370x300^', quality: 100 },
                               large: { geometry: '770x300^', quality: 100 }
                             },
                             convert_options: {
                               thumbnail: " -gravity center -crop '270x220+0+0'",
+                              medium: " -gravity center -crop '370x300+0+0'",
                               large: " -gravity Center -extent 770x300"
                             },
-                            default_url: '/images/img/gallery/gallery-img-1-4col.jpg'
+                            default_url: '/images/img/gallery/default_project_:style.jpg'
+
 
   accepts_nested_attributes_for :images, :legal_documents
 
@@ -28,19 +33,19 @@ class Project < ActiveRecord::Base
   # -------------------------------------------------------------
   aasm column: 'state'.freeze do
     state :created, initial: true
-    state :publish
-    state :unpublish
-    state :success
-    state :failure
+    state :published
+    state :unpublished
+    state :successful
+    state :failed
     state :fraud
     state :payment_pending
 
     event :publish do
-      transitions from: [:created, :unpublish], to: :publish
+      transitions from: [:created, :unpublished], to: :published
     end
 
     event :unpublish do
-      transitions from: [:created, :publish], to: :unpublish
+      transitions from: [:created, :published], to: :unpublished
     end
   end
 
@@ -66,8 +71,13 @@ class Project < ActiveRecord::Base
   scope :charity, -> { where(type: 'CharityProject') }
   scope :investment, -> { where(type: 'InvestmentProject') }
   scope :order_by_creation, -> { order(created_at: :desc) }
-  scope :projects_to_be_approved, -> { where(verified_at: nil).order_by_creation }
-  scope :best_projects, -> { where.not(verified_at: nil).limit(BEST_PROJECTS_LIMIT) }
+  scope :projects_to_be_approved, -> { where(state: [:created, :unpublished]).order_by_creation }
+  scope :best_projects, -> { where(state: :published).limit(BEST_PROJECTS_LIMIT) }
+  scope :published_projects, -> (page = 1) { where(state: :published).limit_records }
+  scope :published_charity_projects, -> (page = 1) { published_projects.where(type: 'CharityProject').limit_records }
+  scope :published_investment_projects, -> (page = 1) { published_projects.where(type: 'InvestmentProject').limit_records }
+
+  scope :limit_records, -> (page = 1) { limit(INITIAL_PROJECT_DISPLAY_LIMIT).offset((page - 1) * INITIAL_PROJECT_DISPLAY_LIMIT) }
 
   # To determine which all projects we can make
   def self.types

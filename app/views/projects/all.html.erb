@@ -1,0 +1,20 @@
+<% if @projects.length %>
+  <h3 class="title-bg">Our <%= @page_title %></h3>
+  <div class="row all-projects">
+    <% @projects.each do |project| %>
+      <%= render partial: 'project_listing', locals: { project: project } %>
+    <% end %>
+
+    <% if @projects.length > (Project::INITIAL_PROJECT_DISPLAY_LIMIT - 1) %>
+      <%= button_tag 'I want to see more projects', path: projects_load_more_path, action: 'load_more', for_action: action_name, id: 'projects_load_more_button', class: 'btn btn-block', data: { page: 1 } %>
+    <% end %>
+  </div>
+<% else %>
+  <h3 class='text-warning'>Sorry. Currently there are no ongoing projects.</h3>
+<% end %>
+
+<!-- JS --> 
+<% content_for :javascripts do %>
+  <%= javascript_include_tag 'project_listing', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'projects_list_page', 'data-turbolinks-track' => true %>
+<% end %>  

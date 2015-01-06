@@ -3,9 +3,9 @@
     <br />
     <h5 class="title-bg">Our Best Projects
       <small>That we are most proud of</small>
-      <button class="btn btn-mini btn-inverse hidden-phone" type="button">View All</button>
-      <button class="btn btn-mini btn-inverse hidden-phone" type="button">View Charity Projects</button>
-      <button class="btn btn-mini btn-inverse hidden-phone" type="button">View Investment Projects</button>
+      <%= link_to (button_tag 'View All', class: 'btn btn-mini btn-inverse hidden-phone'), projects_path %>
+      <%= link_to (button_tag 'Charity Projects', class: 'btn btn-mini btn-inverse hidden-phone'), projects_charity_path %>
+      <%= link_to (button_tag 'Investment Projects', class: 'btn btn-mini btn-inverse hidden-phone'), projects_investment_path %>
     </h5>
 
     <!-- Gallery Thumbnails

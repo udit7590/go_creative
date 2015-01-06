@@ -19,5 +19,6 @@
  *= require 'css/custom-styles.css'
  *= require 'css/lightbox.css'
  *= require 'css/form.css'
+ *= require 'css/project-listing.css'
  *= require_directory .
  */

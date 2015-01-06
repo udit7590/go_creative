@@ -1,0 +1,13 @@
+var $commentContainer = $('section.comments').children('ul').find('li[data-comment-id="<%= @comment.id %>"]'),
+    $abuseCommentButton = $commentContainer.find('a.abuse-comment');
+
+<% if abused %>
+  $abuseCommentButton.text('You have abused this comment').attr('href', '#').bind('click', false);
+<% else %>
+  <% if error %>
+    <% case description %>
+      <% when :already_abused %>
+      $abuseCommentButton.text('You have already abused this comment').attr('href', '#').bind('click', false);
+    <% end %>
+  <% end %>
+<% end %>

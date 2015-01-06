@@ -1,3 +1,4 @@
+
 <!-- Gallery
   ================================================== --> 
   <h4 class="title-bg">Gallery</h4>
@@ -5,19 +6,14 @@
     <ul class="gallery-post-grid holder">
 
       <% @project.images.each do |image| %>
+        <!-- Gallery Item -->
         <li class="span3 gallery-item" data-id="id-1" data-type="illustration">
           <a href="<%= image.image.url %>" data-lightbox="gallery"><%= image_tag image.image.url(:thumbnail) %></a>
         </li>
       <% end %>
-      <!-- Gallery Item -->
-        <!-- Gallery Item -->
-        <li class="span3 gallery-item" data-id="id-2" data-type="illustration">
-          <a href="/assets/img/gallery/gallery-img-1-4col.jpg" data-lightbox="gallery"><%= image_tag 'img/gallery/gallery-img-1-4col.jpg' %></a>
-        </li>
-        <!-- Gallery Item -->
-        <li class="span3 gallery-item" data-id="id-3" data-type="illustration">
-          <a href="/assets/img/gallery/gallery-img-1-4col.jpg" data-lightbox="gallery"><%= image_tag 'img/gallery/gallery-img-1-4col.jpg' %></a>
-        </li>
-
     </ul>
   </div>
+  <% if @project.images.length == 0 %>
+    <center><h6 class="text-warning">No gallery exists for this project.</h6></center>
+    <br />
+  <% end %>

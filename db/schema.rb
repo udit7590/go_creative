@@ -11,10 +11,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141230083246) do
+ActiveRecord::Schema.define(version: 20150103174718) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "abuses", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "abusable_id"
+    t.string   "abusable_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "addresses", force: true do |t|
     t.boolean  "primary"
@@ -51,6 +59,21 @@ ActiveRecord::Schema.define(version: 20141230083246) do
 
   add_index "admin_users", ["email"], name: "index_admin_users_on_email", unique: true, using: :btree
   add_index "admin_users", ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true, using: :btree
+
+  create_table "comments", force: true do |t|
+    t.integer  "parent_id"
+    t.integer  "user_id"
+    t.integer  "project_id"
+    t.text     "description"
+    t.boolean  "spam",           default: false
+    t.boolean  "visible_to_all", default: true
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.boolean  "deleted",        default: false
+    t.datetime "deleted_at"
+    t.integer  "deleted_by"
+    t.integer  "abused_count",   default: 0
+  end
 
   create_table "images", force: true do |t|
     t.string   "image_file_name"
