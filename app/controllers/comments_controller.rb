@@ -5,7 +5,7 @@ class CommentsController < ApplicationController
   before_action :load_project, only: :load_more
   before_action :verify_comment_author, only: [:delete, :undo_delete]
   before_action :check_admin, only: :destroy
-  before_action :load_comment, only: :report_abuse
+  before_action :load_comment, only: [:report_abuse, :destroy]
   before_action :check_not_already_abused, only: :report_abuse
 
   def new
@@ -119,7 +119,6 @@ class CommentsController < ApplicationController
       unless @admin
         #TODO: RETURN ERROR JS
       end
-      load_comment
     end
 
     def load_comment

@@ -26,7 +26,7 @@ var CommentsPage = (function() {
         $commentList = _this.$commentsContainer.children('ul');
       }
 
-      if(serializedHash['comment[description]'].length <= 3) {
+      if(serializedHash['comment[description]'].length < 3) {
         alert('Please enter at least 3 characters in your comment.');
         _this.$formContainer.find('textarea').focus();
         return;

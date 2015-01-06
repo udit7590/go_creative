@@ -28,8 +28,10 @@ json.comment do
   
   if @admin
     json.delete_path comment_path(@comment.id)
+    json.delete_method 'delete'
   else
     json.delete_path comment_delete_path(@comment.id)
+    json.delete_method 'get'
   end
 
 end
