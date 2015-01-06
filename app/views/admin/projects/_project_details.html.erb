@@ -74,7 +74,7 @@
   </tbody>
 </table>
 
-<% if !@project.publish? %>
+<% if !@project.published? %>
   <%= button_to 'Publish', admin_project_publish_path(@project.id), method: :get, class: 'btn btn-block btn-primary' %>
 <% else %>
   <%= button_to 'Unpublish', admin_project_unpublish_path(@project.id), method: :get, class: 'btn btn-block btn-primary' %>

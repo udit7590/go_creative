@@ -41,7 +41,7 @@ class Admin::ProjectsController < ::ApplicationController
         flash[:notice]= 'Project unpublished'
         format.html { redirect_to action: :index }
       else
-        format.js { render 'error_publish', locals: { errors: @project.errors.full_messages } }
+        format.js { render 'error_publish', locals: { project: nil, errors: @project.errors.full_messages } }
         flash[:alert] = @project.errors.full_messages
         format.html { redirect_to admin_project_path(params[:project_id]) }
       end
@@ -51,7 +51,7 @@ class Admin::ProjectsController < ::ApplicationController
   protected
 
     def load_project
-      @project = Project.find_by(id: params[:project_id])
+      @project = Project.find_by(id: params[:project_id]) || Project.find_by(id: params[:id])
       unless @project
         respond_to do |format|
           format.js { render 'error_publish', locals: { project: :not_found } }
