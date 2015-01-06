@@ -4,12 +4,20 @@
     <% @comments.each do |comment| %>
       <li class="comment" data-project-id="<%= @project.id %>" data-comment-id="<%= comment.id %>">
         <%= image_tag 'img/user-avatar.jpg' %>
-        <span class="comment-name"><%= comment.user.name %></span>
+        <span class="comment-name">
+          <% if comment.user %>
+            <%= comment.user.name %>
+          <% else %>
+            Admin
+          <% end %>
+        </span>
         <span class="comment-date">
           <%= comment.updated_at.to_s(:short) %>
-           | <%= link_to 'Report Abuse', comment_report_abuse_path(comment.id), remote: true, class: 'abuse-comment' %> (Count: <%= comment.abused_count %>)
-           <% if current_user.id == comment.user.id %>
-           | <%= link_to 'Delete', comment_delete_path(comment.id), remote: true, class: 'delete-comment', data: { confirm: 'Are you sure?' } %>
+           <% if comment.user %>
+            | <%= link_to 'Report Abuse', comment_report_abuse_path(comment.id), remote: true, class: 'abuse-comment' %> (<%= comment.abused_count %>)
+           <% end %>
+           <% if comment.user && current_user.id == comment.user.id %>
+            | <%= link_to 'Delete', comment_delete_path(comment.id), remote: true, class: 'delete-comment', data: { confirm: 'Are you sure?' } %>
            <% end %>
         </span>
         <div class="comment-content"><%= comment.description %></div>

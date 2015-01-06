@@ -9,7 +9,7 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable, :confirmable
 
-  has_many :addresses
+  has_many :addresses, autosave: true
   has_attached_file :pan_card_copy, styles: { thumbnail: '60x60#' }
 
   has_many :projects
@@ -44,14 +44,28 @@ class User < ActiveRecord::Base
     !!(pan_card && pan_card_copy.exists?)
   end
 
+  def pan_details_verified?
+    !!pan_verified_at
+  end
+
   def primary_address_details_complete?
     primary_address = addresses.primary_address
     !!(primary_address && primary_address.address_proof.exists?)
   end
 
+  def primary_address_details_verified?
+    primary_address = addresses.primary_address
+    !!primary_address.verified_at
+  end
+
   def current_address_details_complete?
     current_address = addresses.current_address
     !!(current_address && current_address.address_proof.exists?)
+  end
+
+  def current_address_details_verified?
+    current_address = addresses.current_address
+    !!current_address.verified_at
   end
 
   def complete?
@@ -64,6 +78,29 @@ class User < ActiveRecord::Base
     else
       true
     end   
+  end
+
+  def verified?
+    pan_details_verified? && primary_address_details_verified?
+  end
+
+  # Only admin can verify the user details
+  def verify(admin, should_verify_current_address = false)
+    verified = false
+
+    unless pan_details_verified?
+      verified = self.update(pan_verified_at: DateTime.current, pan_verified_by: admin.id)
+    end
+    
+    unless primary_address_details_verified?
+      verified = self.addresses.primary_address.update(verified_at: DateTime.current, admin_user_id_id: admin.id)
+    end
+
+    if should_verify_current_address
+      verified = self.addresses.current_address.update(verified_at: DateTime.current, admin_user_id_id: admin.id)
+    end
+
+    verified
   end
 
 end

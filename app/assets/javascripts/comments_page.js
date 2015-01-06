@@ -9,7 +9,8 @@ var CommentsPage = (function() {
   CommentsPage.prototype.bindEventsForAddComment = function() {
     var _this = this,
         $commentForm = this.$formContainer.find('form'),
-        $addCommentButton = this.$formContainer.find('.add-comment');
+        $addCommentButton = this.$formContainer.find('.add-comment'),
+        $commentList = null;
 
     $addCommentButton.click(function() {
       var $this = $(this),
@@ -19,25 +20,30 @@ var CommentsPage = (function() {
         serializedHash[obj['name']] = obj['value'];
       });
 
+      if($this.data('admin')) {
+        $commentList = _this.$commentsContainer.children('tbody');
+      } else {
+        $commentList = _this.$commentsContainer.children('ul');
+      }
+
       if(serializedHash['comment[description]'].length <= 3) {
         alert('Please enter at least 3 characters in your comment.');
         _this.$formContainer.find('textarea').focus();
         return;
       }
       this.disabled = true;
-      _this.sendRequestToAddComment($commentForm.attr('action'), serializedHash, this);
+      _this.sendRequestToAddComment($commentForm.attr('action'), serializedHash, this, $commentList);
     });
   };
 
-  CommentsPage.prototype.sendRequestToAddComment = function(path, data, button) {
+  CommentsPage.prototype.sendRequestToAddComment = function(path, data, button, commentList) {
     var _this = this;
     $.getJSON(path, { data: data })
      .done(function(jsonData) {
         var error = jsonData
         if(!jsonData['error'])
-
         //Load the comment in the view
-        _this.$commentsContainer.children('ul').prepend(Comment.buildFromJSON(jsonData['comment']));
+        ContentLoader.loadContentInExistingList(commentList, jsonData['comment'], { template: Comment.template, prepend: true });
 
         //Clear the form
         _this.$formContainer.find('textarea').val('');
@@ -56,20 +62,29 @@ var CommentsPage = (function() {
     if(this.$loadMoreButton.length) {
       var _this = this;
       this.$loadMoreButton.click(function() {
-        var $this = $(this);
-        _this.sendRequestToLoadMore($this.attr('path'), $this.data('page') + 1);
+        var $this = $(this),
+            formData = { page: ($this.data('page') + 1) };
+        
+        if($this.data('admin')) {
+          $commentList = _this.$commentsContainer.children('tbody');
+          formData['admin'] = true;
+        } else {
+          $commentList = _this.$commentsContainer.children('ul');
+        }
+
+        _this.sendRequestToLoadMore($this.attr('path'), formData, $commentList);
       });
     }
 
   };
 
-  CommentsPage.prototype.sendRequestToLoadMore = function(path, page) {
+  CommentsPage.prototype.sendRequestToLoadMore = function(path, data, commentList) {
     var _this = this;
-    $.getJSON(path, { page: page })
+    $.getJSON(path, data)
      .done(function(jsonData) {
 
         //Load the comments on the page
-        _this.$commentsContainer.children('ul').append(Comment.buildFromJSON(jsonData['comments']));
+        ContentLoader.loadContentInExistingList(commentList, jsonData['comments'], { template: Comment.template });
 
         //Remove Load more button if no more comments
         if(!jsonData['is_more_comments_available']) {
@@ -83,12 +98,3 @@ var CommentsPage = (function() {
   //Return the class
   return CommentsPage;
 })();
-
-$(document).ready(function() {
-
-  var commentsPage = new CommentsPage($('section.comments'), $('.comment-form-container'), $('#comments_load_more_button'));
-
-  commentsPage.bindEventsForAddComment();
-  commentsPage.bindClickEventForLoadMoreButton();
-
-});

@@ -54,6 +54,7 @@
 
 <!-- JS --> 
 <% content_for :javascripts do %>
+  <%= javascript_include_tag 'content_loader', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'comment', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'comments_page', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'embed_video', 'data-turbolinks-track' => true %>

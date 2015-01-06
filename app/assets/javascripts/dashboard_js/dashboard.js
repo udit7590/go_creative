@@ -15,4 +15,6 @@
 //= require turbolinks
 //= require 'dashboard_js/bootstrap.min.js'
 //= require 'dashboard_js/init.dashboard.theme.js'
+//= require 'js/lightbox.js'
+//= require 'js/mustache.js'
 //= require_directory .

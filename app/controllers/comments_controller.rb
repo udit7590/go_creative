@@ -4,13 +4,21 @@ class CommentsController < ApplicationController
   before_action :load_user_and_project, only: :new
   before_action :load_project, only: :load_more
   before_action :verify_comment_author, only: [:delete, :undo_delete]
+  before_action :check_admin, only: :destroy
   before_action :load_comment, only: :report_abuse
   before_action :check_not_already_abused, only: :report_abuse
 
   def new
-    @comment = @project.comments.build(visible_to_all: true, spam: false)
+    if params[:data][:admin]
+      @comment = @project.comments.build(visible_to_all: false, spam: false)
+      @comment.admin_user_id = @admin.id
+      @admin = true
+    else
+      @comment = @project.comments.build(visible_to_all: true, spam: false)
+      @comment.user_id = @user.id
+    end
+    
     @comment.description = params[:data][:comment][:description]
-    @comment.user_id = @user.id
 
     if(@comment.save)
       render 'add_comment'
@@ -20,7 +28,16 @@ class CommentsController < ApplicationController
   end
 
   def load_more
-    @comments = @project.comments.latest(params[:page].to_i)
+    if(params[:admin] == 'true')
+      @admin = true
+      @comments = @project.comments.order_by_date(params[:page].to_i)
+    else
+      if @project.user == current_user
+        @comments = @project.comments.order_by_date(params[:page].to_i)
+      else
+        @comments = @project.comments.latest(params[:page].to_i).visible_to_all(true)
+      end
+    end
     @is_more_available = @comments.length == Comment::INITIAL_COMMENT_DISPLAY_LIMIT
     render 'load'
   end
@@ -51,6 +68,14 @@ class CommentsController < ApplicationController
     end
   end
 
+  def destroy
+    if(@comment.delete)
+      render 'delete', locals: { deleted: true }
+    else
+      render js: 'alert("Sorry. We are unable to delete your comment.")'
+    end
+  end
+
   protected
 
     def check_ajax_request
@@ -60,9 +85,16 @@ class CommentsController < ApplicationController
     def load_user_and_project
       load_project
 
-      @user = User.find_by(id: params[:data][:user_id])
-      unless @user
-        #TODO: RETURN ERROR JSON
+      if params[:data][:admin]
+        @admin = AdminUser.find_by(id: params[:data][:admin_user_id])
+        unless @admin
+          #TODO: RETURN ERROR JSON
+        end
+      else
+        @user = User.find_by(id: params[:data][:user_id])
+        unless @user
+          #TODO: RETURN ERROR JSON
+        end
       end
     end
 
@@ -78,12 +110,20 @@ class CommentsController < ApplicationController
 
       # TODO DISCUSS: comment.project.user.id
       if current_user.id != @comment.user.id && current_user.id != @comment.project.user.id
-        render js: 'alert("Sorry. Only project owner or comment author can delete the comment.")'
+        render js: 'alertlocals("Sorry. Only project owner or comment author can delete the comment.")'
       end
     end
 
+    def check_admin
+      @admin = current_admin_user
+      unless @admin
+        #TODO: RETURN ERROR JS
+      end
+      load_comment
+    end
+
     def load_comment
-      @comment = Comment.find_by(id: params[:comment_id])
+      @comment = Comment.find_by(id: params[:comment_id] || Comment.find_by_id(params[:id])
       unless @comment
         render js: 'alert("Cannot find any such comment.")'
       end

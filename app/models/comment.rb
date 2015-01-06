@@ -15,7 +15,7 @@ class Comment < ActiveRecord::Base
   scope :deleted, -> (is_deleted) { where(deleted: is_deleted) }
   scope :safe, -> { where(spam: false).deleted(false) }
   scope :visible_to_all, -> (visibility) { where(visible_to_all: visibility).deleted(false) }
-  scope :order_by_date, ->  { order(created_at: :desc).deleted(false) }
-  scope :latest, -> (page = 1) { order_by_date.limit(INITIAL_COMMENT_DISPLAY_LIMIT).offset((page - 1) * INITIAL_COMMENT_DISPLAY_LIMIT) }
+  scope :order_by_date, -> (page = 1) { order(created_at: :desc).limit(INITIAL_COMMENT_DISPLAY_LIMIT).offset((page - 1) * INITIAL_COMMENT_DISPLAY_LIMIT) }
+  scope :latest, -> (page = 1) { order_by_date.deleted(false).limit(INITIAL_COMMENT_DISPLAY_LIMIT).offset((page - 1) * INITIAL_COMMENT_DISPLAY_LIMIT) }
   
 end
