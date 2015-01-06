@@ -62,7 +62,7 @@ class Admin::ProjectsController < ::ApplicationController
     end
 
     def check_project_unpublished
-      if @project.publish?
+      if @project.published?
         respond_to do |format|
           format.js { render 'error_publish', locals: { project: :already_published } }
         end

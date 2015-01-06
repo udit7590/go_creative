@@ -123,7 +123,7 @@ class CommentsController < ApplicationController
     end
 
     def load_comment
-      @comment = Comment.find_by(id: params[:comment_id] || Comment.find_by_id(params[:id])
+      @comment = Comment.find_by(id: params[:comment_id] || Comment.find_by(id: params[:id]))
       unless @comment
         render js: 'alert("Cannot find any such comment.")'
       end
