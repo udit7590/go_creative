@@ -44,7 +44,7 @@ class ConfirmationsController < Devise::ConfirmationsController
     end
 
     def sign_in_if_confirmed(email)
-      @resource = User.find_by_email(email)
+      @resource = User.find_by(email: email)
       if @resource && @resource.confirmed?
         set_flash_message :notice, :already_confirmed_resource
         sign_in_and_redirect resource_name, @resource

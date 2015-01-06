@@ -12,3 +12,9 @@
 <% else %>
   <h3 class='text-warning'>Sorry. Currently there are no ongoing projects.</h3>
 <% end %>
+
+<!-- JS --> 
+<% content_for :javascripts do %>
+  <%= javascript_include_tag 'project_listing', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'projects_list_page', 'data-turbolinks-track' => true %>
+<% end %>  

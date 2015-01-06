@@ -15,7 +15,7 @@ class CommentsController < ApplicationController
     if(@comment.save)
       render 'add_comment'
     else
-      render json: '{ error: true }'
+      render json: { error: true }
     end
   end
 
@@ -60,14 +60,14 @@ class CommentsController < ApplicationController
     def load_user_and_project
       load_project
 
-      @user = User.find_by_id(params[:data][:user_id])
+      @user = User.find_by(id: params[:data][:user_id])
       unless @user
         #TODO: RETURN ERROR JSON
       end
     end
 
     def load_project
-      @project = Project.find_by_id(params[:project_id])
+      @project = Project.find_by(id: params[:project_id])
       unless @project
         #TODO: RETURN ERROR JSON
       end
@@ -83,15 +83,14 @@ class CommentsController < ApplicationController
     end
 
     def load_comment
-      @comment = Comment.find_by_id(params[:comment_id])
+      @comment = Comment.find_by(id: params[:comment_id])
       unless @comment
         render js: 'alert("Cannot find any such comment.")'
       end
     end
 
     def check_not_already_abused
-      already_abused_by = @comment.abused_comments.pluck(:user_id)
-      if already_abused_by.include? current_user.id
+      if @comment.abused_comments.where(user_id: current_user.id).size > 0
         render 'abused', locals: { abused: false, error: true, description: :already_abused }
       end
     end

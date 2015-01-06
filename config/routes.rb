@@ -43,20 +43,20 @@ Gocreative::Application.routes.draw do
   end
 
   scope '/projects', as: 'projects' do
-    get 'all', to: 'projects_display#all'
-    get 'charity', to: 'projects_display#charity'
-    get 'investment', to: 'projects_display#investment'
-    get 'load_more', to: 'projects_display#load_more'
+    get '/', to: 'projects#index'
+    get :charity, to: 'projects#charity_projects'
+    get :investment, to: 'projects#investment_projects'
+    get :load_more, to: 'projects#load_more_projects'
   end
 
   resource :users do
-    resources :projects, shallow: true do
+    resources :projects, shallow: true, except: :index do
       get :user_projects, path: 'my', on: :collection, as: 'current'
       resources :comments, shallow: true, except: [:show, :update, :destroy, :create] do
-        get 'delete'
-        get 'undo_delete'
-        get 'report_abuse'
-        get 'load_more', to: 'comments#load_more', on: :collection
+        get :delete
+        get :undo_delete
+        get :report_abuse
+        get :load_more, to: 'comments#load_more', on: :collection
       end
     end
   end

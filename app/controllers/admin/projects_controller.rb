@@ -38,7 +38,7 @@ class Admin::ProjectsController < ::ApplicationController
   protected
 
     def load_project
-      @project = Project.find_by_id(params[:project_id])
+      @project = Project.find_by(id: params[:project_id])
       unless @project
         respond_to do |format|
           format.js { render 'error_publish', locals: { project: nil } }

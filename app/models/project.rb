@@ -33,19 +33,19 @@ class Project < ActiveRecord::Base
   # -------------------------------------------------------------
   aasm column: 'state'.freeze do
     state :created, initial: true
-    state :publish
-    state :unpublish
-    state :success
-    state :failure
+    state :published
+    state :unpublished
+    state :successful
+    state :failed
     state :fraud
     state :payment_pending
 
     event :publish do
-      transitions from: [:created, :unpublish], to: :publish
+      transitions from: [:created, :unpublished], to: :published
     end
 
     event :unpublish do
-      transitions from: [:created, :publish], to: :unpublish
+      transitions from: [:created, :published], to: :unpublished
     end
   end
 
@@ -71,11 +71,13 @@ class Project < ActiveRecord::Base
   scope :charity, -> { where(type: 'CharityProject') }
   scope :investment, -> { where(type: 'InvestmentProject') }
   scope :order_by_creation, -> { order(created_at: :desc) }
-  scope :projects_to_be_approved, -> { where(verified_at: nil).order_by_creation }
-  scope :best_projects, -> { where.not(verified_at: nil).limit(BEST_PROJECTS_LIMIT) }
-  scope :published_projects, -> (page = 1) { where('verified_at IS NOT NULL').limit(INITIAL_PROJECT_DISPLAY_LIMIT).offset((page - 1) * INITIAL_PROJECT_DISPLAY_LIMIT) }
-  scope :published_charity_projects, -> (page = 1) { published_projects.where(type: 'CharityProject').limit(INITIAL_PROJECT_DISPLAY_LIMIT).offset((page - 1) * INITIAL_PROJECT_DISPLAY_LIMIT) }
-  scope :published_investment_projects, -> (page = 1) { published_projects.where(type: 'InvestmentProject').limit(INITIAL_PROJECT_DISPLAY_LIMIT).offset((page - 1) * INITIAL_PROJECT_DISPLAY_LIMIT) }
+  scope :projects_to_be_approved, -> { where(state: [:created, :unpublished]).order_by_creation }
+  scope :best_projects, -> { where(state: :published).limit(BEST_PROJECTS_LIMIT) }
+  scope :published_projects, -> (page = 1) { where(state: :published).limit_records }
+  scope :published_charity_projects, -> (page = 1) { published_projects.where(type: 'CharityProject').limit_records }
+  scope :published_investment_projects, -> (page = 1) { published_projects.where(type: 'InvestmentProject').limit_records }
+
+  scope :limit_records, -> (page = 1) { limit(INITIAL_PROJECT_DISPLAY_LIMIT).offset((page - 1) * INITIAL_PROJECT_DISPLAY_LIMIT) }
 
   # To determine which all projects we can make
   def self.types
