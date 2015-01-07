@@ -1,10 +1,10 @@
 class CommentsController < ApplicationController
   
   before_action :check_ajax_request
-  before_action :load_user_and_project, only: :new
-  before_action :load_project, only: :load_more
-  before_action :verify_comment_author, only: [:delete, :undo_delete]
   before_action :check_admin, only: :destroy
+  before_action :load_project, only: [:load_more, :new]
+  before_action :load_user, only: :new
+  before_action :verify_comment_author, only: [:delete, :undo_delete]
   before_action :load_comment, only: [:report_abuse, :destroy]
   before_action :check_not_already_abused, only: :report_abuse
 
@@ -13,6 +13,8 @@ class CommentsController < ApplicationController
       @comment = @project.comments.build(visible_to_all: false, spam: false)
       @comment.admin_user_id = @admin.id
       @admin = true
+    elsif @project.user == current_user && !@project.published?
+      @comment = @project.comments.build(visible_to_all: false, spam: false)
     else
       @comment = @project.comments.build(visible_to_all: true, spam: false)
       @comment.user_id = @user.id
@@ -72,7 +74,7 @@ class CommentsController < ApplicationController
     if(@comment.delete)
       render 'delete', locals: { deleted: true }
     else
-      render js: 'alert("Sorry. We are unable to delete your comment.")'
+      render js: 'alert("Sorry. We are unable to delete this comment.")'
     end
   end
 
@@ -82,18 +84,16 @@ class CommentsController < ApplicationController
       redirect_to controller: :home unless request.xhr?
     end
 
-    def load_user_and_project
-      load_project
-
+    def load_user
       if params[:data][:admin]
         @admin = AdminUser.find_by(id: params[:data][:admin_user_id])
         unless @admin
-          #TODO: RETURN ERROR JSON
+          render json: { error: true, description: 'Cannot find any admin user.' }
         end
       else
         @user = User.find_by(id: params[:data][:user_id])
         unless @user
-          #TODO: RETURN ERROR JSON
+          render json: { error: true, description: 'Cannot find any admin user.' }
         end
       end
     end
@@ -101,7 +101,7 @@ class CommentsController < ApplicationController
     def load_project
       @project = Project.find_by(id: params[:project_id])
       unless @project
-        #TODO: RETURN ERROR JSON
+        render json: { error: true, description: 'Cannot find any such project.' }
       end
     end
 
@@ -117,7 +117,7 @@ class CommentsController < ApplicationController
     def check_admin
       @admin = current_admin_user
       unless @admin
-        #TODO: RETURN ERROR JS
+        render js: 'alert("Sorry. No admin user is currently logged in.")'
       end
     end
 

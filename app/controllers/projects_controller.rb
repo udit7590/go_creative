@@ -3,9 +3,9 @@ class ProjectsController < ApplicationController
 
   before_action :store_location
   before_action :authenticate_user!, except: [:index, :show, :charity_projects, :investment_projects]
-  before_action :verify_project_approved_or_owner, only: :show
   before_action :initialize_project, only: [:new, :create]
   before_action :load_project, only: [:show, :edit, :update, :destroy]
+  before_action :verify_project_approved_or_owner, only: :show
   before_action :check_if_published, only: [:edit, :update]
 
   def new
@@ -108,7 +108,8 @@ class ProjectsController < ApplicationController
       @user = current_user
       @project = Project.find_by(id: params[:id])
       unless @project
-        # TODO
+        flash[:alert] = 'Cannot find any such project.'
+        redirect_to controller: :home, action: :index
       end
     end
 
@@ -135,7 +136,8 @@ class ProjectsController < ApplicationController
     def check_project_user_details_and_redirect(format)
       @user = @project.user
       unless @user
-        format.html { redirect_to controller: :home, action: :index, alert: 'This project has been deleted.' }
+        flash[:alert] = 'This project has been deleted.'
+        format.html { redirect_to controller: :home, action: :index }
       end
 
       check_user_details_and_redirect(format, @user)
