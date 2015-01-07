@@ -61,3 +61,23 @@ div.field_with_errors {
   background-color: #ccc;
   margin-left: 0
 }
+
+div.image-uploader-container {
+  border: dashed #ccc 2px;
+  padding: 5px;
+  background-color: #fff;
+  overflow: hidden;
+}
+
+div.image-uploader-container.before-select {
+  background: url(/assets/img/gallery/image_preview.png) no-repeat center;
+}
+
+div.image-uploader-container.select-error {
+  border: dashed #cc0000 2px;
+}
+
+div.image-uploader-container > p {
+  font-size: 30px;
+  color: #ccc;
+}

@@ -16,7 +16,7 @@
            <% if comment.user %>
             | <%= link_to 'Report Abuse', comment_report_abuse_path(comment.id), remote: true, class: 'abuse-comment' %> (<%= comment.abused_count %>)
            <% end %>
-           <% if comment.user && current_user.id == comment.user.id %>
+           <% if comment.user && current_user && current_user.id == comment.user.id %>
             | <%= link_to 'Delete', comment_delete_path(comment.id), remote: true, class: 'delete-comment', data: { confirm: 'Are you sure?' } %>
            <% end %>
         </span>

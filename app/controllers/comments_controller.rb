@@ -129,7 +129,7 @@ class CommentsController < ApplicationController
     end
 
     def check_not_already_abused
-      if @comment.abused_comments.where(user_id: current_user.id).size > 0
+      if current_user && @comment.abused_comments.where(user_id: current_user.id).size > 0
         render 'abused', locals: { abused: false, error: true, description: :already_abused }
       end
     end

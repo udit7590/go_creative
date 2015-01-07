@@ -50,6 +50,14 @@
           <%= addresses_form.text_field :country, class: 'input-xlarge country-field', placeholder: 'Country', size: 24, data: { field: 'country-field', class: address_field_class(is_primary) } %>
         </div>
       </div>
+
+      <div class="control-group">
+        <%= addresses_form.label :address_proof, 'Address Proof', class: 'control-label' %>
+        <div class="controls">
+          <%= addresses_form.file_field :address_proof, multiple: false, class: 'filestyle', data: { buttonName: 'btn', buttonText: 'Select File', uploader: 'single', width: '350', height: '200', prev: image_path(addresses_form.object.address_proof) } %>
+          <p class="help-block">Max file size: 2MB. Valid Image Types: PNG, JPEG</p>
+        </div>
+      </div>
     </div>
   <% end %>
   <div class="control-group">
@@ -60,5 +68,3 @@
 
 </fieldset>
 <% end %>
-
-<%= render partial: 'address_proof_upload_box' %>

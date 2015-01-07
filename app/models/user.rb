@@ -93,11 +93,11 @@ class User < ActiveRecord::Base
     end
     
     unless primary_address_details_verified?
-      verified = self.addresses.primary_address.update(verified_at: DateTime.current, admin_user_id_id: admin.id)
+      verified = self.addresses.primary_address.update(verified_at: DateTime.current, admin_user_id: admin.id)
     end
 
     if should_verify_current_address
-      verified = self.addresses.current_address.update(verified_at: DateTime.current, admin_user_id_id: admin.id)
+      verified = self.addresses.current_address.update(verified_at: DateTime.current, admin_user_id: admin.id)
     end
 
     verified

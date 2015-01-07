@@ -95,6 +95,11 @@ table.table-horizontal > tbody > tr > td:first-child {
   width: 250px;
 }
 
+#projectComments > tbody > tr > td:first-child {
+  width: 450px;
+  font-size: 12px;
+}
+
 .success {
   color: #00cc00;
   font-weight: bold;

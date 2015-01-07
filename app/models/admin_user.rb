@@ -3,6 +3,6 @@ class AdminUser < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
  def name
-    [first_name, last_name].join(' ').presence || 'Admin'
+    [try(:first_name), try(:last_name)].join(' ').presence || 'Admin'
   end
 end

@@ -12,7 +12,7 @@
         </ul>
       </li>
       <li><a href="#">Contact</a></li>
-      <% if !signed_in? %>
+      <% if !current_user %>
       <li><a href="#userLoginModal" role="button" data-backdrop="static" data-toggle="modal">Login</a></li>
       <li><a href="#userRegistrationModal" data-backdrop="static" role="button" data-toggle="modal">Signup</a></li>
       <%= render '/sessions/login_modal' %>
