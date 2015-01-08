@@ -14,7 +14,7 @@
         <span class="comment-date">
           <%= comment.updated_at.to_s(:short) %>
            <% if comment.user %>
-            | <%= link_to 'Report Abuse', comment_report_abuse_path(comment.id), remote: true, class: 'abuse-comment' %> (<%= comment.abused_count %>)
+            | <%= link_to 'Report Abuse', comment_report_abuse_path(comment.id, user_id: @user), remote: true, class: 'abuse-comment' %> (<%= comment.abused_count %>)
            <% end %>
            <% if comment.user && current_user && current_user.id == comment.user.id %>
             | <%= link_to 'Delete', comment_delete_path(comment.id), remote: true, class: 'delete-comment', data: { confirm: 'Are you sure?' } %>
@@ -33,7 +33,7 @@
     <!-- Comment Form -->
     <div class="comment-form-container">
       <h6>Leave a Comment</h6>
-      <form action="<%= new_project_comment_path(@project) %>" id="comment-form" method="get">
+      <form action="<%= new_project_comment_path(@project, user_id: @user) %>" id="comment-form" method="get">
         <div class="input-prepend">
           <span class="add-on"><i class="icon-user"></i></span>
           <input class="span4" id="prependedInput" size="16" type="text" placeholder="Name" value="<%= @user.name %>" readonly="readonly" name="comment[name]">

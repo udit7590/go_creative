@@ -3,7 +3,7 @@ class CommentsController < ApplicationController
   before_action :check_ajax_request
   before_action :check_admin, only: :destroy
   before_action :load_project, only: [:load_more, :new]
-  before_action :load_user, only: :new
+  before_action :load_user, only: [:new, :report_abuse]
   before_action :build_comment, only: :new
   before_action :verify_comment_author, only: [:delete, :undo_delete]
   before_action :load_comment, only: [:report_abuse, :destroy]
@@ -73,15 +73,15 @@ class CommentsController < ApplicationController
     end
 
     def load_user
-      if params[:data][:admin]
+      if params[:data] && params[:data][:admin]
         @admin = AdminUser.find_by(id: params[:data][:admin_user_id])
         unless @admin
           render json: { error: true, description: 'Cannot find any admin user.' }
         end
       else
-        @user = User.find_by(id: params[:data][:user_id])
+        @user = User.find_by(id: params[:user_id])
         unless @user
-          render json: { error: true, description: 'Cannot find any admin user.' }
+          render js: 'alert("Only registered users can report abuse a comment.")'
         end
       end
     end

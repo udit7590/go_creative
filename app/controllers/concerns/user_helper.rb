@@ -9,7 +9,7 @@ module UserHelper
       flash[:alert] = I18n.t missing_message, scope: [:projects, :views]
       format.html { redirect_to controller: :accounts, action: missing_page }
     else
-      flash[:alert] = I18n.t :project_created, scope: [:projects, :views]
+      flash[:notice] = I18n.t :project_created, scope: [:projects, :views]
       format.html { redirect_to controller: :home, action: :index }
     end
     format.json { head :no_content }
