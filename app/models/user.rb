@@ -16,8 +16,6 @@ class User < ActiveRecord::Base
 
   has_many :projects
 
-  validates_attachment_content_type :pan_card_copy, content_type: %w(image/jpg image/jpeg image/png)
-
   accepts_nested_attributes_for :addresses,  reject_if: :all_blank, limit: 2
 
   # -------------- SECTION FOR CALLBACKS ------------------------
@@ -30,6 +28,9 @@ class User < ActiveRecord::Base
   validates_attachment_content_type :pan_card_copy, content_type: %w(image/jpg image/jpeg image/png)
   #FIXME_AB: I think instead of having validation for two address. you should have permanent and current address address. and validation on them
   validates :addresses, count: { limit: 2 }
+  validates :pan_card, allow_blank: true, format: { with: /\A[a-z]{3}[abcfghljpt]{1}[a-z]{1}[0-9]{4}[a-z]{1}\Z/i, message: 'should be in format AAA[ABCFGHLJPT]A9999A' }
+  validates :phone_number, allow_blank: true, format: { with: /\A[0-9]{8,10}\Z/, message: 'should have 8 or 10 digits' }
+  validates :first_name, presence: true, length: { in: 2..50 }
   
   # -------------- SECTION FOR SCOPES AND METHODS ---------------
   # -------------------------------------------------------------
