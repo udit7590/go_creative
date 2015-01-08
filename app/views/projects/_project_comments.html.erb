@@ -1,5 +1,5 @@
 <section class="comments">
-  <h4 class="title-bg"><a name="comments"></a><%= @comment_count %> Comments so far</h4>
+  <h4 class="title-bg"><a name="comments"></a>Comments</h4>
   <ul>
     <% @comments.each do |comment| %>
       <li class="comment" data-project-id="<%= @project.id %>" data-comment-id="<%= comment.id %>">

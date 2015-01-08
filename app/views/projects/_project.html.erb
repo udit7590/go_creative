@@ -2,7 +2,7 @@
   <td><%= project.id %></td>
   <td><%= project.title %></td>
   <td><%= humanize_sti_class(project.type) %></td>
-  <td><%= project.verified_at ? 'Live' : 'Pending Approval' %></td>
+  <td><%= project.published? ? 'Live' : 'Pending Approval' %></td>
   <td><%= number_to_currency(project.amount_required, unit: 'INR ') %></td>
   <td><%= project.created_at.to_s(:short) %></td>
   <td><%= project.end_date.to_s(:long) %></td>

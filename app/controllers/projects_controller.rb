@@ -106,7 +106,7 @@ class ProjectsController < ApplicationController
 
     def load_project
       @user = current_user
-      @project = Project.find_by(id: params[:id])
+      @project = Project.find_by(id: params[:project_id]) || Project.find_by(id: params[:id])
       unless @project
         flash[:alert] = 'Cannot find any such project.'
         redirect_to controller: :home, action: :index
@@ -145,9 +145,7 @@ class ProjectsController < ApplicationController
     end
 
     def verify_project_approved_or_owner
-      @user = current_user
-      @project = Project.find_by(id: params[:id])
-      unless(@project.user == current_user || @project.verified_at)
+      unless(@project.published? || @project.user == current_user)
         redirect_to root_path, alert: 'Cannot find any such project'
       end
     end
