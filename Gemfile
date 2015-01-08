@@ -68,3 +68,8 @@ gem 'kaminari'
 
 #For State Machine
 gem 'aasm', '~> 4.0.7'
+
+#For mails in test and development
+gem 'letter_opener', group: [:development, :test]
+
+gem 'quiet_assets', group: :development

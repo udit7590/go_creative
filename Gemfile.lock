@@ -28,6 +28,7 @@ GEM
       minitest (~> 5.1)
       thread_safe (~> 0.1)
       tzinfo (~> 1.1)
+    addressable (2.3.5)
     arel (5.0.1.20140414130214)
     bcrypt (3.1.9)
     bcrypt-ruby (3.0.1)
@@ -73,6 +74,10 @@ GEM
     kaminari (0.15.1)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
+    launchy (2.3.0)
+      addressable (~> 2.3)
+    letter_opener (1.1.2)
+      launchy (~> 2.2)
     mail (2.6.3)
       mime-types (>= 1.16, < 3)
     mime-types (2.4.3)
@@ -86,6 +91,8 @@ GEM
       cocaine (~> 0.5.3)
       mime-types
     pg (0.17.1)
+    quiet_assets (1.0.2)
+      railties (>= 3.1, < 5.0)
     rack (1.5.2)
     rack-test (0.6.2)
       rack (>= 1.0)
@@ -173,9 +180,11 @@ DEPENDENCIES
   jbuilder (~> 1.2)
   jquery-rails
   kaminari
+  letter_opener
   non-stupid-digest-assets
   paperclip
   pg (~> 0.17.1)
+  quiet_assets
   rails (= 4.1.8)
   rails_12factor
   rspec-rails (~> 3.0)
