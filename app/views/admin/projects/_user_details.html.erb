@@ -29,17 +29,17 @@
     <tr>
       <td>Permanent Address (<%= address_status(@project.user.addresses.primary_address) %>) </td>
       <td>
-        <%= @project.user.addresses.primary_address.full_address %><br />
-        <%= @project.user.addresses.primary_address.city %>-
-        <%= @project.user.addresses.primary_address.pincode %>,
-        <%= @project.user.addresses.primary_address.state %>,
-        <%= @project.user.addresses.primary_address.country %>
+        <%= @project.user.addresses.primary_address.try(:full_address) %><br />
+        <%= @project.user.addresses.primary_address.try(:city) %>-
+        <%= @project.user.addresses.primary_address.try(:pincode) %>,
+        <%= @project.user.addresses.primary_address.try(:state) %>,
+        <%= @project.user.addresses.primary_address.try(:country) %>
       </td>
     </tr>
     <tr>
       <td>Permanent Address Proof</td>
       <td>
-        <% if @project.user.addresses.primary_address.address_proof.exists? %>
+        <% if @project.user.addresses.primary_address && @project.user.addresses.primary_address.address_proof.exists? %>
           <%= link_to image_tag(@project.user.addresses.primary_address.address_proof.url, size: '300x200'), @project.user.addresses.primary_address.address_proof.url, target: '_blank' %>
         <% else %>
           <span class="missing">Missing</span>
@@ -49,17 +49,17 @@
     <tr>
       <td>Current Address</td>
       <td>
-        <%= @project.user.addresses.current_address.full_address %><br />
-        <%= @project.user.addresses.current_address.city %>-
-        <%= @project.user.addresses.current_address.pincode %>,
-        <%= @project.user.addresses.current_address.state %>,
-        <%= @project.user.addresses.current_address.country %>
+        <%= @project.user.addresses.current_address.try(:full_address) %><br />
+        <%= @project.user.addresses.current_address.try(:city) %>-
+        <%= @project.user.addresses.current_address.try(:pincode) %>,
+        <%= @project.user.addresses.current_address.try(:state) %>,
+        <%= @project.user.addresses.current_address.try(:country) %>
       </td>
     </tr>
     <tr>
       <td>Current Address Proof</td>
       <td>
-        <% if @project.user.addresses.current_address.address_proof.exists? %>
+        <% if @project.user.addresses.current_address && @project.user.addresses.current_address.address_proof.exists? %>
           <%= link_to image_tag(@project.user.addresses.current_address.address_proof.url, size: '300x200'), @project.user.addresses.current_address.address_proof.url, target: '_blank' %>
         <% else %>
           <span class="missing">Missing</span>
@@ -70,6 +70,6 @@
   </tbody>
 </table>
 
-<% if !@project.user.verified? %>
+<% unless @project.user && @project.user.verified? %>
   <%= button_to 'Verify', admin_user_verify_path(user_id: @project.user.id, project_id: @project.id), method: :post, class: 'btn btn-block btn-primary' %>
 <% end %>

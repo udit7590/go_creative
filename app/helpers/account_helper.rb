@@ -58,7 +58,7 @@ module AccountHelper
   end
 
   def pan_status(user)
-    if(user.pan_details_verified?)
+    if(user && user.pan_details_verified?)
       '<span class="success">Verified</span>'.html_safe
     else
       '<span class="warning">Not Verified</span>'.html_safe
@@ -66,7 +66,7 @@ module AccountHelper
   end
 
   def address_status(address)
-    if(address.verified_at)
+    if(address.try(:verified_at))
       '<span class="success">Verified</span>'.html_safe
     else
       '<span class="warning">Not Verified</span>'.html_safe
