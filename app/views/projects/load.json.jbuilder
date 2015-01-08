@@ -9,6 +9,7 @@ json.projects @projects do |project|
   json.created_at project.created_at
   json.amount_required project.amount_required
   json.end_date project.end_date
+  json.end_date_display project.end_date.to_s(:long)
   json.min_amount_per_contribution project.min_amount_per_contribution
   json.type project.type
   json.verified_at project.verified_at

@@ -71,12 +71,13 @@ class Project < ActiveRecord::Base
   # -------------------------------------------------------------
   scope :charity, -> { where(type: 'CharityProject') }
   scope :investment, -> { where(type: 'InvestmentProject') }
+  scope :published, -> { where(state: :published) }
   scope :order_by_creation, -> { order(created_at: :desc) }
   scope :projects_to_be_approved, -> { where(state: [:created, :unpublished]).order_by_creation }
-  scope :best_projects, -> { where(state: :published).limit(BEST_PROJECTS_LIMIT) }
-  scope :published_projects, -> (page = 1) { where(state: :published).limit_records }
-  scope :published_charity_projects, -> (page = 1) { published_projects.where(type: 'CharityProject').limit_records }
-  scope :published_investment_projects, -> (page = 1) { published_projects.where(type: 'InvestmentProject').limit_records }
+  scope :best_projects, -> { published.limit(BEST_PROJECTS_LIMIT) }
+  scope :published_projects, -> (page = 1) { published.limit_records(page) }
+  scope :published_charity_projects, -> (page = 1) { charity.published.limit_records(page) }
+  scope :published_investment_projects, -> (page = 1) { investment.published.limit_records(page) }
 
   scope :limit_records, -> (page = 1) { limit(INITIAL_PROJECT_DISPLAY_LIMIT).offset((page - 1) * INITIAL_PROJECT_DISPLAY_LIMIT) }
 

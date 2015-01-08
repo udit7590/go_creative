@@ -1,6 +1,6 @@
 <% @page_title = 'Go Creative: View Project' %>
 
-<% if !@project.verified_at %>
+<% if !@project.published? %>
   <div class="alert alert-error">
     <button type="button" class="close" data-dismiss="alert">×</button>
     <center><strong>Your project has not been published yet.</strong></center>

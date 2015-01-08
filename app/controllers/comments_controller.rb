@@ -4,24 +4,12 @@ class CommentsController < ApplicationController
   before_action :check_admin, only: :destroy
   before_action :load_project, only: [:load_more, :new]
   before_action :load_user, only: :new
+  before_action :build_comment, only: :new
   before_action :verify_comment_author, only: [:delete, :undo_delete]
   before_action :load_comment, only: [:report_abuse, :destroy]
   before_action :check_not_already_abused, only: :report_abuse
 
   def new
-    if params[:data][:admin]
-      @comment = @project.comments.build(visible_to_all: false, spam: false)
-      @comment.admin_user_id = @admin.id
-      @admin = true
-    elsif @project.user == current_user && !@project.published?
-      @comment = @project.comments.build(visible_to_all: false, spam: false)
-    else
-      @comment = @project.comments.build(visible_to_all: true, spam: false)
-      @comment.user_id = @user.id
-    end
-    
-    @comment.description = params[:data][:comment][:description]
-
     if(@comment.save)
       render 'add_comment'
     else
@@ -103,6 +91,22 @@ class CommentsController < ApplicationController
       unless @project
         render json: { error: true, description: 'Cannot find any such project.' }
       end
+    end
+
+    def build_comment
+      if params[:data][:admin]
+        @comment = @project.comments.build(visible_to_all: false, spam: false)
+        @comment.admin_user_id = @admin.id
+        @admin = true
+      elsif @project.user == current_user && !@project.published?
+        @comment = @project.comments.build(visible_to_all: false, spam: false)
+        @comment.user_id = @user.id
+      else
+        @comment = @project.comments.build(visible_to_all: true, spam: false)
+        @comment.user_id = @user.id
+      end
+      
+      @comment.description = params[:data][:comment][:description]
     end
 
     def verify_comment_author

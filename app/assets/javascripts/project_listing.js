@@ -18,10 +18,14 @@ var ProjectListing = (function() {
     {{#.}} \
       <div class="span4 project-listing"> \
         <a href="{{view_url}}"><img src="{{listing_image}}" /></a> \
-        <h5 title="{{title}}"><a href="{{view_url}}">{{truncated_title}}</a></h5> \
-        <p>{{truncated_description}}</p> \
+        <span class="project-details"> \
+          <h5 title="{{title}}"><a href="{{view_url}}">{{truncated_title}}</a></h5> \
+          {{truncated_description}}<br /> \
+          0% of INR {{amount_required}}<br /> \
+          {{end_date_display}} \
+        <span> \
         <a href="{{view_url}}"> \
-          <button class="btn btn-small btn-inverse" name="button" type="submit">Explore</button> \
+          <button class="btn btn-small btn-block btn-inverse" name="button" type="submit">Explore</button> \
         </a> \
       </div> \
     {{/.}} \

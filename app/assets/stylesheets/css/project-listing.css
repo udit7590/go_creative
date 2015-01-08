@@ -5,7 +5,3 @@ div.all-projects > div.project-listing {
 div.all-projects > div.project-listing img {
   border: 1px solid #ccc;
 }
-
-div.all-projects > div.project-listing > p {
-  height: 100px;
-}
