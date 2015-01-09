@@ -6,7 +6,7 @@ class CreateAddresses < ActiveRecord::Migration
       t.string :country
       t.string :state
       t.string :city
-      t.integer  :pincode
+      t.integer :pincode
       t.text :full_address
 
       t.attachment :address_proof

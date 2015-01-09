@@ -33,6 +33,12 @@ RSpec.describe Project, type: :model do
 
   end
 
+  context 'callbacks' do
+    #DISCUSS: Can't include PROC here
+    it { should callback(:set_time_to_midnight).before(:create) }
+    it { should callback(:set_time_to_midnight).before(:update) }
+  end
+
   context 'associations' do
     it { should accept_nested_attributes_for :images }
     it { should accept_nested_attributes_for :legal_documents }

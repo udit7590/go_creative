@@ -29,6 +29,9 @@ class Project < ActiveRecord::Base
   accepts_nested_attributes_for :images, :legal_documents
 
   after_validation :filter_images_error_messages
+
+  # -------------- SECTION FOR CALLBACKS ------------------------
+  # -------------------------------------------------------------
   #FIXME_AB: doing same thing in before_create and before_update. Can before_save be used?\
   before_create :set_time_to_midnight, unless: Proc.new { |project| project.end_date.nil? }
   before_update :set_time_to_midnight, unless: Proc.new { |project| project.end_date.nil? }

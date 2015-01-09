@@ -13,6 +13,10 @@ class Address < ActiveRecord::Base
 
   # -------------- SECTION FOR VALIDATIONS ----------------------
   # -------------------------------------------------------------
+  
+  validates :full_address, length: { maximum: 250 }
+  validates :state, length: { maximum: 60 }
+  validates :city, length: { maximum: 60 }
   #FIXME_AB: Content type array is being repeated
   validates_attachment_content_type :address_proof, content_type: %w(image/jpg image/jpeg image/png image/gif)
 
