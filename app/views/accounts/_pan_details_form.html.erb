@@ -3,6 +3,8 @@
     <div class="control-group">
       <%= f.label :pan_card, 'PAN', class: 'control-label' %>
       <div class="controls">
+        <% #FIXME_AB: I can guess this pattern can be repeated, so lets extract it in a constant and use.   -%>
+        <% #FIXME_AB: Also, I could not find validation on pan card format in the model. please add if it is not there already. All the validation on the client side must be checked in the backend. Can't rely on client side validations -%>
         <%= f.text_field :pan_card, class: 'input-xlarge', placeholder: 'PAN Card Number', size: 16, pattern: '^[A-Za-z]{3}[AaBbCcFfGgHhLlJjPpTt]{1}[A-Za-z]{1}[0-9]{4}[A-Za-z]{1}', title:'Please provide a valid PAN detail.', required: true %>
         <p class="help-block">Required if you want to start a project here.<br />
         PAN card has 10 alphanumeric characters of format AAA[ABCFGHLJPT]A9999A. (One of alphabets in square brackets)</p>

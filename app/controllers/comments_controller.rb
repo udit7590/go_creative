@@ -11,6 +11,7 @@ class CommentsController < ApplicationController
 
   def new
     if(@comment.save)
+      #FIXME_AB: Prefer symbols over strings and save memory
       render 'add_comment'
     else
       render json: { error: true }
@@ -18,10 +19,12 @@ class CommentsController < ApplicationController
   end
 
   def load_more
+    #FIXME_AB: Lets try to find out a way to reduce complexity 
     if(params[:admin] == 'true')
       @admin = true
       @comments = @project.comments.order_by_date(params[:page].to_i)
     else
+      #FIXME_AB: project.owner?(current_user) or project.creator?(current_user)
       if @project.user == current_user
         @comments = @project.comments.order_by_date(params[:page].to_i)
       else
@@ -33,6 +36,7 @@ class CommentsController < ApplicationController
   end
 
   def delete
+    #FIXME_AB: you should have something like comment.mark_deleted(current_user). basically move it to model
     if(@comment.update(deleted: true, deleted_at: DateTime.current, deleted_by: current_user.id))
       render 'delete', locals: { deleted: true }
     else
@@ -49,6 +53,7 @@ class CommentsController < ApplicationController
   end
 
   def report_abuse
+    #FIXME_AB: simply comment.mark_abuse!
     @abused_comment = @comment.abused_comments.build
     @abused_comment.user = current_user
     if(@abused_comment.save)
@@ -59,6 +64,7 @@ class CommentsController < ApplicationController
   end
 
   def destroy
+    #FIXME_AB: Why not comment.destroy ?
     if(@comment.delete)
       render 'delete', locals: { deleted: true }
     else
@@ -73,6 +79,7 @@ class CommentsController < ApplicationController
     end
 
     def load_user
+      #FIXME_AB: don't mix admin control with user.
       if params[:data] && params[:data][:admin]
         @admin = AdminUser.find_by(id: params[:data][:admin_user_id])
         unless @admin

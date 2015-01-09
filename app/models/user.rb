@@ -1,3 +1,4 @@
+#FIXME_AB: No Database indexes. Please add to all tables. and Keep adding in future tables. You should take care of db indexes when you create/add table/field 
 class User < ActiveRecord::Base
 
   attr_accessor :missing_info_page
@@ -9,6 +10,7 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable, :confirmable
 
+#FIXME_AB: What about dependent option in all associations. You should take care of the dependent records when you define association. Else your db would be left with orphan records
   has_many :addresses, autosave: true
   has_attached_file :pan_card_copy, styles: { thumbnail: '60x60#' }
 
@@ -24,7 +26,9 @@ class User < ActiveRecord::Base
 
   # -------------- SECTION FOR VALIDATIONS ----------------------
   # -------------------------------------------------------------
+  #FIXME_AB: %w(image/jpg image/jpeg image/png) is being repeated, please think a way out
   validates_attachment_content_type :pan_card_copy, content_type: %w(image/jpg image/jpeg image/png)
+  #FIXME_AB: I think instead of having validation for two address. you should have permanent and current address address. and validation on them
   validates :addresses, count: { limit: 2 }
   
   # -------------- SECTION FOR SCOPES AND METHODS ---------------

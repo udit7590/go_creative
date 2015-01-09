@@ -33,6 +33,7 @@ class AccountsController < ApplicationController
     end
   end
 
+  #FIXME_AB: try to avoid nested if statements
   def upload_primary_address_proof
     if @user.addresses.primary_address
       if(@user.addresses.primary_address.update(address_proof: params[:address][:address_proof]))
@@ -48,6 +49,7 @@ class AccountsController < ApplicationController
     end
   end
 
+#FIXME_AB: try to avoid nested if statements
   def upload_current_address_proof
     if @user.addresses.current_address
       if(@user.addresses.current_address.update(address_proof: params[:address][:address_proof]))
@@ -64,6 +66,7 @@ class AccountsController < ApplicationController
   end
 
   def update_pan_details
+    #FIXME_AB: Prefer symbols when you can
     render 'update_pan_details'
   end
 

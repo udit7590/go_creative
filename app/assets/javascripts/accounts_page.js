@@ -28,6 +28,7 @@ var AccountsPage = (function() {
         paramName: "user[pan_card_copy]",
       });
     } catch (err) {
+      // FIXME_AB: Console.log doesn't work in IE. There are some articles available on internet to make them work. Please follow them.
       console.log(err)
     }
 

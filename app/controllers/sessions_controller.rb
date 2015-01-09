@@ -33,6 +33,7 @@ class SessionsController < ::Devise::SessionsController
     end
 
     def check_user_confirmation
+      #FIXME_AB: Avoid using dynamic finders
       user = User.find_by_email(params[:user][:email])
       if user && !user.confirmed?
         render 'sessions/error_login', locals: { user_confirmed: false }

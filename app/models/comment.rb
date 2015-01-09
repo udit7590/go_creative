@@ -1,5 +1,6 @@
 class Comment < ActiveRecord::Base
 
+  #FIXME_AB: following constant should not be in model should be application level comment
   INITIAL_COMMENT_DISPLAY_LIMIT = 20
 
   belongs_to :project
@@ -12,6 +13,7 @@ class Comment < ActiveRecord::Base
 
   # -------------- SECTION FOR SCOPES AND METHODS ---------------
   # -------------------------------------------------------------
+  #FIXME_AB: Please check with sahil sir if we can use act_as_paranoid for soft deletion
   scope :deleted, -> (is_deleted) { where(deleted: is_deleted) }
   scope :safe, -> { where(spam: false).deleted(false) }
   scope :visible_to_all, -> (visibility) { where(visible_to_all: visibility).deleted(false) }

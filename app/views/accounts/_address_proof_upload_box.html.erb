@@ -1,5 +1,6 @@
 <h5>Address Proof Attachment(Permanent Address)</h5>
 <%= address_upload_text_image(@user.addresses.primary_address) %>
+<% #FIXME_AB: Use url helper instad of hardcoding urls -%>
 <%= form_tag('/account/upload_primary_address_proof', method: :post, class: 'dropzone', id: 'primary_address_proof_upload') {} %>
 
 <br />

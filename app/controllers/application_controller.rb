@@ -15,6 +15,7 @@ class ApplicationController < ActionController::Base
     def store_location
       # store last url - this is needed for post-login redirect to whatever the user last visited.
       return unless request.get? 
+      #FIXME_AB: simplify using include method
       if (request.path != "/users/sign_in" &&
           request.path != "/users/sign_up" &&
           request.path != "/users/password/new" &&

@@ -1,3 +1,4 @@
+#FIXME_AB: Just a thought, I think we can make it little more better. Can we name this model as Attachment model and then have two models inheritted with it. 1. image. 2. document. This way we can have a better association. Right now you have project has_many images where document is false. Which is kinda confusing. Give it a thought, we can discuss
 class Image < ActiveRecord::Base
   belongs_to :imageable, polymorphic: true
 

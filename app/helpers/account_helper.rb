@@ -11,6 +11,7 @@ module AccountHelper
     is_primary ? 'primary-address-field' : 'current-address-field'
   end
 
+  #FIXME_AB: Too much html in helper
   def address_upload_text_image(address)
 
     primary_address_class = 'primary-address-upload'
@@ -40,6 +41,7 @@ module AccountHelper
     end
   end
 
+  #FIXME_AB: too much html in helpers. Also User's input is being used in html and finally made html_safe. Could be security issue
   def pancard_upload_text_image(pan_card_copy)
     pan_card_copy_class = 'pancard-copy-upload'
     pan_card_copy_available = %{

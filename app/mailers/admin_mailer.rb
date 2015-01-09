@@ -8,5 +8,6 @@ class AdminMailer < Devise::Mailer
   # to make sure that you mailer uses the devise views
   default template_path: 'devise/mailer'
 
+  #FIXME_AB: should not hardcode this email, should be configurable through env based constants.
   default from: 'site@gocreative.com'
 end

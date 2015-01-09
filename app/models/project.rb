@@ -1,6 +1,7 @@
 class Project < ActiveRecord::Base
   include AASM
 
+  #FIXME_AB: Following constants should be application configuration/constants
   BEST_PROJECTS_LIMIT           = 16
   INITIAL_PROJECT_DISPLAY_LIMIT = 30
 
@@ -9,7 +10,9 @@ class Project < ActiveRecord::Base
   has_many :images, -> { where document: false }, as: :imageable
   has_many :legal_documents, -> { where document: true }, as: :imageable, class_name: 'Image'
   belongs_to :user
+  #FIXME_AB: Dependent option ?
   has_many :comments
+
   has_attached_file :project_picture, styles: {
                               thumbnail: '270x220^',
                               medium: { geometry: '370x300^', quality: 100 },
@@ -26,6 +29,7 @@ class Project < ActiveRecord::Base
   accepts_nested_attributes_for :images, :legal_documents
 
   after_validation :filter_images_error_messages
+  #FIXME_AB: doing same thing in before_create and before_update. Can before_save be used?
   before_create :set_time_to_midnight
   before_update :set_time_to_midnight
 
@@ -57,6 +61,7 @@ class Project < ActiveRecord::Base
   validates :amount_required, presence: true
   validates :min_amount_per_contribution, presence: true
 
+  #FIXME_AB: You should not be worried about beginning_of_day here when using you validation here. It should be taken care by the validator. 
   validates :end_date, presence: true, date: { greater_than_or_equal_to: (5.days.from_now.beginning_of_day) }, if: :end_date_changed?
   validates :title, uniqueness: true, allow_blank: true
   validates :title, length: { maximum: 250 }
@@ -72,14 +77,15 @@ class Project < ActiveRecord::Base
   scope :charity, -> { where(type: 'CharityProject') }
   scope :investment, -> { where(type: 'InvestmentProject') }
   scope :published, -> { where(state: :published) }
+  #FIXME_AB: I am not generally in favor of defining scopes for order. Scopes should be used to scope a collection.
   scope :order_by_creation, -> { order(created_at: :desc) }
   scope :order_by_updation, -> { order(updated_at: :desc) }
   scope :projects_to_be_approved, -> { where(state: [:created, :unpublished]).order_by_creation }
   scope :best_projects, -> { published.limit(BEST_PROJECTS_LIMIT) }
+  #FIXME_AB: Also I am not in favor of making scops for paginations :) It should be a controller thing
   scope :published_projects, -> (page = 1) { published.limit_records(page).order_by_updation }
   scope :published_charity_projects, -> (page = 1) { charity.published.limit_records(page).order_by_updation }
   scope :published_investment_projects, -> (page = 1) { investment.published.limit_records(page).order_by_updation }
-
   scope :limit_records, -> (page = 1) { limit(INITIAL_PROJECT_DISPLAY_LIMIT).offset((page - 1) * INITIAL_PROJECT_DISPLAY_LIMIT) }
 
   # To determine which all projects we can make
