@@ -2,6 +2,7 @@ class ConfirmationsController < Devise::ConfirmationsController
   before_action :load_original_token, only: :show
 
   def show
+    #FIXME_AB: refactor it
     @resource = resource_class.find_by_confirmation_token Devise.token_generator.
     digest(self, :confirmation_token, @original_token)
     if @resource

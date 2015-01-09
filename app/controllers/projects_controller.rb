@@ -28,6 +28,7 @@ class ProjectsController < ApplicationController
   end
 
   def show
+    #FIXME_AB: refactor it. @project.comments written three times
     if @project.user == current_user
       @comments = @project.comments.order_by_date
     else
@@ -81,6 +82,7 @@ class ProjectsController < ApplicationController
   end
 
   def load_more_projects
+    #FIXME_AB: There is a better way to write same code so that you done repeat @project and Project many times
     case params[:for_action]
     when 'charity_projects'
       @projects = Project.published_charity_projects(params[:page].to_i)
@@ -145,6 +147,7 @@ class ProjectsController < ApplicationController
     end
 
     def verify_project_approved_or_owner
+      #FIXME_AB: project.can_be_accessed_by?(current_user)
       unless(@project.published? || @project.user == current_user)
         redirect_to root_path, alert: 'Cannot find any such project'
       end

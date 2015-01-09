@@ -8,6 +8,7 @@ class Admin::ProjectsController < ::ApplicationController
   before_action :check_user_details, only: :publish
 
   def index
+    #FIXME_AB: I have not seen you using include or egarload. Please check you log and egarload data
     @projects = Project.all.order_by_creation.page(params[:page]).per(20)
   end
 
@@ -18,6 +19,7 @@ class Admin::ProjectsController < ::ApplicationController
 
   def publish
     respond_to do |format|
+      #FIXME_AB: We should set verified_at and admin_user_id in the callback of publish!
       @project.verified_at = DateTime.current
       @project.admin_user_id = current_admin_user.id
       if @project.publish!

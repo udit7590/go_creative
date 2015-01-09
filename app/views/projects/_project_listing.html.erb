@@ -1,4 +1,5 @@
 <div class="span4 project-listing">
+  <% #FIXME_AB: project.project_picture => project.picture. -%>
   <a href="<%= project_path(project) %>"><%= image_tag project.project_picture.url(:medium) %></a>
   <span class="project-details">
     <h5 title="<%= project.title %>"><a href="<%= project_path(project) %>"><%= truncate(project.title, length: 57) %></a></h5>

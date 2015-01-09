@@ -5,6 +5,7 @@
       <li class="comment" data-project-id="<%= @project.id %>" data-comment-id="<%= comment.id %>">
         <%= image_tag 'img/user-avatar.jpg' %>
         <span class="comment-name">
+          <% #FIXME_AB: we haven't eagerloaded user -%>
           <% if comment.user %>
             <%= comment.user.name %>
           <% else %>

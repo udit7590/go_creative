@@ -8,11 +8,13 @@
       <% @project.images.each do |image| %>
         <!-- Gallery Item -->
         <li class="span3 gallery-item" data-id="id-1" data-type="illustration">
+          <% #FIXME_AB: image.image? something is wrong :) attachment.image make sense :P-%>
           <a href="<%= image.image.url %>" data-lightbox="gallery"><%= image_tag image.image.url(:thumbnail) %></a>
         </li>
       <% end %>
     </ul>
   </div>
+  <% #FIXME_AB: project.images.present? -%>
   <% if @project.images.length == 0 %>
     <center><h6 class="text-warning">No gallery exists for this project.</h6></center>
     <br />

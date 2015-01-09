@@ -1,3 +1,4 @@
+<% #FIXME_AB: We may need similar html structure at many places to display erros. Lets make it as shared partial, which is independent of the object. we'll pass object as local to partial -%>
 <% if @project.errors.any? %>
   <div id="error_explanation" class="alert alert-error">
     <ul>

@@ -101,7 +101,9 @@ class CommentsController < ApplicationController
     end
 
     def build_comment
+      #FIXME_AB: Keep admin and user sections separate 
       if params[:data][:admin]
+        #FIXME_AB: I guess spam: false should be a default scope
         @comment = @project.comments.build(visible_to_all: false, spam: false)
         @comment.admin_user_id = @admin.id
         @admin = true
@@ -120,6 +122,7 @@ class CommentsController < ApplicationController
       load_comment
 
       # TODO DISCUSS: comment.project.user.id
+      #FIXME_AB: When you have bigger conditions move them out in a method. comment.can_be_deleted_by?(current_user)
       if current_user.id != @comment.user.id && current_user.id != @comment.project.user.id
         render js: 'alertlocals("Sorry. Only project owner or comment author can delete the comment.")'
       end
@@ -133,6 +136,7 @@ class CommentsController < ApplicationController
     end
 
     def load_comment
+    #FIXME_AB: simpilify it by taking id in a local variable so that you have Comment.find_by only once
       @comment = Comment.find_by(id: params[:comment_id] || Comment.find_by(id: params[:id]))
       unless @comment
         render js: 'alert("Cannot find any such comment.")'
@@ -140,6 +144,7 @@ class CommentsController < ApplicationController
     end
 
     def check_not_already_abused
+      #FIXME_AB: instead of > 0 use exists?
       if current_user && @comment.abused_comments.where(user_id: current_user.id).size > 0
         render 'abused', locals: { abused: false, error: true, description: :already_abused }
       end
