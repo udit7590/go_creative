@@ -1,10 +1,15 @@
 class AccountsController < ApplicationController
   include AddressesFormHelper, UserHelper
 
+  # To store the previous accessed URL
   before_action :store_location
-  before_action :authenticate_user!
-  before_action :set_account, only: [:edit, :update, :upload_pan_card_image, :upload_primary_address_proof, :upload_current_address_proof]
-  before_action :set_user, only: [:update_pan_details, :update_address_details, :update_incomplete_details]
+
+  # All users need to be authenticated to access their account details 
+  # except for public profile view
+  before_action :authenticate_user!, except: :show
+
+  # Just sets the user instance variable as current user
+  before_action :set_user, except: :show
 
   def edit
     build_max_n_addresses(@user, 2)
@@ -13,14 +18,41 @@ class AccountsController < ApplicationController
   def update
     respond_to do |format|
       if @user.update(account_params)
-        format.html { redirect_to edit_account_path(@user) + '#user_address', notice: 'Your account has successfully been updated.' }
+        format.html { redirect_to (edit_account_path(anchor: params[:page].to_s)), notice: (I18n.t :details_updated, scope: [:account, :update]) }
         format.json { head :no_content }
       else
-        format.html { render action: 'edit' }
+        format.html { render action: :edit, status: :bad_request }
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
     end
   end
+
+  # ---------------------------------------------------------------------------------
+  # SECTION FOR ACTIONS WHEN USER CREATES PROJECT BUT HIS DETAILS ARE INCOMPLETE
+  # ---------------------------------------------------------------------------------
+  def update_pan_details
+    render :update_pan_details
+  end
+
+  def update_address_details
+    build_max_n_addresses(@user, 2)
+    render :update_address_details
+  end
+
+  def update_incomplete_details
+    respond_to do |format|
+      if @user.update(account_params)
+        check_user_details_and_redirect(format, @user)
+      else
+        format.html { render action: :edit, status: :bad_request }
+        format.json { render json: @user.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # ---------------------------------------------------------------------------------
+  # SECTION FOR ACTIONS TO UPLOAD PAN/ADDRESS PROOFS BY AJAX
+  # ---------------------------------------------------------------------------------
 
   def upload_pan_card_image
     if(@user.update(pan_card_copy: params[:user][:pan_card_copy]))
@@ -49,7 +81,7 @@ class AccountsController < ApplicationController
     end
   end
 
-#FIXME_AB: try to avoid nested if statements
+  #FIXME_AB: try to avoid nested if statements
   def upload_current_address_proof
     if @user.addresses.current_address
       if(@user.addresses.current_address.update(address_proof: params[:address][:address_proof]))
@@ -65,44 +97,14 @@ class AccountsController < ApplicationController
     end
   end
 
-  def update_pan_details
-    #FIXME_AB: Prefer symbols when you can
-    render 'update_pan_details'
-  end
-
-  def update_address_details
-    build_max_n_addresses(@user, 2)
-    render :update_address_details
-  end
-
-  def update_incomplete_details
-    respond_to do |format|
-      if @user.update(account_params)
-        check_user_details_and_redirect(format, @user)
-      else
-        format.html { render action: 'edit' }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_account
-      @user = current_user || User.find(params[:id])
 
-      rescue ActiveRecord::RecordNotFound
-        redirect_to root_path, alert: 'Cannot find the user in our system.'
+    def account_params
+      params.require(:user).permit(:first_name, :last_name, :phone_number, :pan_card, :pan_card_copy, addresses_attributes: [:id, :city, :full_address, :primary, :country, :state, :pincode, :address_proof])
     end
 
     def set_user
       @user = current_user
-    end
-
-    # Never trust parameters from the scary internet, only allow the white
-    # list through.
-    def account_params
-      params.require(:user).permit(:first_name, :last_name, :phone_number, :pan_card, :pan_card_copy, addresses_attributes: [:id, :city, :full_address, :primary, :country, :state, :pincode, :address_proof])
     end
 
 end

@@ -11,7 +11,7 @@ RSpec.describe Project, type: :model do
     it { should validate_presence_of(:min_amount_per_contribution) }
     it { should validate_presence_of(:end_date) }
 
-    it { should validate_uniqueness_of(:title) }
+    # it { should validate_uniqueness_of(:title) }
 
     it { should ensure_length_of(:title).is_at_most(250) }
     it { should ensure_length_of(:description).is_at_most(10000) }
