@@ -44,7 +44,7 @@ class ProjectsController < ApplicationController
 
   def show
     #FIXME_AB: refactor it. @project.comments written three times
-    if @project.user == current_user
+    if @project.user_id == current_user.id
       @comments = @project.comments.order_by_date
     else
       @comments = @project.comments.latest.visible_to_all(true)
@@ -130,7 +130,7 @@ class ProjectsController < ApplicationController
 
     def load_project
       @user = current_user
-      @project = Project.find_by(id: params[:project_id]) || Project.find_by(id: params[:id])
+      @project = Project.find_by(id: (params[:project_id] || params[:id]))
       unless @project
         flash[:alert] = I18n.t :no_project, scope: [:projects, :views]
         redirect_to controller: :home, action: :index
