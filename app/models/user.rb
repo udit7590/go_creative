@@ -14,9 +14,9 @@ class User < ActiveRecord::Base
   has_many :addresses, autosave: true
   has_attached_file :pan_card_copy, styles: { thumbnail: '60x60#' }
 
-  has_many :projects
+  has_many :projects, dependent: :restrict_with_error
 
-  accepts_nested_attributes_for :addresses,  reject_if: :all_blank, limit: 2
+  accepts_nested_attributes_for :addresses, reject_if: :all_blank, limit: 2
 
   # -------------- SECTION FOR CALLBACKS ------------------------
   # -------------------------------------------------------------

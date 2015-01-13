@@ -2,8 +2,8 @@ class Project < ActiveRecord::Base
   include AASM
 
   #FIXME_AB: Following constants should be application configuration/constants
-  BEST_PROJECTS_LIMIT           = 16
-  INITIAL_PROJECT_DISPLAY_LIMIT = 30
+  BEST_PROJECTS_LIMIT           = 4
+  INITIAL_PROJECT_DISPLAY_LIMIT = 28
 
   # -------------- SECTION FOR ASSOCIATIONS ---------------------
   # -------------------------------------------------------------
@@ -11,7 +11,7 @@ class Project < ActiveRecord::Base
   has_many :legal_documents, -> { where document: true }, as: :imageable, class_name: 'Image'
   belongs_to :user
   #FIXME_AB: Dependent option ?
-  has_many :comments
+  has_many :comments, dependent: :destroy
 
   has_attached_file :project_picture, styles: {
                               thumbnail: '270x220^',
@@ -33,7 +33,7 @@ class Project < ActiveRecord::Base
   # -------------- SECTION FOR CALLBACKS ------------------------
   # -------------------------------------------------------------
   #FIXME_AB: doing same thing in before_create and before_update. Can before_save be used?\
-  before_create :set_time_to_midnight, unless: Proc.new { |project| project.end_date.nil? }
+  before_save :set_time_to_midnight, unless: Proc.new { |project| project.end_date.nil? }
   before_update :set_time_to_midnight, unless: Proc.new { |project| project.end_date.nil? }
 
   # -------------- SECTION FOR STATE MACHINE --------------------
@@ -46,14 +46,32 @@ class Project < ActiveRecord::Base
     state :failed
     state :fraud
     state :payment_pending
+    state :reached_end_date
 
     event :publish do
       transitions from: [:created, :unpublished], to: :published
     end
 
     event :unpublish do
-      transitions from: [:created, :published], to: :unpublished
+      transitions from: [:created, :published, :fraud], to: :unpublished
     end
+
+    event :successful do
+      transitions from: :payment_pending, to: :unpublished
+    end
+
+    event :payment_pending do
+      transitions from: :published, to: :payment_pending
+    end
+
+    event :failed do
+      transitions from: [:published, :payment_pending], to: :failed
+    end
+
+    event :fraud do
+      transitions from: [:published, :unpublished, :created, :payment_pending], to: :failed
+    end
+
   end
 
   # -------------- SECTION FOR VALIDATIONS ----------------------
@@ -86,12 +104,15 @@ class Project < ActiveRecord::Base
   scope :order_by_creation, -> { order(created_at: :desc) }
   scope :order_by_updation, -> { order(updated_at: :desc) }
   scope :projects_to_be_approved, -> { where(state: [:created, :unpublished]).order_by_creation }
-  scope :best_projects, -> { published.limit(BEST_PROJECTS_LIMIT) }
   #FIXME_AB: Also I am not in favor of making scops for paginations :) It should be a controller thing
   scope :published_projects, -> (page = 1) { published.limit_records(page).order_by_updation }
   scope :published_charity_projects, -> (page = 1) { charity.published.limit_records(page).order_by_updation }
   scope :published_investment_projects, -> (page = 1) { investment.published.limit_records(page).order_by_updation }
   scope :limit_records, -> (page = 1) { limit(INITIAL_PROJECT_DISPLAY_LIMIT).offset((page - 1) * INITIAL_PROJECT_DISPLAY_LIMIT) }
+  #TODO: amount_required - 0 to be replaced by - amount_collected
+  scope :popular, -> { published.order(amount_required: :desc).limit(BEST_PROJECTS_LIMIT) }
+  scope :completed, -> { published.order(end_date: :desc).limit(BEST_PROJECTS_LIMIT) }
+  scope :recent, -> { published.order(updated_at: :desc).limit(BEST_PROJECTS_LIMIT) }
 
   # To determine which all projects we can make
   def self.types
@@ -129,6 +150,24 @@ class Project < ActiveRecord::Base
 
   def check_end_date
     self.end_date >= 5.days.from_now.beginning_of_day
+  end
+
+  def self.cached_recent(exclude_ids = nil)
+    Rails.cache.fetch([name, 'recent'], expires_in: 30.minutes) do
+      exclude_ids ? Project.recent.where.not(id: exclude_ids).to_a : Project.recent.to_a
+    end
+  end
+
+  def self.cached_popular(exclude_ids = nil)
+    Rails.cache.fetch([name, 'popular'], expires_in: 30.minutes) do
+      exclude_ids ? Project.popular.where.not(id: exclude_ids).to_a : Project.popular.to_a
+    end
+  end
+
+  def self.cached_completed(exclude_ids = nil)
+    Rails.cache.fetch([name, 'completed'], expires_in: 30.minutes) do
+      exclude_ids ? Project.completed.where.not(id: exclude_ids).to_a : Project.completed.to_a
+    end
   end
 
   # -------------- STATE MACHINE METHODS START------------

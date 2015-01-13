@@ -1,11 +1,8 @@
 <div class="row gallery-row"><!-- Begin Gallery Row --> 
   <div class="span12">
     <br />
-    <h5 class="title-bg">Our Best Projects
-      <small>That we are most proud of</small>
-      <%= link_to (button_tag 'View All', class: 'btn btn-mini btn-inverse hidden-phone'), projects_path %>
-      <%= link_to (button_tag 'Charity Projects', class: 'btn btn-mini btn-inverse hidden-phone'), projects_charity_path %>
-      <%= link_to (button_tag 'Investment Projects', class: 'btn btn-mini btn-inverse hidden-phone'), projects_investment_path %>
+    <h5 class="title-bg"><%= message %>
+      <%= link_to (button_tag 'View All', class: 'btn btn-mini btn-inverse hidden-phone'), path %>
     </h5>
 
     <!-- Gallery Thumbnails
@@ -13,19 +10,29 @@
 
     <div class="row clearfix no-margin">
       <ul class="gallery-post-grid holder">
-        <% @projects.each do |project| %>
+        <% projects.each do |project| %>
           <!-- Gallery Item -->
           <li  class="span3 gallery-item" data-id="id-1" data-type="illustration">
             <span class="gallery-hover-4col hidden-phone hidden-tablet">
               <span class="gallery-icons">
+                <% if project.project_picture.present? %>
                 <a href="<%= project.project_picture.url %>" data-lightbox="<%= project.id %>" class="item-zoom-link"></a>
+                <% end %>
                 <%= link_to '', project_path(project), class: 'item-details-link', title: 'View' %>
               </span>
             </span>
              
               <a href="gallery-single.htm"><%= image_tag project.project_picture.url(:thumbnail) %></a>
-            <span class="project-details"><%= link_to truncate(project.title,  length: 40, omission: '...') %>
-              0% of INR <%= project.amount_required %></span>
+            <span class="project-details"><%= link_to truncate(project.title,  length: 40, omission: '...') %><br / >
+              <div class="progress" style="height: 7px">
+                <div class="bar bar-success" role="progressbar" style="width: 20%;">
+                  <!-- <span>60% Complete of INR <%= project.amount_required %></span> -->
+                </div>
+              </div>
+              Target <%= number_to_currency(project.amount_required, unit: 'INR ', precision: 0) %>
+              <span class="pull-right">By <%= project.end_date.to_date.to_s(:short) %></span>
+            </span>
+
           </li>
         <% end %>
 

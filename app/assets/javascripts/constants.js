@@ -8,7 +8,7 @@ const videoDomainMatchRegex = /^https:\/\/www\.youtube\.com\/watch\?v=([^\?\&\/]
 const videoDomainMatchPattern = 'https:\\/\\/www\\.youtube\\.com\\/watch\\?v=([A-z0-9_]+)';
 
 $(function() {
-  var matchElements = '[data-pattern="email"],[data-pattern="password"],[data-pattern="name"],[data-embed="video"],[data-uploader="single"]'
+  var matchElements = '[data-pattern="email"],[data-pattern="password"],[data-pattern="name"],[data-embed="video"],[data-uploader="single"],[data-animate="progress"]'
   $(matchElements).each(function() {
     var $this = $(this);
     if($this.data('pattern') == 'email') {
@@ -26,6 +26,11 @@ $(function() {
     if($this.data('embed') == 'video') {
       $this.attr('pattern', videoDomainMatchPattern);
       $this.attr('title', 'Video url must be from youtube.');
+    }
+    if($this.data('animate') == 'progress') {
+      var width = $this.data('progress-complete') + '%';
+      $this.css('width', width);
+      $this.animate({width:width});
     }
     if($this.data('uploader') == 'single') {
       var $imagePreviewer = $('<div>', { class: 'image-uploader-container' })
