@@ -71,5 +71,7 @@
 </table>
 
 <% unless @project.user && @project.user.verified? %>
-  <%= button_to 'Verify', admin_user_verify_path(user_id: @project.user.id, project_id: @project.id), method: :post, class: 'btn btn-block btn-primary' %>
+  <%= button_to 'Verify', admin_user_verify_path(user_id: @project.user_id, project_id: @project.id), method: :post, class: 'btn btn-block btn-primary' %>
+<% else %>
+  <%= button_to 'View', admin_user_path(@project.user), method: :get, class: 'btn btn-block btn-primary' %>
 <% end %>

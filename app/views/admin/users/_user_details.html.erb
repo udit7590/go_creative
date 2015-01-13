@@ -1,0 +1,75 @@
+<table class="table table-striped table-horizontal">
+  <tbody>
+    <tr>
+      <td>Id</td>
+      <td><%= @user.id %></td>
+    </tr>
+    <tr>
+      <td>Name</td>
+      <td><%= @user.name %></td>
+    </tr>
+    <tr>
+      <td>Created On</td>
+      <td><%= @user.created_at.to_s(:long) %></td>
+    </tr>
+    <tr>
+      <td>PAN (<%= pan_status(@user) %>)</td>
+      <td><%= @user.pan_card %></td>
+    </tr>
+    <tr>
+      <td>PAN Proof</td>
+      <td>
+        <% if @user.pan_card_copy.exists? %>
+          <%= link_to image_tag(@user.pan_card_copy.url, size: '300x200'), @user.pan_card_copy.url, target: '_blank' %>
+        <% else %>
+          <span class="missing">Missing</span>
+        <% end %>
+      </td>
+    </tr>
+    <tr>
+      <td>Permanent Address (<%= address_status(@user.addresses.primary_address) %>) </td>
+      <td>
+        <%= @user.addresses.primary_address.try(:full_address) %><br />
+        <%= @user.addresses.primary_address.try(:city) %>-
+        <%= @user.addresses.primary_address.try(:pincode) %>,
+        <%= @user.addresses.primary_address.try(:state) %>,
+        <%= @user.addresses.primary_address.try(:country) %>
+      </td>
+    </tr>
+    <tr>
+      <td>Permanent Address Proof</td>
+      <td>
+        <% if @user.addresses.primary_address && @user.addresses.primary_address.address_proof.exists? %>
+          <%= link_to image_tag(@user.addresses.primary_address.address_proof.url, size: '300x200'), @user.addresses.primary_address.address_proof.url, target: '_blank' %>
+        <% else %>
+          <span class="missing">Missing</span>
+        <% end %>
+      </td>
+    </tr>
+    <tr>
+      <td>Current Address</td>
+      <td>
+        <%= @user.addresses.current_address.try(:full_address) %><br />
+        <%= @user.addresses.current_address.try(:city) %>-
+        <%= @user.addresses.current_address.try(:pincode) %>,
+        <%= @user.addresses.current_address.try(:state) %>,
+        <%= @user.addresses.current_address.try(:country) %>
+      </td>
+    </tr>
+    <tr>
+      <td>Current Address Proof</td>
+      <td>
+        <% if @user.addresses.current_address && @user.addresses.current_address.address_proof.exists? %>
+          <%= link_to image_tag(@user.addresses.current_address.address_proof.url, size: '300x200'), @user.addresses.current_address.address_proof.url, target: '_blank' %>
+        <% else %>
+          <span class="missing">Missing</span>
+        <% end %>
+      </td>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<% unless @user && @user.verified? %>
+  <%= button_to 'Verify', admin_user_verify_path(user_id: @user.id), method: :post, class: 'btn btn-block btn-primary' %>
+<% end %>

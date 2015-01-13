@@ -1,16 +1,16 @@
 <tr>
   <td><%= project.title %></td>
   <td><%= humanize_sti_class(project.type) %></td>
-  <td><%= number_to_currency(project.amount_required, unit: 'INR ') %></td>
+  <td><%= number_to_currency(project.amount_required, unit: 'INR ', precision: 0) %></td>
   <td><a href="#" data-toggle="tooltip" data-placement="bottom" data-original-title="<%= project.user.email %>"><%= project.user.name %></a></td>
   <td><%= project.created_at.to_s(:short) %></td>
   <td><%= project.end_date.to_s(:long) %></td>
   <td>
     <%= link_to (button_tag 'View'), admin_project_path(project) %>
     <% if !project.published? %>
-      <%= link_to (button_tag 'Publish'), admin_project_publish_path(project), remote: true, data: { project_id: project.id }, class: 'publish' %>
+      <%= link_to (button_tag 'Publish'), admin_project_publish_path(project), remote: true, data: { project_id: project.id, confirm: 'Are you sure you want to publish this project?' }, class: 'publish' %>
     <% else %>
-      <%= link_to (button_tag 'Unpublish'), admin_project_unpublish_path(project), remote: true, data: { project_id: project.id }, class: 'publish' %>
+      <%= link_to (button_tag 'Unpublish'), admin_project_unpublish_path(project), remote: true, data: { project_id: project.id, confirm: 'Are you sure you want to unpublish this project?' }, class: 'publish' %>
     <% end %>
   </td>
 </tr>
