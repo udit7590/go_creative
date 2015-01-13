@@ -45,7 +45,7 @@ class ProjectsController < ApplicationController
   def show
     #FIXME_AB: refactor it. @project.comments written three times
     if current_user && @project.user_id == current_user.id
-      @comments = @project.comments.order_by_date
+      @comments = @project.comments.order_by_date.where(deleted: false)
     else
       @comments = @project.comments.latest.visible_to_all(true)
     end

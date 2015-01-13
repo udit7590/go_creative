@@ -3,14 +3,11 @@ class Image < ActiveRecord::Base
   belongs_to :imageable, polymorphic: true
 
   has_attached_file :image, 
-                    styles: (lambda do |image|
-                      unless image.instance.document?
-                        { 
+                    styles: { 
                           thumbnail: { geometry: '270x220^', quality: 80 },
                           large: { geometry: '770x', quality: 100 } 
                         }
-                      end
-                    end)
+                      
 
   accepts_nested_attributes_for :imageable
 
