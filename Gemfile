@@ -75,3 +75,5 @@ gem 'aasm', '~> 4.0.7'
 gem 'letter_opener', group: [:development, :test]
 
 gem 'quiet_assets', group: :development
+
+gem 'paperclip-dropbox', '>= 1.1.7'

@@ -100,6 +100,7 @@ class Project < ActiveRecord::Base
   scope :charity, -> { where(type: 'CharityProject') }
   scope :investment, -> { where(type: 'InvestmentProject') }
   scope :published, -> { where(state: :published) }
+  scope :successful, -> { where(state: :successful) }
   #FIXME_AB: I am not generally in favor of defining scopes for order. Scopes should be used to scope a collection.
   scope :order_by_creation, -> { order(created_at: :desc) }
   scope :order_by_updation, -> { order(updated_at: :desc) }
@@ -109,9 +110,9 @@ class Project < ActiveRecord::Base
   scope :published_charity_projects, -> (page = 1) { charity.published.limit_records(page).order_by_updation }
   scope :published_investment_projects, -> (page = 1) { investment.published.limit_records(page).order_by_updation }
   scope :limit_records, -> (page = 1) { limit(INITIAL_PROJECT_DISPLAY_LIMIT).offset((page - 1) * INITIAL_PROJECT_DISPLAY_LIMIT) }
-  #TODO: amount_required - 0 to be replaced by - amount_collected
-  scope :popular, -> { published.order(amount_required: :desc).limit(BEST_PROJECTS_LIMIT) }
-  scope :completed, -> { published.order(end_date: :desc).limit(BEST_PROJECTS_LIMIT) }
+  #TODO: amount_required - 100 to be replaced by - amount_collected
+  scope :popular, -> { published.order('((amount_required - 100) / 100) DESC').limit(BEST_PROJECTS_LIMIT) }
+  scope :completed, -> { successful.order(amount_required: :desc).limit(BEST_PROJECTS_LIMIT) }
   scope :recent, -> { published.order(updated_at: :desc).limit(BEST_PROJECTS_LIMIT) }
 
   # To determine which all projects we can make

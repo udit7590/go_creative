@@ -35,7 +35,7 @@
         <%= f.submit contribute_button_text(@project.type), class: 'btn btn-success btn-large btn-block' %>
       </div>
     <% end %>
-  <% elsif !@project.published? && project.user == current_user %>
+  <% elsif !@project.published? && @project.user_id == current_user.id %>
     <%= link_to (button_tag 'Edit', class: 'btn btn-info btn-large btn-block'), edit_project_path(@project) %>
   <% end %>
 

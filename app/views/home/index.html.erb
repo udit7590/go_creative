@@ -20,16 +20,18 @@
   <div class="span4">
     
     <h3 class="text-special">Go Creative! Get Started!</h3>
-    <p class="lead">GoCreative is a crowdfunding platform where you can start a donation campaign or an investment project.</p>
-    <p>Best way to attract contributors is to be creative while starting the project. Provide images, add descriptions, video, etc to enhance the look and feel of your project.</p>
+    <p class="lead" style="text-align: justify;">GoCreative is a crowdfunding platform where you can start a donation campaign or an investment project.</p>
+    <p style="text-align: justify;">Best way to attract contributors is to be creative while starting the project. Provide images, add descriptions, video, etc to enhance the look and feel of your project.</p>
     <a href="#"><i class="icon-plus-sign"></i>Read More</a> 
   </div>
 
   <!-- Best Projects
   ================================================== -->
+  <div class="span12">
   <%= render partial: 'project_listings', locals: { projects: @recent_projects, message: 'Recent Projects', path: projects_path } %>
   <%= render partial: 'project_listings', locals: { projects: @popular_projects, message: 'Popular Projects', path: projects_path } %>
   <%= render partial: 'project_listings', locals: { projects: @completed_projects, message: 'Our Successful Projects', path: projects_path } %>
+  </div>
 
 </div><!-- End Headline -->     
 

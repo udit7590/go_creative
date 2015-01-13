@@ -17,7 +17,7 @@
     <div class="carousel-inner" role="listbox" style="border: 1px solid #ccc; background-color: white">
       <% @project.images.each.with_index do |image, index| %>
         <div class="item<%= ' active' if index == 0 %>">
-          <%= image_tag image.image.url %>
+          <%= image_tag image.image.url(:large) %>
         </div>
       <% end %>
     </div>
