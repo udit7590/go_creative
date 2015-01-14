@@ -53,7 +53,7 @@ class Admin::ProjectsController < ::ApplicationController
   protected
 
     def load_project
-      @project = Project.find_by(id: params[:project_id]) || Project.find_by(id: params[:id])
+      @project = Project.find_by(id: (params[:project_id] || params[:id]))
       unless @project
         respond_to do |format|
           format.js { render 'error_publish', locals: { project: :not_found } }

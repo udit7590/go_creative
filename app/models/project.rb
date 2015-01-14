@@ -29,9 +29,12 @@ class Project < ActiveRecord::Base
   accepts_nested_attributes_for :images, :legal_documents
 
   after_validation :filter_images_error_messages
-  #FIXME_AB: doing same thing in before_create and before_update. Can before_save be used?
-  before_create :set_time_to_midnight
-  before_update :set_time_to_midnight
+
+  # -------------- SECTION FOR CALLBACKS ------------------------
+  # -------------------------------------------------------------
+  #FIXME_AB: doing same thing in before_create and before_update. Can before_save be used?\
+  before_create :set_time_to_midnight, unless: Proc.new { |project| project.end_date.nil? }
+  before_update :set_time_to_midnight, unless: Proc.new { |project| project.end_date.nil? }
 
   # -------------- SECTION FOR STATE MACHINE --------------------
   # -------------------------------------------------------------
@@ -62,11 +65,13 @@ class Project < ActiveRecord::Base
   validates :min_amount_per_contribution, presence: true
 
   #FIXME_AB: You should not be worried about beginning_of_day here when using you validation here. It should be taken care by the validator. 
-  validates :end_date, presence: true, date: { greater_than_or_equal_to: (5.days.from_now.beginning_of_day) }, if: :end_date_changed?
-  validates :title, uniqueness: true, allow_blank: true
+  validates :end_date, presence: true
+  
+  validates :end_date, allow_nil: true, date: { greater_than_or_equal_to: (5.days.from_now.beginning_of_day) }, if: :end_date_changed?
+  # validates :title, uniqueness: true, allow_blank: true
   validates :title, length: { maximum: 250 }
-  validates :amount_required, allow_blank: true, numericality: { greater_than: 0, less_than_or_equal_to: 10000000 }
-  validates :min_amount_per_contribution, allow_blank: true, numericality: { greater_than: 0, less_than_or_equal_to: :amount_required }
+  validates :amount_required, allow_nil: true, numericality: { greater_than: 0, less_than_or_equal_to: 10000000 }
+  validates :min_amount_per_contribution, allow_nil: true, numericality: { greater_than: 0, less_than_or_equal_to: :amount_required }
   validates :description, length: { maximum: 10000 }
   validate :amount_multiple_of_100
   validate :min_amount_multiple_of_10
@@ -94,11 +99,11 @@ class Project < ActiveRecord::Base
   end
 
   def amount_multiple_of_100
-    errors[:amount_required] << 'should be a multiple of 100' if (amount_required % 100).nonzero?
+    errors[:amount_required] << 'should be a multiple of 100' if (amount_required.to_i % 100).nonzero?
   end
 
   def min_amount_multiple_of_10
-    errors[:min_amount_per_contribution] << 'should be a multiple of 10' if (amount_required % 10).nonzero?
+    errors[:min_amount_per_contribution] << 'should be a multiple of 10' if (min_amount_per_contribution.to_i % 10).nonzero?
   end
 
   # It reduces and fixes the error messages for the attachments in an association.

@@ -35,3 +35,23 @@ en:
       address_details_incomplete: 'Your address or address proof details are incomplete. Please provide the following details to proceed further.'
       project_created: 'Your project is created.'
       project_edited: 'Your project details have successfully been updated.'
+      no_project: 'Cannot find any such project'
+      orphan_project: 'Cannot find any user associated with this project'
+    edit:
+      not_project_owner: 'You can only edit your projects.'
+
+  account:
+    update:
+      details_updated: 'Your account has successfully been updated.'
+      cannot_edit_published:  'This project cannot be edited now'
+
+  comments:
+    views:
+      no_user_or_admin: 'You must be logged in to access this section'
+      no_user: 'Only registered users can comment or perform comment related tasks.'
+      no_project: 'Cannot find any such project.'
+      no_comment: 'Cannot find any such comment.'
+      no_admin: 'Cannot find any admin user.'
+      no_user_to_abuse_comment: 'Only registered users can report abuse a comment.'
+      only_comment_author_or_project_owner_delete: 'Sorry. Only project owner or comment author can delete the comment.'
+
