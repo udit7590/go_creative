@@ -2,7 +2,7 @@ class ProjectsController < ApplicationController
   include UserHelper
 
   before_action :store_location
-  before_action :authenticate_user!, except: [:index, :show, :charity_projects, :investment_projects, :load_more_projects]
+  before_action :authenticate_user!, except: [:index, :show, :charity_projects, :investment_projects, :load_more_projects, :sort_projects]
   before_action :initialize_project, only: [:new, :create]
 
   # Loads the project based on ID. Make sure project owner is the currently logged in user
@@ -49,7 +49,7 @@ class ProjectsController < ApplicationController
     else
       @comments = @project.comments.latest.visible_to_all(true)
     end
-    @comment_count = @project.comments.deleted(false).count
+    @comment_count = @comments.deleted(false).count
   end
 
   def update
@@ -81,19 +81,19 @@ class ProjectsController < ApplicationController
   # ---------------------------------------------------------------------------------
 
   def index
-    @projects = Project.published_projects
+    @projects = Project.recent_published.page(1)
     @page_title = 'Projects'
     render :all
   end
 
   def charity_projects
-    @projects = Project.published_charity_projects
+    @projects = Project.recent_published_charity.page(1)
     @page_title = 'Charity Projects'
     render :all
   end
 
   def investment_projects
-    @projects = Project.published_investment_projects
+    @projects = Project.recent_published_investment.page(1)
     @page_title = 'Investment Projects'
     render :all
   end
@@ -102,15 +102,28 @@ class ProjectsController < ApplicationController
     #FIXME_AB: There is a better way to write same code so that you done repeat @project and Project many times
     case params[:for_action]
     when 'charity_projects'
-      @projects = Project.published_charity_projects(params[:page].to_i)
+      @projects = Project.recent_published_charity.page(params[:page].to_i)
     when 'investment_projects'
-      @projects = Project.published_investment_projects(params[:page].to_i)
+      @projects = Project.recent_published_investment.page(params[:page].to_i)
+    when 'sort'
+      @projects = Project.sort_by(params[:sort_by].try(:to_sym), params[:order_by].try(:to_sym)).page(params[:page].to_i)
     else
-      @projects = Project.published_projects(params[:page].to_i)
+      @projects = Project.recent_published.page(params[:page].to_i)
     end
     # @projects = Project.public_send("published_#{ params[:for_action] }projects", params[:page].to_i)
     @is_more_available = @projects.length == Project::INITIAL_PROJECT_DISPLAY_LIMIT
     render 'load'
+  end
+
+  # ---------------------------------------------------------------------------------
+  # --------------------------- SECTION FOR SORTING PROJECTS ------------------------
+  # ---------------------------------------------------------------------------------
+
+  #JSON Request
+  def sort_projects
+    @projects = Project.sort_by(params[:sort_by].try(:to_sym), params[:order_by].try(:to_sym)).page(1)
+    @is_more_available = @projects.length == Project::INITIAL_PROJECT_DISPLAY_LIMIT
+    render :load
   end
 
   protected

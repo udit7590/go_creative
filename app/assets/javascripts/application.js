@@ -18,6 +18,7 @@
 //= require 'js/bootstrap-filestyle.js'
 //= require 'js/bootstrap-datetimepicker.min.js'
 //= require 'js/jquery.prettyPhoto.js'
+//= require 'js/jquery.loader.min.js'
 //= require 'js/jquery.flexslider.js'
 //= require 'js/jquery.easing.1.3.js'
 //= require 'js/mustache.js'

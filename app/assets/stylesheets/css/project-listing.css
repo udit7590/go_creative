@@ -36,3 +36,32 @@ ul.slides li img {
   border-radius: 5px;
   box-shadow: 20px 20px 0px #eea236 ;
 }
+
+.place-header {
+  margin-right: 25px;
+  margin-top: -66px;
+}
+
+.place-header .btn-group {
+  display: inline-block;
+}
+
+.place-header .dropdown-menu {
+  background-color: #fff;
+  border: 1px #ccc solid;
+}
+
+.place-header .dropdown-menu a {
+  color: #000000;
+  border: none;
+  font-size: 12px;
+}
+.place-header .dropdown-menu li > a:hover,
+.dropdown-menu li > a:focus,
+.dropdown-submenu:hover > a {
+  color: #5eb95e;
+  background-color: #fff;
+  text-decoration: none;
+  background-image: none;
+  filter: none;
+}
