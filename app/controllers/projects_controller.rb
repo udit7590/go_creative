@@ -23,6 +23,9 @@ class ProjectsController < ApplicationController
   # Makes sure project is in valid state before edit/update]
   before_action :check_if_published, only: [:edit, :update]
 
+  # To check if any sorting parameters are provided
+  before_action :check_sorting_details_and_load_projects, only: :index
+
   def new
     @project.images.build
   end
@@ -80,10 +83,13 @@ class ProjectsController < ApplicationController
   # --------------------------- SECTION FOR PROJECTS PUBLIC VIEW --------------------
   # ---------------------------------------------------------------------------------
 
+  # HTML request for listing and JSON for sorting
   def index
-    @projects = Project.recent_published.page(1)
     @page_title = 'Projects'
-    render :all
+    respond_to do |format|
+      format.html { render :all } 
+      format.json { render :load }
+    end
   end
 
   def charity_projects
@@ -113,17 +119,6 @@ class ProjectsController < ApplicationController
     # @projects = Project.public_send("published_#{ params[:for_action] }projects", params[:page].to_i)
     @is_more_available = @projects.length == Project::INITIAL_PROJECT_DISPLAY_LIMIT
     render 'load'
-  end
-
-  # ---------------------------------------------------------------------------------
-  # --------------------------- SECTION FOR SORTING PROJECTS ------------------------
-  # ---------------------------------------------------------------------------------
-
-  #JSON Request
-  def sort_projects
-    @projects = Project.sort_by(params[:sort_by].try(:to_sym), params[:order_by].try(:to_sym)).page(1)
-    @is_more_available = @projects.length == Project::INITIAL_PROJECT_DISPLAY_LIMIT
-    render :load
   end
 
   protected
@@ -175,6 +170,15 @@ class ProjectsController < ApplicationController
       unless(@project.published? || @project.user_id == current_user.try(:id))
         redirect_to root_path, alert: (I18n.t :no_project, scope: [:projects, :views])
       end
+    end
+
+    def check_sorting_details_and_load_projects
+      if params[:sort_by]
+        @projects = Project.sort_by(params[:sort_by].try(:to_sym), params[:order_by].try(:to_sym)).page(1)
+      else
+        @projects = Project.recent_published.page(1)
+      end
+      @is_more_available = @projects.length == Project::INITIAL_PROJECT_DISPLAY_LIMIT
     end
 
     # ---------------------------------------------------------------------------------

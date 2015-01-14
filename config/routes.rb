@@ -49,7 +49,6 @@ Gocreative::Application.routes.draw do
     get :charity, to: 'projects#charity_projects'
     get :investment, to: 'projects#investment_projects'
     get :load_more, to: 'projects#load_more_projects'
-    get :sort_projects, to: 'projects#sort_projects'
   end
 
   resource :users do
