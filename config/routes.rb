@@ -60,6 +60,7 @@ Gocreative::Application.routes.draw do
         get :report_abuse
         get :load_more, to: 'comments#load_more', on: :collection
       end
+      resources :contributions, shallow: true
     end
   end
 

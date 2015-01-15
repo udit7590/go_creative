@@ -12,5 +12,8 @@
     Target: <%= number_to_currency(project.amount_required, unit: 'INR ', precision: 0) %>
     <span class="pull-right">By <%= project.end_date.to_date.to_s(:short) %></span>
   </span>
+  <% if @project.try(:user_id) == @user.try(:id) %>
+    <!-- <center><strong><span class="text-info">Your are the owner of this project</span></strong></center> -->
+  <% end %>
   <%= link_to (button_tag 'Explore', class: 'btn btn-small btn-block btn-info'), project_path(project) %>
 </div>

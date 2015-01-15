@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150105154841) do
+ActiveRecord::Schema.define(version: 20150115134248) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -76,6 +76,18 @@ ActiveRecord::Schema.define(version: 20150105154841) do
     t.integer  "admin_user_id"
   end
 
+  create_table "contributions", force: true do |t|
+    t.integer  "project_id"
+    t.integer  "user_id"
+    t.string   "state",      default: "contributed"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "amount"
+  end
+
+  add_index "contributions", ["project_id"], name: "index_contributions_on_project_id", using: :btree
+  add_index "contributions", ["user_id"], name: "index_contributions_on_user_id", using: :btree
+
   create_table "images", force: true do |t|
     t.string   "image_file_name"
     t.string   "image_content_type"
@@ -124,6 +136,10 @@ ActiveRecord::Schema.define(version: 20150105154841) do
     t.datetime "last_sign_in_at"
     t.inet     "current_sign_in_ip"
     t.inet     "last_sign_in_ip"
+    t.string   "confirmation_token"
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
+    t.string   "unconfirmed_email"
     t.string   "first_name"
     t.string   "last_name"
     t.string   "phone_number"
@@ -136,10 +152,6 @@ ActiveRecord::Schema.define(version: 20150105154841) do
     t.string   "pan_card_copy_content_type"
     t.integer  "pan_card_copy_file_size"
     t.datetime "pan_card_copy_updated_at"
-    t.string   "confirmation_token"
-    t.datetime "confirmed_at"
-    t.datetime "confirmation_sent_at"
-    t.string   "unconfirmed_email"
     t.datetime "pan_verified_at"
     t.integer  "pan_verified_by"
   end

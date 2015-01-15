@@ -26,6 +26,8 @@ class Project < ActiveRecord::Base
                             },
                             default_url: '/images/img/gallery/default_project_:style.jpg'
 
+  has_many :contributions
+  has_many :contributors, through: :contributions, dependent: :restrict_with_error
 
   accepts_nested_attributes_for :images, :legal_documents
 

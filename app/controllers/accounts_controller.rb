@@ -40,13 +40,19 @@ class AccountsController < ApplicationController
   end
 
   def update_incomplete_details
-    respond_to do |format|
-      if @user.update(account_params)
-        check_user_details_and_redirect(format, @user)
-      else
-        format.html { render action: :edit, status: :bad_request }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
+    @project = Project.find_by(id: session[:process_project_id])
+    if @project
+      respond_to do |format|
+        if @user.update(account_params)
+          check_user_details_and_redirect(format, @user, @project)
+        else
+          format.html { render action: :edit, status: :bad_request }
+          format.json { render json: @user.errors, status: :unprocessable_entity }
+        end
       end
+    else
+      flash[:alert] = I18n.t :invalid_session, scope: [:errors, :views]
+      redirect_to root_path
     end
   end
 
