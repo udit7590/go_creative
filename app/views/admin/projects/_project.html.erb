@@ -5,6 +5,7 @@
   <td><a href="#" data-toggle="tooltip" data-placement="bottom" data-original-title="<%= project.user.email %>"><%= project.user.name %></a></td>
   <td><%= project.created_at.to_s(:short) %></td>
   <td><%= project.end_date.to_s(:long) %></td>
+  <td><%= project.contributors_count %></td>
   <td>
     <%= link_to (button_tag 'View'), admin_project_path(project) %>
     <% if !project.published? %>

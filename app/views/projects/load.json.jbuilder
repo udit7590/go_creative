@@ -12,10 +12,14 @@ json.projects @projects do |project|
   json.end_date project.end_date
   json.end_date_display project.end_date.to_date.to_s(:short)
   json.min_amount_per_contribution project.min_amount_per_contribution
+  json.percentage_completed project.percentage_completed
+  json.contributors_count project.contributors_count
+  json.collected_amount project.collected_amount
   json.type project.type
   json.verified_at project.verified_at
   json.listing_image project.project_picture.url(:medium)
   json.view_url project_path(project)
+  json.owner = project.user_id
 
 end
 

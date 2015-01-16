@@ -42,23 +42,25 @@ class Contribution < ActiveRecord::Base
       # To make sure that if if the cache is updated for first time, it is in valid state. (Useful for older data)
       if project.collected_amount == 0
         # TODO: The contribution amount to be updated will also depend upon state of contribution
-        project.collected_amount = project.contributions.sum(:amount)
-        project.contributors_count = project.contributions.length
+        collected_amount = project.contributions.sum(:amount)
+        contributors_count = project.contributions.length
       # If amount is updated, changed amount is added/subtracted
       elsif changed?
-        project.collected_amount += self.amount - changed_attributes[:amount]
+        collected_amount = project.collected_amount + self.amount - changed_attributes[:amount]
       # New Contributions are added to cache column
       else
-        project.collected_amount += self.amount
-        project.contributors_count += 1
+        collected_amount = project.collected_amount + self.amount
+        contributors_count = project.contributors_count + 1
       end
     end
+    project.update(collected_amount: collected_amount, contributors_count: contributors_count)
   end
 
   def remove_contribution_amount_from_cache
     if project && project.collected_amount && project.collected_amount > 0
-      project.collected_amount -= self.amount
-      project.contributors_count -= 1
+      collected_amount = project.collected_amount - self.amount
+      contributors_count = project.contributors_count - 1
+      project.update(collected_amount: collected_amount, contributors_count: contributors_count)
     end
   end
 

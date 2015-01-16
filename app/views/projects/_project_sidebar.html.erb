@@ -10,7 +10,7 @@
         <p class="title-bg text-special">Project Starter: <%= @project.user.first_name%></p>
       
     <div class="progress" style="height: 10px">
-      <div class="bar bar-success animate" data-animate="progress" data-progress-complete="20" role="progressbar">
+      <div class="bar bar-success animate" data-animate="progress" rel="tooltip" title="<%= @project.percentage_completed %>" data-progress-complete="<%= @project.percentage_completed %>" role="progressbar">
         <!-- <span>60% Complete of INR <%= @project.amount_required %></span> -->
       </div>
     </div>

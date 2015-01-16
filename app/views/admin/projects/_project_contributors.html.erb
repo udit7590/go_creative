@@ -1,0 +1,26 @@
+<table class="table table-striped" id="projectComments">
+  <thead>
+    <tr>
+      <th>id</th>
+      <th>By</th>
+      <th>Amount</th>
+      <th>On</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @contributors.each do |contributor| %>
+      <tr data-project-id="<%= @project.id %>" data-contributor-id="<%= contributor.id %>">
+        <td style="width:25px"><%= contributor.id %></td>
+        <td>
+          <% if(contributor.user) %>
+            <%= contributor.user.name %>(<%= contributor.user.email %>)
+          <% end %>
+        </td>
+        <td><%= number_to_currency(contributor.amount, unit: 'INR ', precision: 0) %></td>
+        <td><%= contributor.created_at.to_s(:short) %></td>
+        <td><%= contributor.state.humanize %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

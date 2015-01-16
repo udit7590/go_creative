@@ -116,7 +116,7 @@ class Project < ActiveRecord::Base
 
   # SORTING SCOPES
   #TODO: amount_required - 100 to be replaced by - amount_collected
-  scope :popular, -> { published.order('((amount_required - 100) / 100) DESC') }
+  scope :popular, -> { published.order('(collected_amount / amount_required) DESC') }
   scope :completed, -> { successful.order(amount_required: :desc) }
   scope :recent_published, -> { published.order_by_updation }
   scope :recent_published_charity, -> { charity.recent_published }
@@ -172,6 +172,10 @@ class Project < ActiveRecord::Base
 
   def check_end_date
     self.end_date >= 5.days.from_now.beginning_of_day
+  end
+
+  def percentage_completed
+    ((self.collected_amount / self.amount_required) * 100) if self.amount_required > 0
   end
 
   # -------------- SECTION FOR CACHING METHODS ----------------------

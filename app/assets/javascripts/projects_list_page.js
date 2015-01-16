@@ -6,7 +6,7 @@ var ProjectsListPage = (function() {
     this.$sortButtons = sortButtons;
   }
 
-  ProjectsListPage.prototype.bindClickEventForLoadMoreButton= function() {
+  ProjectsListPage.prototype.bindClickEventForLoadMoreButton = function() {
     if(this.$loadMoreButton.length) {
       var _this = this;
       this.$loadMoreButton.click(function() {
@@ -64,15 +64,46 @@ var ProjectsListPage = (function() {
      .done(function(jsonData) {
         $('.all-projects').html(ProjectListing.buildFromJSON(jsonData['projects']));
 
+        //Define the load more button for particular sort order
         if(jsonData['is_more_projects_available']) {
           _this.$loadMoreButton = $('<button>', { class: 'btn btn-block', id: 'projects_load_more_button', action: 'load_more', for_action: 'sort', path: '/projects/load_more' }).text('I want to see more projects').data('page', 1).data('sort_by', data['sort_by']).data('order_by', data['order_by']);
           $('.all-projects').append(_this.$loadMoreButton);
           _this.bindClickEventForLoadMoreButton();
         }
+
+        //Change the text of sorted by
+        $('#sort-by-criteria-button').text('Sorted by: ' + humanize( data['sort_by']));
+        
+        //Maintain ajax history so that back button dosent send back a hit to server and serves old records
+        history.pushState(data['sort_by'], '', changeQueryParameters(window.url, data));
+        if(localStorage) {
+          localStorage.setItem(data['sort_by'], $('div.all-projects').html());
+        }
+        window.onpopstate = function(event) {
+          if(localStorage && localStorage[event.state]) {
+            $('div.all-projects').html(localStorage[event.state]);
+            $('#sort-by-criteria-button').text('Sorted by: ' + humanize(event.state));
+          }
+        };
+
     }).always(function() {
       $.loader('close');
     });
   };
+
+  function humanize(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1).replace( /_/g, ' ');
+  }
+
+  function changeQueryParameters(url, params) {
+    var oldQueryStringIndex = url.search(/\?/);
+    var newQueryString = '?' + $.param(params)
+    if(oldQueryStringIndex > 0) {
+      url = url.substring(0, oldQueryStringIndex);
+    }
+    url += newQueryString;
+    return url;
+  }
 
   //Return the class
   return ProjectsListPage;

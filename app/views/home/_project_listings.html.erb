@@ -25,8 +25,8 @@
              
               <a href="gallery-single.htm"><%= image_tag project.project_picture.url(:thumbnail) %></a>
             <span class="project-details"><%= link_to truncate(project.title,  length: 40, omission: '...') %><br / >
-              <div class="progress" style="height: 7px">
-                <div class="bar bar-success" role="progressbar" style="width: 20%;">
+              <div class="progress" style="height: 7px" rel="tooltip" title="<%= project.percentage_completed %>% Completed">
+                <div class="bar bar-success" role="progressbar" style="width: <%= project.percentage_completed %>%;">
                   <!-- <span>60% Complete of INR <%= project.amount_required %></span> -->
                 </div>
               </div>

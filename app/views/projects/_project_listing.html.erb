@@ -4,8 +4,8 @@
   <span class="project-details">
     <h5 title="<%= project.title %>"><a href="<%= project_path(project) %>"><%= truncate(project.title, length: 57) %></a></h5>
     <div class="description-fixed"><%= truncate(project.description, length: 200) %></div>
-    <div class="progress" style="height: 7px">
-      <div class="bar bar-success" role="progressbar" style="width: 20%;">
+    <div class="progress" style="height: 7px" rel="tooltip" title="<%= project.percentage_completed %>% Completed" >
+      <div class="bar bar-success" role="progressbar" style="width: <%= project.percentage_completed %>%;">
         <!-- <span>60% Complete of INR <%= project.amount_required %></span> -->
       </div>
     </div>
