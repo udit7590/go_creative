@@ -27,8 +27,39 @@ class Contribution < ActiveRecord::Base
     end
   end
 
+  # -------------- SECTION FOR CALLBACKS  -----------------------
+  # -------------------------------------------------------------
+
+  after_save :update_total_contribution_cache
+  after_destroy :remove_contribution_amount_from_cache
+
   # -------------- SECTION FOR SCOPES AND METHODS ---------------
   # -------------------------------------------------------------
   scope :volunteered, -> { where(state: 'contributed') }
-  
+
+  def update_total_contribution_cache
+    if project && project.collected_amount
+      # To make sure that if if the cache is updated for first time, it is in valid state. (Useful for older data)
+      if project.collected_amount == 0
+        # TODO: The contribution amount to be updated will also depend upon state of contribution
+        project.collected_amount = project.contributions.sum(:amount)
+        project.contributors_count = project.contributions.length
+      # If amount is updated, changed amount is added/subtracted
+      elsif changed?
+        project.collected_amount += self.amount - changed_attributes[:amount]
+      # New Contributions are added to cache column
+      else
+        project.collected_amount += self.amount
+        project.contributors_count += 1
+      end
+    end
+  end
+
+  def remove_contribution_amount_from_cache
+    if project && project.collected_amount && project.collected_amount > 0
+      project.collected_amount -= self.amount
+      project.contributors_count -= 1
+    end
+  end
+
 end

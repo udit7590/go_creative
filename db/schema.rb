@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150115134248) do
+ActiveRecord::Schema.define(version: 20150116052903) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -119,6 +119,8 @@ ActiveRecord::Schema.define(version: 20150115134248) do
     t.integer  "project_picture_file_size"
     t.datetime "project_picture_updated_at"
     t.string   "state",                                                 default: "created"
+    t.integer  "collected_amount",                                      default: 0
+    t.integer  "contributors_count",                                    default: 0
   end
 
   add_index "projects", ["state"], name: "index_projects_on_state", using: :btree
