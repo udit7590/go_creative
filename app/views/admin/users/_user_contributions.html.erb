@@ -1,27 +1,30 @@
-<h1>TODO: Currently it is just some fake data. Will be update with rest of the stories</h1>
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th>Contribution Transaction ID</th>
-      <th>Project Title</th>
-      <th>Contributed On</th>
-      <th>Status</th>
-      <th>Amount Contributed</th>
-      <th>Action</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @projects.each do |project| %>
-      <tr data-project-id="<%= project.id %>">
-        <td><%= project.id %></td>
-        <td><%= link_to project.title, admin_project_path(project.id) %></td>
-        <td><%= project.created_at.to_s(:short) %></td>
-        <td><%= project.end_date.to_date.to_s(:long) %></td>
-        <td><%= number_to_currency(0, unit: 'INR ', precision: 0) %></td>
-        <td>
-          <%= link_to (button_tag 'View'), admin_project_path(project.id) %>
-        </td>
+<% if @contributions.present? %>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Contribution ID</th>
+        <th>Contributed For</th>
+        <th>Contributed On</th>
+        <th>Amount Contributed</th>
+        <th>Status</th>
+        <th>Action</th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <% @contributions.each do |contribution| %>
+        <tr data-project-id="<%= contribution.project_id %>">
+          <td><%= contribution.id %></td>
+          <td><%= link_to contribution.project.title, admin_project_path(contribution.project_id) %></td>
+          <td><%= contribution.created_at.to_s(:short) %></td>
+          <td><%= number_to_currency(contribution.amount, unit: 'INR ', precision: 0) %></td>
+          <td><%= contribution.state.humanize %></td>
+          <td>
+            <%= link_to (button_tag 'View'), admin_project_path(contribution.project_id) %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p class="missing">This user has not made any contributions yet</p>
+<% end %>

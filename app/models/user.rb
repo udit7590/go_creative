@@ -17,7 +17,7 @@ class User < ActiveRecord::Base
 
   accepts_nested_attributes_for :addresses, reject_if: :all_blank, limit: 2
 
-  has_many :contributions
+  has_many :contributions, -> { includes :project }
   has_many :project_contributions, through: :contributions, dependent: :restrict_with_error
 
   # -------------- SECTION FOR CALLBACKS ------------------------

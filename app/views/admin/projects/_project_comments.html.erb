@@ -1,35 +1,40 @@
-<table class="table table-striped" id="projectComments">
-  <thead>
-    <tr>
-      <th>Description</th>
-      <th>By</th>
-      <th>On</th>
-      <th>Abuse Count</th>
-      <th>Spam</th>
-      <th>Action</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @comments.each do |comment| %>
-      <tr data-project-id="<%= @project.id %>" data-comment-id="<%= comment.id %>">
-        <td><%= comment.description %></td>
-        <td>
-          <% if(comment.user) %>
-            <%= comment.user.name %>(<%= comment.user.email %>)
-          <% else %>
-            Admin
-          <% end %>
-        </td>
-        <td><%= comment.created_at.to_s(:short) %></td>
-        <td><%= comment.abused_count %></td>
-        <td><%= comment.spam %></td>
-        <td>
-          <%= link_to (button_tag 'Delete'), comment_path(comment.id), method: :delete, remote: true, data: { confirm: 'Are you sure you want to delete this comment?' } %>
-        </td>
+
+  <table class="table table-striped" id="projectComments">
+    <thead>
+      <tr>
+        <th>Description</th>
+        <th>By</th>
+        <th>On</th>
+        <th>Abuse Count</th>
+        <th>Spam</th>
+        <th>Action</th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <% unless @comments.present? %>
+        <tr><td colspan="6"><p class="missing">This project hasn't received any comments yet. Provide your comments using the form below.</p></td></tr>
+      <% else %>
+        <% @comments.each do |comment| %>
+          <tr data-project-id="<%= @project.id %>" data-comment-id="<%= comment.id %>">
+            <td><%= comment.description %></td>
+            <td>
+              <% if(comment.user) %>
+                <%= comment.user.name %>(<%= comment.user.email %>)
+              <% else %>
+                Admin
+              <% end %>
+            </td>
+            <td><%= comment.created_at.to_s(:short) %></td>
+            <td><%= comment.abused_count %></td>
+            <td><%= comment.spam %></td>
+            <td>
+              <%= link_to (button_tag 'Delete'), comment_path(comment.id), method: :delete, remote: true, data: { confirm: 'Are you sure you want to delete this comment?' } %>
+            </td>
+          </tr>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
 
   <% if @comment_count > (Comment::INITIAL_COMMENT_DISPLAY_LIMIT - 1) %>
     <%= button_tag 'More Comments', path: load_more_project_comments_path(@project.id), action: 'load_more', id: 'comments_load_more_button', class: 'btn btn-block', data: { page: 1, admin: true } %>

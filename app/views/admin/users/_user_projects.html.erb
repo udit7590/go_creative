@@ -1,28 +1,33 @@
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th>Project ID</th>
-      <th>Project Title</th>
-      <th>Created On</th>
-      <th>End Date</th>
-      <th>Amount Required</th>
-      <th>Amount Collected</th>
-      <th>Action</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @projects.each do |project| %>
-      <tr data-project-id="<%= project.id %>">
-        <td><%= project.id %></td>
-        <td><%= link_to project.title, admin_project_path(project.id) %></td>
-        <td><%= project.created_at.to_s(:short) %></td>
-        <td><%= project.end_date.to_date.to_s(:long) %></td>
-        <td><%= number_to_currency(project.amount_required, unit: 'INR ', precision: 0) %></td>
-        <td><%= number_to_currency(0, unit: 'INR ', precision: 0) %></td>
-        <td>
-          <%= link_to (button_tag 'View'), admin_project_path(project.id) %>
-        </td>
+<% if @projects.present? %>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Project ID</th>
+        <th>Project Title</th>
+        <th>Created On</th>
+        <th>End Date</th>
+        <th>Amount Required</th>
+        <th>Amount Collected</th>
+        <th>Action</th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <% @projects.each do |project| %>
+        <tr data-project-id="<%= project.id %>">
+          <td><%= project.id %></td>
+          <td><%= link_to project.title, admin_project_path(project.id) %></td>
+          <td><%= project.created_at.to_s(:short) %></td>
+          <td><%= project.end_date.to_date.to_s(:long) %></td>
+          <td><%= number_to_currency(project.amount_required, unit: 'INR ', precision: 0) %></td>
+          <td><%= number_to_currency(0, unit: 'INR ', precision: 0) %></td>
+          <td>
+            <%= link_to (button_tag 'View'), admin_project_path(project.id) %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p class="missing">This user has not started any projects yet.</p>
+<% end %>
+
