@@ -175,7 +175,7 @@ class Project < ActiveRecord::Base
   end
 
   def percentage_completed
-    ((self.collected_amount / self.amount_required) * 100) if self.amount_required > 0
+    ((collected_amount / amount_required) * 100) if amount_required > 0
   end
 
   # -------------- SECTION FOR CACHING METHODS ----------------------

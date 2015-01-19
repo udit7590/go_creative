@@ -4,13 +4,14 @@ class ContributionsController < ApplicationController
   before_action :authenticate_user!
   before_action :load_project, only: [:new, :create]
   before_action :load_user, only: [:new, :create]
-  before_action :build_contribution, only: [:new]
+  before_action :build_contribution, only: :new
+  before_action :build_contribution_from_params, only: :create
 
   # Checks if the project is not orphan. It is only a security check.
   # FUTURE: Do some critical action here
   before_action :check_orphan_project, only: [:new, :create]
 
-  # TODO: Decide whether project owner can contribute
+  # Project owner cannot contribute
   before_action :check_project_owner, only: [:new, :create]
 
   # To capture user's PAN and address details (Proceed if not verified, but display message)
@@ -22,34 +23,35 @@ class ContributionsController < ApplicationController
   # To make sure no contributions are accepted if project state is invalid
   before_action :check_project_state, only: [:new, :create]
 
-  # TODO: To make sure amount being contributed meets the project's minimum criterai
+  # To make sure amount being contributed meets the project's minimum criteria
   before_action :check_minimum_amount, only: [:new, :create]
 
-  # TODO: No need for more contributions if amount has been completely collected
+  # No need for more contributions if amount has been completely collected
   before_action :check_if_more_contribution_required, only: [:new, :create]
 
-  def index
-  end
+  def index; end
 
-  def new
-    render :new
-  end
+  def new; end
 
   def create
-    @contribution = @project.contributions.build(user_id: @user.id, amount: params[:contribution][:amount])
     if(@contribution.save)
-      flash[:notice] = 'Your donation has been accepted'
-      redirect_to root_path
+      if(@contribution.purchase)
+        render :success
+      else
+        @transaction = @contribution.current_transaction
+        flash[:alert] = "Your contribution has not been accepted due to following reason: <br />#{ @transaction.message }".html_safe
+        redirect_to project_path(@project)
+      end
     else
-      flash[:alert] = 'Unable to accept'
-      redirect_to root_path
+      flash[:alert] = "Your contribution has not been accepted due to following reason: <br />#{ @contribution.errors[:base].join('. ') }".html_safe
+      render :new
     end
   end
 
   protected
 
     def contribution_params
-      params.require(:contribution).permit(:amount, :project_id, :user_id)
+      params.require(:contribution).permit(:amount, :project_id, :user_id, :card_type, :card_number, :card_verification, :card_expires_on)
     end
 
     def load_project
@@ -75,6 +77,12 @@ class ContributionsController < ApplicationController
       else
         @contribution.amount = params[:investment_project][:min_amount_per_contribution]
       end
+    end
+
+    def build_contribution_from_params
+      @contribution = @project.contributions.build(contribution_params)
+      @contribution.user_id = @user.id
+      @contribution.ip_address = request.remote_ip
     end
 
     def check_orphan_project
@@ -118,16 +126,17 @@ class ContributionsController < ApplicationController
       end
     end
 
-    # TODO: replace params[:amount] with apt param
     def check_minimum_amount
-      # if params[:amount] < @project.min_amount_per_contribution 
-      #   flash[:alert] = I18n.t :project_not_published, scope: [:contributions, :errors]
-      #   redirect_to controller: :projects, action: :show
-      # end
+      if @contribution.amount < @project.min_amount_per_contribution 
+        flash[:alert] = I18n.t :no_project_min_amount, scope: [:contributions, :errors]
+        render :new
+      end
     end
 
-    #TODO
-    def check_if_more_contribution_required; end
-    
-
+    def check_if_more_contribution_required
+      if @project.amount_required <= @project.collected_amount
+        flash[:alert] = I18n.t :project_amount_collected, scope: [:contributions, :errors]
+        redirect_to root_path
+      end
+    end    
 end

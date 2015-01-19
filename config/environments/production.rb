@@ -98,4 +98,16 @@ Gocreative::Application.configure do
   }
 
   config.action_mailer.default_options = { from: 'site@gocreative.com' }
+
+  config.after_initialize do
+    # Send requests to the gateway's test servers
+    ActiveMerchant::Billing::Base.mode = :production
+
+    ::GATEWAY = ActiveMerchant::Billing::PaypalGateway.new(
+      login: '',
+      password: '',
+      signature: ''
+      )
+  end
+
 end

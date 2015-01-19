@@ -50,6 +50,8 @@ en:
       project_expired: "This project's end date has expired. So one cannot contribute to this project"
       project_not_published: "The project is not in published state and so cannot accept any contributions"
       project_owner_cannot_contribute: 'The project owner cannot contribute to his/her own project'
+      no_project_min_amount: 'This amount does not meet project minimum amount requirement criteria'
+      project_amount_collected: 'This project has already collected the amount it required'
     notice:
       details_updated: 'Your details have been updated. You can now proceed further'
 
@@ -67,4 +69,6 @@ en:
       no_admin: 'Cannot find any admin user.'
       no_user_to_abuse_comment: 'Only registered users can report abuse a comment.'
       only_comment_author_or_project_owner_delete: 'Sorry. Only project owner or comment author can delete the comment.'
-
+  payments:
+    errors:
+      failure: 'We were unable to recieve the payment due to following errors.'
