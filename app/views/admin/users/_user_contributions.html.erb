@@ -1,0 +1,30 @@
+<% if @contributions.present? %>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Contribution ID</th>
+        <th>Contributed For</th>
+        <th>Contributed On</th>
+        <th>Amount Contributed</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @contributions.each do |contribution| %>
+        <tr data-project-id="<%= contribution.project_id %>">
+          <td><%= contribution.id %></td>
+          <td><%= link_to contribution.project.title, admin_project_path(contribution.project_id) %></td>
+          <td><%= contribution.created_at.to_s(:short) %></td>
+          <td><%= number_to_currency(contribution.amount, unit: 'INR ', precision: 0) %></td>
+          <td><%= contribution.state.humanize %></td>
+          <td>
+            <%= link_to (button_tag 'View'), admin_project_path(contribution.project_id) %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p class="missing">This user has not made any contributions yet</p>
+<% end %>

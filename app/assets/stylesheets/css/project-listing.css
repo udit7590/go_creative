@@ -1,7 +1,67 @@
+div.project-listing.span4 {
+  width: 21.45%;
+  margin-bottom: 10px;
+  padding: 5px;
+  background-color: #fff;
+}
+
 div.all-projects > div.project-listing {
-  height: 520px;
+  border: solid 1px #ccc;
+  border-radius: 5px;
+  border-color: #ccc;
+  box-shadow: 0 0 2px #999;
+  /*5eb95e #49afcd #eea236*/
 }
 
 div.all-projects > div.project-listing img {
   border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+div.project-listing div.description-fixed {
+  height: 120px;
+}
+
+span.multi-span {
+  margin: 0 18px;
+}
+
+.clear {
+  clear: both;
+}
+
+ul.slides li img {
+  border-top: solid 5px #eea236;
+  border-bottom: solid 5px #eea236;
+  border-radius: 5px;
+  box-shadow: 20px 20px 0px #eea236 ;
+}
+
+.place-header {
+  margin-right: 25px;
+  margin-top: -66px;
+}
+
+.place-header .btn-group {
+  display: inline-block;
+}
+
+.place-header .dropdown-menu {
+  background-color: #fff;
+  border: 1px #ccc solid;
+}
+
+.place-header .dropdown-menu a {
+  color: #000000;
+  border: none;
+  font-size: 12px;
+}
+.place-header .dropdown-menu li > a:hover,
+.dropdown-menu li > a:focus,
+.dropdown-submenu:hover > a {
+  color: #5eb95e;
+  background-color: #fff;
+  text-decoration: none;
+  background-image: none;
+  filter: none;
 }

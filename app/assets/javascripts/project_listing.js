@@ -20,12 +20,17 @@ var ProjectListing = (function() {
         <a href="{{view_url}}"><img src="{{listing_image}}" /></a> \
         <span class="project-details"> \
           <h5 title="{{title}}"><a href="{{view_url}}">{{truncated_title}}</a></h5> \
-          {{truncated_description}}<br /> \
-          0% of INR {{amount_required}}<br /> \
-          {{end_date_display}} \
-        <span> \
+          <div class="description-fixed">{{truncated_description}}</div> \
+          <div rel="tooltip" title="{{percentage_completed}}% Completed" class="progress" style="height: 7px"> \
+            <div class="bar bar-success" role="progressbar" style="width: {{percentage_completed}}%;"> \
+               \
+            </div> \
+          </div> \
+          Target: {{amount_required_display}} \
+          <span class="pull-right">By {{end_date_display}}</span> \
+        </span> \
         <a href="{{view_url}}"> \
-          <button class="btn btn-small btn-block btn-inverse" name="button" type="submit">Explore</button> \
+          <button class="btn btn-small btn-block btn-info" name="button" type="submit">Explore</button> \
         </a> \
       </div> \
     {{/.}} \

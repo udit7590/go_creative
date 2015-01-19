@@ -1,18 +1,30 @@
 <div class="span4 sidebar">
 
   <!--Starter Info-->
-  <center>
-    <%= image_tag 'site/user_profile1.png' %>
-    <p class="title-bg text-special">Project Starter: <%= @project.user.first_name%></p>
-  </center>
+  
 
   <!--Project Info-->
-  <center><h4 class="title-bg">Target: <span class="text-special"><%= number_to_currency(@project.amount_required, unit: 'INR ') %></span> By <span class="text-special"><%= @project.end_date.to_date.to_s(:short) %></span></h4>
-  <h4 class="title-bg">Collected: <span class="text-special">INR 0</span><br /><meter value='0' max='100' style="width: 80%"><span>0</span>%</meter> 0%</h4>
+  <center><h6 class="title-bg">
+    
+        <%= image_tag 'site/user_profile1.png' %>
+        <p class="title-bg text-special">Project Starter: <%= @project.user.first_name%></p>
+      
+    <div class="progress" style="height: 10px">
+      <div class="bar bar-success animate" data-animate="progress" rel="tooltip" title="<%= @project.percentage_completed %>" data-progress-complete="<%= @project.percentage_completed %>" role="progressbar">
+        <!-- <span>60% Complete of INR <%= @project.amount_required %></span> -->
+      </div>
+    </div>
+    <center>
+    <span class="multi-span">Collected <br /><span class="text-special">INR 0</span></span>
+    <span class="multi-span">Contributors <br /><span class="text-special">0</span></span>
+    <span class="multi-span">Target <br /><span class="text-special"><%= number_to_currency(@project.amount_required, unit: 'INR ', precision: 0) %></span></span>
+    <span class="multi-span">Ends <br /><span class="text-special"><%= @project.end_date.to_date.to_s(:short) %></span></span></span>
   </center>
+    <br class="clear" />
+  </h6></center>
 
   <% if @project.user != current_user %>
-    <%= form_for(@project, url: '', method: :post, html: { class: 'form-horizontal' }) do |f| %>
+    <%= form_for(@project, url: new_project_contribution_path(@project), method: :get, html: { class: 'form-horizontal' }) do |f| %>
       <div class="input-prepend">
         <span class="add-on-block">INR</span>
         <%= f.number_field :min_amount_per_contribution, class: 'input-block', placeholder: 'Contribute', required: true, step: 100, max: 10000000 %>
@@ -20,18 +32,11 @@
 
       <div class="control-group">
         <p>Min amount required: INR <%= @project.min_amount_per_contribution %></p>
-        <%= f.submit contribute_button_text(@project.type), class: 'btn btn-primary btn-large btn-block' %>
+        <%= f.submit contribute_button_text(@project.type), class: 'btn btn-success btn-large btn-block' %>
       </div>
     <% end %>
-  <% elsif !@project.published? && project.user == current_user %>
-    <%= link_to (button_tag 'Edit', class: 'btn btn-primary btn-large btn-block'), edit_project_path(@project) %>
-  <% end %>
-
-  <% unless @project.video_link.empty? %>
-    <!--Video Widget-->
-    <h5 class="title-bg">Project Video</h5>
-    <!-- <iframe src="http://player.vimeo.com/video/24496773" width="370" height="208"></iframe> -->
-    <span data-src="<%= @project.video_link %>" id="embeddedVideo"></span>
+  <% elsif !@project.published? && @project.user_id == current_user.id %>
+    <%= link_to (button_tag 'Edit', class: 'btn btn-info btn-large btn-block'), edit_project_path(@project) %>
   <% end %>
 
   <!--Categories-->

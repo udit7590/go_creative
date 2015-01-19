@@ -20,7 +20,7 @@ Gocreative::Application.routes.draw do
 
   namespace :admin do
     root 'dashboard#index', controller: 'admin/dashboard'
-    resources :users, only: :index, concerns: :paginatable do
+    resources :users, only: [:index, :show], concerns: :paginatable do
       post :verify
     end
     resources :projects, only: [:index, :show], concerns: :paginatable do
@@ -60,6 +60,7 @@ Gocreative::Application.routes.draw do
         get :report_abuse
         get :load_more, to: 'comments#load_more', on: :collection
       end
+      resources :contributions, shallow: true
     end
   end
 

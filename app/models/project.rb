@@ -2,16 +2,17 @@ class Project < ActiveRecord::Base
   include AASM
 
   #FIXME_AB: Following constants should be application configuration/constants
-  BEST_PROJECTS_LIMIT           = 16
-  INITIAL_PROJECT_DISPLAY_LIMIT = 30
+  INDEX_PROJECTS_LIMIT          = 4
+  INITIAL_PROJECT_DISPLAY_LIMIT = 28
+  paginates_per 28
+  max_paginates_per 100
 
   # -------------- SECTION FOR ASSOCIATIONS ---------------------
   # -------------------------------------------------------------
   has_many :images, -> { where document: false }, as: :imageable
   has_many :legal_documents, -> { where document: true }, as: :imageable, class_name: 'Image'
   belongs_to :user
-  #FIXME_AB: Dependent option ?
-  has_many :comments
+  has_many :comments, dependent: :destroy
 
   has_attached_file :project_picture, styles: {
                               thumbnail: '270x220^',
@@ -25,6 +26,8 @@ class Project < ActiveRecord::Base
                             },
                             default_url: '/images/img/gallery/default_project_:style.jpg'
 
+  has_many :contributions
+  has_many :contributors, through: :contributions, dependent: :restrict_with_error
 
   accepts_nested_attributes_for :images, :legal_documents
 
@@ -32,8 +35,8 @@ class Project < ActiveRecord::Base
 
   # -------------- SECTION FOR CALLBACKS ------------------------
   # -------------------------------------------------------------
-  #FIXME_AB: doing same thing in before_create and before_update. Can before_save be used?\
-  before_create :set_time_to_midnight, unless: Proc.new { |project| project.end_date.nil? }
+  #FIXME_AB: doing same thing in before_create and before_update. Can before_save be used?
+  before_save :set_time_to_midnight, unless: Proc.new { |project| project.end_date.nil? }
   before_update :set_time_to_midnight, unless: Proc.new { |project| project.end_date.nil? }
 
   # -------------- SECTION FOR STATE MACHINE --------------------
@@ -46,14 +49,32 @@ class Project < ActiveRecord::Base
     state :failed
     state :fraud
     state :payment_pending
+    state :reached_end_date
 
     event :publish do
       transitions from: [:created, :unpublished], to: :published
     end
 
     event :unpublish do
-      transitions from: [:created, :published], to: :unpublished
+      transitions from: [:created, :published, :fraud], to: :unpublished
     end
+
+    event :successful do
+      transitions from: :payment_pending, to: :unpublished
+    end
+
+    event :payment_pending do
+      transitions from: :published, to: :payment_pending
+    end
+
+    event :failed do
+      transitions from: [:published, :payment_pending], to: :failed
+    end
+
+    event :fraud do
+      transitions from: [:published, :unpublished, :created, :payment_pending], to: :failed
+    end
+
   end
 
   # -------------- SECTION FOR VALIDATIONS ----------------------
@@ -79,23 +100,45 @@ class Project < ActiveRecord::Base
 
   # -------------- SECTION FOR SCOPES AND METHODS ---------------
   # -------------------------------------------------------------
+  # Scopes for project type
   scope :charity, -> { where(type: 'CharityProject') }
   scope :investment, -> { where(type: 'InvestmentProject') }
+
+  # Scopes for project state
   scope :published, -> { where(state: :published) }
+  scope :successful, -> { where(state: :successful) }
+
   #FIXME_AB: I am not generally in favor of defining scopes for order. Scopes should be used to scope a collection.
   scope :order_by_creation, -> { order(created_at: :desc) }
   scope :order_by_updation, -> { order(updated_at: :desc) }
   scope :projects_to_be_approved, -> { where(state: [:created, :unpublished]).order_by_creation }
-  scope :best_projects, -> { published.limit(BEST_PROJECTS_LIMIT) }
-  #FIXME_AB: Also I am not in favor of making scops for paginations :) It should be a controller thing
-  scope :published_projects, -> (page = 1) { published.limit_records(page).order_by_updation }
-  scope :published_charity_projects, -> (page = 1) { charity.published.limit_records(page).order_by_updation }
-  scope :published_investment_projects, -> (page = 1) { investment.published.limit_records(page).order_by_updation }
   scope :limit_records, -> (page = 1) { limit(INITIAL_PROJECT_DISPLAY_LIMIT).offset((page - 1) * INITIAL_PROJECT_DISPLAY_LIMIT) }
+
+  # SORTING SCOPES
+  #TODO: amount_required - 100 to be replaced by - amount_collected
+  scope :popular, -> { published.order('(collected_amount / amount_required) DESC') }
+  scope :completed, -> { successful.order(amount_required: :desc) }
+  scope :recent_published, -> { published.order_by_updation }
+  scope :recent_published_charity, -> { charity.recent_published }
+  scope :recent_published_investment, -> { investment.recent_published }
+  scope :ending_soon, -> { published.order(:end_date) }
 
   # To determine which all projects we can make
   def self.types
     %w(CharityProject InvestmentProject)
+  end
+
+  def self.sort_by(criteria, order_by = :desc)
+    case criteria
+    when :popularity
+      Project.popular
+    when :recent
+      Project.recent_published
+    when :ending_soon
+      Project.ending_soon
+    else
+      Project.published
+    end
   end
 
   def amount_multiple_of_100
@@ -129,6 +172,31 @@ class Project < ActiveRecord::Base
 
   def check_end_date
     self.end_date >= 5.days.from_now.beginning_of_day
+  end
+
+  def percentage_completed
+    ((self.collected_amount / self.amount_required) * 100) if self.amount_required > 0
+  end
+
+  # -------------- SECTION FOR CACHING METHODS ----------------------
+  # -----------------------------------------------------------------
+
+  def self.cached_recent(number_of_records = INDEX_PROJECTS_LIMIT, exclude_ids = nil)
+    Rails.cache.fetch([name, 'recent'], expires_in: 30.minutes) do
+      exclude_ids ? Project.recent_published.where.not(id: exclude_ids).limit(number_of_records).to_a : Project.recent_published.limit(number_of_records).to_a
+    end
+  end
+
+  def self.cached_popular(number_of_records = INDEX_PROJECTS_LIMIT, exclude_ids = nil)
+    Rails.cache.fetch([name, 'popular'], expires_in: 30.minutes) do
+      exclude_ids ? Project.popular.where.not(id: exclude_ids).limit(number_of_records).to_a : Project.popular.limit(number_of_records).to_a
+    end
+  end
+
+  def self.cached_completed(number_of_records = INDEX_PROJECTS_LIMIT, exclude_ids = nil)
+    Rails.cache.fetch([name, 'completed'], expires_in: 30.minutes) do
+      exclude_ids ? Project.completed.where.not(id: exclude_ids).limit(number_of_records).to_a : Project.completed.limit(number_of_records).to_a
+    end
   end
 
   # -------------- STATE MACHINE METHODS START------------

@@ -59,6 +59,8 @@ GEM
       thread_safe (~> 0.1)
       warden (~> 1.2.3)
     diff-lcs (1.2.5)
+    dropbox-sdk (1.6.4)
+      json
     erubis (2.7.0)
     eventmachine (1.0.3)
     execjs (2.2.2)
@@ -95,6 +97,9 @@ GEM
       activesupport (>= 3.0.0)
       cocaine (~> 0.5.3)
       mime-types
+    paperclip-dropbox (1.2.2)
+      dropbox-sdk (~> 1.3)
+      paperclip (>= 3.1, < 5)
     pg (0.17.1)
     quiet_assets (1.0.2)
       railties (>= 3.1, < 5.0)
@@ -191,6 +196,7 @@ DEPENDENCIES
   letter_opener
   non-stupid-digest-assets
   paperclip
+  paperclip-dropbox (>= 1.1.7)
   pg (~> 0.17.1)
   quiet_assets
   rails (= 4.1.8)

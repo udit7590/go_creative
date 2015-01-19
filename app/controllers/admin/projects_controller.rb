@@ -15,6 +15,7 @@ class Admin::ProjectsController < ::ApplicationController
   def show
     @comments = @project.comments.order_by_date
     @comment_count = @project.comments.deleted(false).count
+    @contributors = @project.contributions.order(created_at: :desc)
   end
 
   def publish

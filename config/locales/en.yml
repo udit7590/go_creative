@@ -29,6 +29,11 @@ en:
       next: "&rsaquo;"
       truncate: "&hellip;"
 
+  errors:
+    views: 
+      no_user: 'Cannot find any such user'
+      invalid_session: 'Session lost or invalid. Please try again'
+
   projects:
     views:
       pan_details_incomplete: 'Your pan details (PAN Card Number or PAN card proof) are incomplete. Please provide the following details to proceed further.'
@@ -39,6 +44,14 @@ en:
       orphan_project: 'Cannot find any user associated with this project'
     edit:
       not_project_owner: 'You can only edit your projects.'
+
+  contributions:
+    errors:
+      project_expired: "This project's end date has expired. So one cannot contribute to this project"
+      project_not_published: "The project is not in published state and so cannot accept any contributions"
+      project_owner_cannot_contribute: 'The project owner cannot contribute to his/her own project'
+    notice:
+      details_updated: 'Your details have been updated. You can now proceed further'
 
   account:
     update:

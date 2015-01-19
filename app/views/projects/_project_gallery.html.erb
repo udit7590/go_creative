@@ -1,21 +1,29 @@
+<% unless @project.video_link.empty? %>
+  <!--Video Widget-->
+  <h4 class="title-bg">Project Video</h4>
+  <!-- <iframe src="http://player.vimeo.com/video/24496773" width="1000" height="400"></iframe> -->
+  <span data-src="<%= @project.video_link %>" id="embeddedVideo" width="770" height="400"></span>
+
+<% end %>
 
 <!-- Gallery
   ================================================== --> 
+<% if @project.images.present? %>
   <h4 class="title-bg">Gallery</h4>
-  <div class="row no-margin">
-    <ul class="gallery-post-grid holder">
 
-      <% @project.images.each do |image| %>
-        <!-- Gallery Item -->
-        <li class="span3 gallery-item" data-id="id-1" data-type="illustration">
-          <% #FIXME_AB: image.image? something is wrong :) attachment.image make sense :P-%>
-          <a href="<%= image.image.url %>" data-lightbox="gallery"><%= image_tag image.image.url(:thumbnail) %></a>
-        </li>
+  <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+
+  <!-- Wrapper for slides -->
+    <div class="carousel-inner" role="listbox" style="border: 1px solid #ccc; background-color: white">
+      <% @project.images.each.with_index do |image, index| %>
+        <div class="item<%= ' active' if index == 0 %>">
+          <%= image_tag image.image.url(:large) %>
+        </div>
       <% end %>
-    </ul>
+    </div>
+
+    <!-- Controls -->
+    <a data-slide="prev" href="#carousel-example-generic" class="left carousel-control">‹</a>
+    <a data-slide="next" href="#carousel-example-generic" class="right carousel-control">›</a>
   </div>
-  <% #FIXME_AB: project.images.present? -%>
-  <% if @project.images.length == 0 %>
-    <center><h6 class="text-warning">No gallery exists for this project.</h6></center>
-    <br />
-  <% end %>
+<% end %>

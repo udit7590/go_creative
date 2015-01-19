@@ -105,6 +105,7 @@ blockquote.pull-right {border-right: 5px solid #999;}
 }
 
 .navbar .nav > .active > a,
+.navbar .nav > li > a.active,
 .navbar .nav > .active > a:hover,
 .navbar .nav > .active > a:focus {
 	color:#FFF; 

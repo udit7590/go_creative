@@ -18,7 +18,15 @@
     </tr>
     <tr>
       <td>Amount Required</td>
-      <td>INR: <%= @project.amount_required %></td>
+      <td><%= number_to_currency(@project.amount_required, unit: 'INR ', precision: 0) %></td>
+    </tr>
+    <tr>
+      <td>Amount Collected</td>
+      <td><%= number_to_currency(@project.collected_amount, unit: 'INR ', precision: 0) %></td>
+    </tr>
+    <tr>
+      <td>Contributors</td>
+      <td><%= @project.contributors_count %></td>
     </tr>
     <tr>
       <td>End Date</td>
@@ -35,7 +43,7 @@
     
     <tr>
       <td>Minimum amount required per contribution</td>
-      <td><%= @project.min_amount_per_contribution %></td>
+      <td><%= number_to_currency(@project.min_amount_per_contribution, unit: 'INR ', precision: 0) %></td>
     </tr>
     <tr>
       <td>Project Image</td>

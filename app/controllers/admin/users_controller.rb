@@ -1,12 +1,17 @@
 class Admin::UsersController < ::ApplicationController
   layout 'dashboard'
   before_action :authenticate_admin_user!
-  before_action :load_user, only: :verify
+  before_action :load_user, only: [:verify, :show]
   before_action :check_not_verified, only: :verify
   before_action :check_user_details_complete, only: :verify
   
   def index
     @users = User.all.order_by_creation.page(params[:page]).per(20)
+  end
+
+  def show
+    @projects = @user.projects
+    @contributions = @user.contributions.order(created_at: :desc)
   end
 
   def verify
@@ -20,7 +25,7 @@ class Admin::UsersController < ::ApplicationController
   protected
 
     def load_user
-      @user = User.find_by_id(params[:user_id])
+      @user = User.find_by(id: (params[:user_id] || params[:id]))
       unless @user
         redirect_to admin_root_path, alert: "No Such user found with ID: #{ params[:user_id] }"
       end

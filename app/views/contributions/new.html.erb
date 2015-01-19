@@ -1,0 +1,15 @@
+<div class="span4 col-md-6 "></div>
+  <div class="formContainer span4 col-md-6 ">
+    <h2>Payment Page</h2>
+
+    <%= form_for(@contribution, url: project_contributions_path, method: :post) do |f| %>
+      <div class="field">
+        <%= f.number_field :amount, autofocus: true, class: 'form-control input-block-level', placeholder: 'Amount to Contribute*', required: true, minimum: @project.min_amount_per_contribution, max: @project.amount_required %>
+      </div>
+
+      <div class="actions">
+        <%= f.submit 'Confirm Payment', class: 'btn btn-inverse btn-block' %>
+      </div>
+    <% end %>
+
+</div>

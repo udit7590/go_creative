@@ -7,6 +7,7 @@
       <li role="presentation" class="active"><a href="#project-details" role="tab" data-toggle="tab" aria-expanded="true">Project Details</a></li>
       <li role="presentation"><a href="#user-details" role="tab" data-toggle="tab">User Details</a></li>
       <li role="presentation"><a href="#project-comments" role="tab" data-toggle="tab">Comments</a></li>
+      <li role="presentation"><a href="#project-contributors" role="tab" data-toggle="tab">Contributors</a></li>
     </ul>
     <div id="myTabContent" class="tab-content">
       <div role="tabpanel" class="tab-pane fade in active" id="project-details">
@@ -20,6 +21,10 @@
       <div role="tabpanel" class="tab-pane fade" id="project-comments">
         <br />
         <%= render 'project_comments' %>
+      </div>
+      <div role="tabpanel" class="tab-pane fade" id="project-contributors">
+        <br />
+        <%= render 'project_contributors' %>
       </div>
     </div>
   </div>

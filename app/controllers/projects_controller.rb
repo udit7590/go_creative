@@ -2,7 +2,7 @@ class ProjectsController < ApplicationController
   include UserHelper
 
   before_action :store_location
-  before_action :authenticate_user!, except: [:index, :show, :charity_projects, :investment_projects, :load_more_projects]
+  before_action :authenticate_user!, except: [:index, :show, :charity_projects, :investment_projects, :load_more_projects, :sort_projects]
   before_action :initialize_project, only: [:new, :create]
 
   # Loads the project based on ID. Make sure project owner is the currently logged in user
@@ -23,6 +23,9 @@ class ProjectsController < ApplicationController
   # Makes sure project is in valid state before edit/update]
   before_action :check_if_published, only: [:edit, :update]
 
+  # To check if any sorting parameters are provided
+  before_action :check_sorting_details_and_load_projects, only: :index
+
   def new
     @project.images.build
   end
@@ -31,7 +34,7 @@ class ProjectsController < ApplicationController
     respond_to do |format|
       @project = current_user.projects.build(project_params)
       if @project.save
-        check_user_details_and_redirect(format, @user)
+        check_user_details_and_redirect(format, @user, @project)
       else
         @project = @project.becomes!(Project)
         @project.type = params[:project][:type]
@@ -44,12 +47,12 @@ class ProjectsController < ApplicationController
 
   def show
     #FIXME_AB: refactor it. @project.comments written three times
-    if @project.user_id == current_user.id
-      @comments = @project.comments.order_by_date
+    if current_user && @project.user_id == current_user.id
+      @comments = @project.comments.order_by_date.where(deleted: false)
     else
       @comments = @project.comments.latest.visible_to_all(true)
     end
-    @comment_count = @project.comments.deleted(false).count
+    @comment_count = @comments.deleted(false).count
   end
 
   def update
@@ -80,20 +83,23 @@ class ProjectsController < ApplicationController
   # --------------------------- SECTION FOR PROJECTS PUBLIC VIEW --------------------
   # ---------------------------------------------------------------------------------
 
+  # HTML request for listing and JSON for sorting
   def index
-    @projects = Project.published_projects
     @page_title = 'Projects'
-    render :all
+    respond_to do |format|
+      format.html { render :all } 
+      format.json { render :load }
+    end
   end
 
   def charity_projects
-    @projects = Project.published_charity_projects
+    @projects = Project.recent_published_charity.page(1)
     @page_title = 'Charity Projects'
     render :all
   end
 
   def investment_projects
-    @projects = Project.published_investment_projects
+    @projects = Project.recent_published_investment.page(1)
     @page_title = 'Investment Projects'
     render :all
   end
@@ -102,11 +108,13 @@ class ProjectsController < ApplicationController
     #FIXME_AB: There is a better way to write same code so that you done repeat @project and Project many times
     case params[:for_action]
     when 'charity_projects'
-      @projects = Project.published_charity_projects(params[:page].to_i)
+      @projects = Project.recent_published_charity.page(params[:page].to_i)
     when 'investment_projects'
-      @projects = Project.published_investment_projects(params[:page].to_i)
+      @projects = Project.recent_published_investment.page(params[:page].to_i)
+    when 'sort'
+      @projects = Project.sort_by(params[:sort_by].try(:to_sym), params[:order_by].try(:to_sym)).page(params[:page].to_i)
     else
-      @projects = Project.published_projects(params[:page].to_i)
+      @projects = Project.recent_published.page(params[:page].to_i)
     end
     # @projects = Project.public_send("published_#{ params[:for_action] }projects", params[:page].to_i)
     @is_more_available = @projects.length == Project::INITIAL_PROJECT_DISPLAY_LIMIT
@@ -162,6 +170,15 @@ class ProjectsController < ApplicationController
       unless(@project.published? || @project.user_id == current_user.try(:id))
         redirect_to root_path, alert: (I18n.t :no_project, scope: [:projects, :views])
       end
+    end
+
+    def check_sorting_details_and_load_projects
+      if params[:sort_by]
+        @projects = Project.sort_by(params[:sort_by].try(:to_sym), params[:order_by].try(:to_sym)).page(1)
+      else
+        @projects = Project.recent_published.page(1)
+      end
+      @is_more_available = @projects.length == Project::INITIAL_PROJECT_DISPLAY_LIMIT
     end
 
     # ---------------------------------------------------------------------------------

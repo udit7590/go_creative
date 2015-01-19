@@ -1,3 +1,4 @@
+<% if @user || @comments.present? %>
 <section class="comments">
   <h4 class="title-bg"><a name="comments"></a>Comments</h4>
   <ul>
@@ -55,3 +56,4 @@
     </div>
   <% end %>
 </section><!-- Close comments section-->
+<% end %>
