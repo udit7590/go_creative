@@ -6,6 +6,10 @@
     <center><strong>Your project has not been published yet.</strong></center>
   </div>
 <% end %>
+
+<% if @transaction %>
+  <%= transaction_error(@transaction) %>
+<% end %>
   
 <!-- Blog Content
   ================================================== --> 

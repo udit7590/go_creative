@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150116052903) do
+ActiveRecord::Schema.define(version: 20150117182614) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -76,13 +76,29 @@ ActiveRecord::Schema.define(version: 20150116052903) do
     t.integer  "admin_user_id"
   end
 
+  create_table "contribution_transactions", force: true do |t|
+    t.integer  "contribution_id"
+    t.string   "action"
+    t.integer  "amount"
+    t.boolean  "success"
+    t.string   "authorization"
+    t.string   "message"
+    t.text     "params"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "contributions", force: true do |t|
     t.integer  "project_id"
     t.integer  "user_id"
-    t.string   "state",      default: "contributed"
+    t.string   "state",           default: "contributed"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "amount"
+    t.string   "card_type"
+    t.date     "card_expires_on"
+    t.inet     "ip_address"
+    t.cidr     "network_address"
   end
 
   add_index "contributions", ["project_id"], name: "index_contributions_on_project_id", using: :btree

@@ -39,4 +39,15 @@ Gocreative::Application.configure do
 
   config.action_controller.perform_caching = true
   config.cache_store = :memory_store
+
+  config.after_initialize do
+    # Send requests to the gateway's test servers
+    ActiveMerchant::Billing::Base.mode = :test
+
+    ::GATEWAY = ActiveMerchant::Billing::PaypalGateway.new(
+      login: 'udit-facilitator_api1.vinsol.com',
+      password: '9ZDXLHZMG6MTYWPE',
+      signature: 'AFcWxV21C7fd0v3bYYYRCpSSRl31AYKb-gwzAAGTZTmeRpmVwK9jlrP8'
+      )
+  end
 end

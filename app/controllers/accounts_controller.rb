@@ -11,6 +11,8 @@ class AccountsController < ApplicationController
   # Just sets the user instance variable as current user
   before_action :set_user, except: :show
 
+  before_action :load_project, only: :update_incomplete_details
+
   def edit
     build_max_n_addresses(@user, 2)
   end
@@ -40,19 +42,13 @@ class AccountsController < ApplicationController
   end
 
   def update_incomplete_details
-    @project = Project.find_by(id: session[:process_project_id])
-    if @project
-      respond_to do |format|
-        if @user.update(account_params)
-          check_user_details_and_redirect(format, @user, @project)
-        else
-          format.html { render action: :edit, status: :bad_request }
-          format.json { render json: @user.errors, status: :unprocessable_entity }
-        end
+    respond_to do |format|
+      if @user.update(account_params)
+        check_user_details_and_redirect(format, @user, @project)
+      else
+        format.html { render action: :edit, status: :bad_request }
+        format.json { render json: @user.errors, status: :unprocessable_entity }
       end
-    else
-      flash[:alert] = I18n.t :invalid_session, scope: [:errors, :views]
-      redirect_to root_path
     end
   end
 
@@ -104,6 +100,14 @@ class AccountsController < ApplicationController
   end
 
   private
+
+    def load_project
+      @project = Project.find_by(id: session[:process_project_id])
+      unless @project
+        flash[:alert] = I18n.t :invalid_session, scope: [:errors, :views]
+        redirect_to root_path
+      end
+    end
 
     def account_params
       params.require(:user).permit(:first_name, :last_name, :phone_number, :pan_card, :pan_card_copy, addresses_attributes: [:id, :city, :full_address, :primary, :country, :state, :pincode, :address_proof])
