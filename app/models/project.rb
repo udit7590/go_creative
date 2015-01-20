@@ -140,6 +140,17 @@ class Project < ActiveRecord::Base
     end
   end
 
+  def self.filter_by(criteria, order_by = :desc)
+    case criteria
+    when :charity
+      Project.charity
+    when :investment
+      Project.investment
+    else
+      Project.successful
+    end
+  end
+
   def amount_multiple_of_100
     errors[:amount_required] << 'should be a multiple of 100' if (amount_required.to_i % 100).nonzero?
   end
