@@ -36,4 +36,8 @@ class Address < ActiveRecord::Base
     self.address_proof = nil
   end
 
+  def to_s
+    full_address.to_s + "\n" + city.to_s + '-' + pincode.to_s + "\n" + state.to_s + ', ' + country.to_s
+  end
+
 end
