@@ -104,9 +104,9 @@ Gocreative::Application.configure do
     ActiveMerchant::Billing::Base.mode = :production
 
     ::GATEWAY = ActiveMerchant::Billing::PaypalGateway.new(
-      login: '',
-      password: '',
-      signature: ''
+      login: 'udit-facilitator_api1.vinsol.com',
+      password: '9ZDXLHZMG6MTYWPE',
+      signature: 'AFcWxV21C7fd0v3bYYYRCpSSRl31AYKb-gwzAAGTZTmeRpmVwK9jlrP8'
       )
   end
 
