@@ -5,10 +5,10 @@ class Image < ActiveRecord::Base
   has_attached_file :image, 
                     styles: { 
                       thumbnail: { geometry: '270x220^', quality: 80 },
-                      large: { geometry: '770x', quality: 100 } 
+                      gallery: '170x139^',
+                      large: { geometry: 'x500', quality: 100 } 
                     }
                       
-
   accepts_nested_attributes_for :imageable
 
   validates_attachment_content_type :image, content_type: %w(image/jpg image/jpeg image/png), unless: :document?

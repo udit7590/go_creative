@@ -16,15 +16,18 @@
           <li  class="span3 gallery-item" data-id="id-1" data-type="illustration">
             <span class="gallery-hover-4col hidden-phone hidden-tablet">
               <span class="gallery-icons">
-                <% if project.project_picture.present? %>
+                <% if project.project_picture.present? && File.exists?(project.project_picture.path) %>
                 <a href="<%= project.project_picture.url %>" data-lightbox="<%= project.id %>" class="item-zoom-link"></a>
                 <% end %>
                 <%= link_to '', project_path(project), class: 'item-details-link', title: 'View' %>
               </span>
             </span>
-             
+            <% if project.project_picture.present? && File.exists?(project.project_picture.path) %>
               <a href="gallery-single.htm"><%= image_tag project.project_picture.url(:thumbnail) %></a>
-            <span class="project-details"><%= link_to truncate(project.title,  length: 40, omission: '...') %><br / >
+            <% else %>
+              <a href="gallery-single.htm"><%= image_tag 'img/gallery/default_project_thumbnail.jpg' %></a>
+            <% end %>
+            <span class="project-details"><%= link_to truncate(project.title, length: 40) %><br / >
               <div class="progress" style="height: 7px" rel="tooltip" title="<%= project.percentage_completed %>% Completed">
                 <div class="bar bar-success" role="progressbar" style="width: <%= project.percentage_completed %>%;">
                   <!-- <span>60% Complete of INR <%= project.amount_required %></span> -->

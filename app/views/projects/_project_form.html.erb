@@ -41,7 +41,8 @@
   <div class="control-group">
     <%= f.label :description, 'Description', class: 'control-label' %>
     <div class="controls">
-      <%= f.text_area :description, class: 'input-xlarge', placeholder: 'Project Description*', size: 16, rows: 7, required: true %>
+      <div id="summernote_description"></div>
+      <%= f.hidden_field :description %>
     </div>
   </div>
 

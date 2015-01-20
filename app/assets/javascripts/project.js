@@ -44,11 +44,36 @@ var ProjectsPage = (function() {
 })();
 
 $(document).ready(function() {
-  var projectsPage = new ProjectsPage($('#endDateTimePicker'),$('#project_amount_required'), $('#project_min_amount_per_contribution'));
+  var projectsPage = new ProjectsPage($('#endDateTimePicker'),$('#project_amount_required'), $('#project_min_amount_per_contribution')),
+      $summernote = null;
 
   try {
     projectsPage.configureDateTimePicker();
     projectsPage.bindChangeEventForAmountField();
+    $summernote = $('#summernote_description').summernote({
+     toolbar: [
+        ['style', ['style']],
+        ['font', ['bold', 'italic', 'underline', 'clear']],
+        ['fontname', ['fontname']],
+        ['color', ['color']],
+        ['para', ['ul', 'ol', 'paragraph']],
+        ['table', ['table']],
+        ['view', ['fullscreen']],
+        ['help', ['help']],
+        ['misc', ['undo', 'redo']]
+      ],
+      styleTags: ['p', 'blockquote', 'h1', 'h2', 'h3', 'h4', 'h5'],
+      fontNames: [
+        'Arial', 'Arial Black', 'Comic Sans MS', 'Courier New',
+        'Helvetica Neue', 'Impact', 'Times New Roman', 'Verdana', 'Langdon'
+      ],
+      height: 300,
+      onChange: function(contents, $editable) {
+        $('#project_description').val(contents);
+      }
+    });
+    $summernote.code($('#project_description').val());
+    $('.note-editor').css('background-color','#fff')
   } catch(err) {
     console.log(err)
   }

@@ -54,6 +54,8 @@ Gocreative::Application.routes.draw do
   resource :users do
     resources :projects, shallow: true, except: :index do
       get :user_projects, path: 'my', on: :collection, as: 'current'
+      get :update_description 
+
       resources :comments, shallow: true, except: [:show, :update, :create] do
         get :delete
         get :undo_delete

@@ -21,5 +21,7 @@
  *= require 'css/lightbox.css'
  *= require 'css/form.css'
  *= require 'css/project-listing.css'
+ *= require 'css/summernote.css'
+ *= require 'css/summernote-bs3.css'
  *= require_directory .
  */

@@ -4,27 +4,29 @@ class ProjectsController < ApplicationController
   before_action :store_location
   before_action :authenticate_user!, except: [:index, :show, :charity_projects, :investment_projects, :load_more_projects, :sort_projects]
   before_action :initialize_project, only: [:new, :create]
+  before_action :check_ajax_request, only: :update_description
 
   # Loads the project based on ID. Make sure project owner is the currently logged in user
   # in case of edit/update 
-  before_action :load_project, only: [:show, :edit, :update, :destroy]
+  before_action :load_project, only: [:show, :edit, :update, :destroy, :update_description]
 
   # Checks if the project is not orphan. It is only a security check.
   # FUTURE: Do some critical action here
-  before_action :check_orphan_project, only: [:show, :new, :edit, :create, :update]
+  before_action :check_orphan_project, only: [:show, :new, :edit, :create, :update, :update_description]
 
   # Check user is project owner when editing/ updating
-  before_action :check_project_owner, only: [:edit, :update]
+  before_action :check_project_owner, only: [:edit, :update, :update_description]
 
   # Check if the project is in a valid state (> Published)
   before_action :verify_project_approved_or_owner, only: :show
 
   # To make sure user cannot edit critical details after project has been published
   # Makes sure project is in valid state before edit/update]
-  before_action :check_if_published, only: [:edit, :update]
+  before_action :check_if_published, only: [:edit, :update, :update_description]
 
   # To check if any sorting parameters are provided
   before_action :check_sorting_details_and_load_projects, only: :index
+
 
   def new
     @project.images.build
@@ -77,6 +79,16 @@ class ProjectsController < ApplicationController
     @user = current_user
     @projects = @user.projects
     render 'user_projects'
+  end
+
+  #JSON
+  def update_description
+    if @project.update(description: params[:description])
+      render json: { error: false }
+    else
+      render json: { error: false }
+    end
+    
   end
 
   # ---------------------------------------------------------------------------------
@@ -140,35 +152,62 @@ class ProjectsController < ApplicationController
       @user = current_user
       @project = Project.find_by(id: (params[:project_id] || params[:id]))
       unless @project
-        flash[:alert] = I18n.t :no_project, scope: [:projects, :views]
-        redirect_to controller: :home, action: :index
+        responds_to do |format|
+          format.html do 
+            flash[:alert] = I18n.t :no_project, scope: [:projects, :views]
+            redirect_to controller: :home, action: :index 
+          end
+          format.json { render json: { error: true, message: 'Cannot find any such project.' } }
+        end
       end
     end
 
     def check_orphan_project
       unless @project.user_id
-        flash[:alert] = I18n.t :orphan_project, scope: [:projects, :views]
-        redirect_to controller: :home, action: :index
+        responds_to do |format|
+          format.html do 
+            flash[:alert] = I18n.t :orphan_project, scope: [:projects, :views]
+            redirect_to controller: :home, action: :index 
+          end
+          format.json { render json: { error: true, message: 'The project is no longer available.' } }
+        end
       end
     end
 
     def check_project_owner
       unless(@project.user_id == current_user.id)
-        redirect_to root_path, alert: (I18n.t :not_project_owner, scope: [:projects, :update])
+        responds_to do |format|
+          format.html { redirect_to root_path, alert: (I18n.t :not_project_owner, scope: [:projects, :update]) }
+          format.json { render json: { error: true, message: 'You are not the project owner.' } }
+        end
+        
       end
     end
 
     def check_if_published
       if @project.published?
-        flash[:alert] = I18n.t :cannot_edit_published, scope: [:projects, :update]
-        redirect_to action: :show
+        responds_to do |format|
+          format.html do 
+            flash[:alert] = I18n.t :cannot_edit_published, scope: [:projects, :update]
+            redirect_to action: :show
+          end
+          format.json { render json: { error: true, message: 'The project is no longer editable.' } }
+        end
       end
     end
 
-    #FIXME_AB: project.can_be_accessed_by?(current_user)
     def verify_project_approved_or_owner
-      unless(@project.published? || @project.user_id == current_user.try(:id))
+      unless(@project.can_be_accessed_by?(current_user))
         redirect_to root_path, alert: (I18n.t :no_project, scope: [:projects, :views])
+      end
+    end
+
+    def check_ajax_request
+      unless request.xhr?
+        responds_to do |format|
+          format.json { render json: { error: true, message: 'This action is only available on ajax requests.' } }
+          format.html { head :bad_request }
+        end
       end
     end
 

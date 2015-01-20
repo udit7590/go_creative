@@ -19,44 +19,62 @@
         ================================================== --> 
         <div class="span8 blog">
 
-          <!-- Blog Post 1 -->
-          <article>
-            <h3 class="title-bg"><%= @project.title %></h3>
-            <div class="post-content">
-              <%= image_tag @project.project_picture.url(:large) %>
+        <h3 class="title-bg"><%= @project.title %></h3>
+        <ul class="nav nav-tabs">
+          <li class="active"><a href="#project-details" data-toggle="tab" class="text-special">Project Details</a></li>
+          <% if @project.images.present? || @project.published? || @project.user_id == @user.id %>
+            <li class=""><a href="#project-gallery" data-toggle="tab" class="text-special">Gallery</a></li>
+          <% end %>
+          <% if @comments || @project.published? || @project.user_id == @user.id %>
+            <li class=""><a href="#project-comments" data-toggle="tab" class="text-special">Comments</a></li>
+          <% end %>
+        </ul>
+        <div class="tab-content">
+          <div class="tab-pane active" id="project-details">
+            <!-- Blog Post 1 -->
+            <article>
+              <div class="post-content">
+                <%= image_tag @project.project_picture.url(:large) %>
+              </div>
+            </article>
+            <div>
+              <!-- Description, main image and video
+                ================================================== -->
+              <h4 class="title-bg">Project Description
+                <% if !@project.published? && current_user && current_user.id == @project.user_id %>
+                  <button id="editDescription" class="btn btn-info pull-right" data-toggle="button" data-path="<%= project_update_description_path(@project) %>">Edit</button>
+                <% end %>
+              </h4>
+              <div class="lead" id="descriptionEditable"><%= @project.description.html_safe %></div>
             </div>
-          </article>
+            <% unless @project.video_link.empty? %>
+              <!--Video Widget-->
+              <h4 class="title-bg">Project Video</h4>
+              <!-- <iframe src="http://player.vimeo.com/video/24496773" width="1000" height="400"></iframe> -->
+              <span data-src="<%= @project.video_link %>" id="embeddedVideo" width="770" height="400"></span>
 
-          <div>
-            <h4 class="title-bg">Project Description</h4>
-            <p class="lead"><%= @project.description %></p>
+            <% end %>
           </div>
-
-          <!-- About the Author -->
-          <section class="post-content">
-            <div class="post-body about-author">
-              <%= image_tag 'img/author-avatar.jpg', alt:'author' %>
-              <h4>About Nathan Brown</h4>
-              Proin tristique tellus in est vulputate luctus fermentum ipsum molestie. Vivamus tincidunt sem eu magna varius elementum. Maecenas felis tellus, fermentum vitae laoreet vitae, volutpat et urna. Nulla faucibus ligula eget ante varius ac euismod odio placerat. Nam sit amet felis non lorem faucibus rhoncus vitae id dui.
-            </div>
-          </section>
-
-        <!-- Gallery
-        ================================================== --> 
-        <%= render 'project_gallery' %>
-
-        <!-- Post Comments
-        ================================================== --> 
-        <%= render 'project_comments' %>
+          <div class="tab-pane" id="project-gallery">
+            <!-- Gallery
+            ================================================== -->
+            <%= render 'project_gallery' %>
+          </div>
+          <div class="tab-pane" id="project-comments">
+            <!-- Post Comments
+            ================================================== --> 
+            <%= render 'project_comments' %>
+          </div>
+        </div>
 
       </div><!--Close container row-->
 
-        <!-- Sidebar
-        ================================================== --> 
-        <%= render 'project_sidebar' %>
-      </div>
+      <!-- Sidebar
+      ================================================== --> 
+      <%= render 'project_sidebar' %>
+    </div>
       
-    </div> <!-- End Container -->
+  </div> <!-- End Container -->
 
 <!-- JS --> 
 <% content_for :javascripts do %>
@@ -64,5 +82,5 @@
   <%= javascript_include_tag 'comment', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'comments_page', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'embed_video', 'data-turbolinks-track' => true %>
-  <%= javascript_include_tag 'project_show', 'data-turbolinks-track' => true %>
+<%= javascript_include_tag 'project_show', 'data-turbolinks-track' => true %>
 <% end %> 
