@@ -1,6 +1,6 @@
 <% if @user || @comments.present? %>
 <section class="comments">
-  <h4 class="title-bg"><a name="comments"></a>Comments</h4>
+  <!-- <h4 class="title-bg"><a name="comments"></a>Comments</h4> -->
   <ul>
     <% @comments.each do |comment| %>
       <li class="comment" data-project-id="<%= @project.id %>" data-comment-id="<%= comment.id %>">
@@ -36,14 +36,6 @@
     <div class="comment-form-container">
       <h6>Leave a Comment</h6>
       <form action="<%= new_project_comment_path(@project, user_id: @user) %>" id="comment-form" method="get">
-        <div class="input-prepend">
-          <span class="add-on"><i class="icon-user"></i></span>
-          <input class="span4" id="prependedInput" size="16" type="text" placeholder="Name" value="<%= @user.name %>" readonly="readonly" name="comment[name]">
-        </div>
-        <div class="input-prepend">
-          <span class="add-on"><i class="icon-envelope"></i></span>
-          <input class="span4" id="prependedInput" size="16" type="text" placeholder="Email Address" value="<%= @user.email %>" readonly="readonly" name="comment[email]">
-        </div>
         <textarea name="comment[description]" class="span6" placeholder="Please share your views and comments.*"></textarea>
         <input type="hidden" value="<%= @user.id %>" name="user_id" />
         <div class="row">

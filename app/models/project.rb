@@ -37,8 +37,7 @@ class Project < ActiveRecord::Base
   # -------------------------------------------------------------
   #FIXME_AB: doing same thing in before_create and before_update. Can before_save be used?
   before_save :set_time_to_midnight, unless: Proc.new { |project| project.end_date.nil? }
-  before_update :set_time_to_midnight, unless: Proc.new { |project| project.end_date.nil? }
-
+  before_save :sanitize_description
   # -------------- SECTION FOR STATE MACHINE --------------------
   # -------------------------------------------------------------
   aasm column: 'state'.freeze do
@@ -185,6 +184,15 @@ class Project < ActiveRecord::Base
   def amount_collected
     collected_amount.to_i > 0 ? collected_amount : contributions.sum(:amount)
   end
+  
+  def can_be_accessed_by?(user)
+    published? || user_id == user.try(:id)
+  end
+
+  def owner?(user)
+    false unless user
+    user_id == user.id
+  end
 
   # -------------- SECTION FOR CACHING METHODS ----------------------
   # -----------------------------------------------------------------
@@ -214,6 +222,10 @@ class Project < ActiveRecord::Base
   protected
     def set_time_to_midnight
       self.end_date = self.end_date.at_end_of_day
+    end
+
+    def sanitize_description
+      self.description = (ActionController::Base.helpers.sanitize description, tags: %w(table tr td h1 h2 h3 h4 h5 h6 p ul ol li b strong em i blockquote span hr br), attributes: %w(id class style)).html_safe
     end
 
 end

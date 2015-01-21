@@ -1,29 +1,23 @@
-<% unless @project.video_link.empty? %>
-  <!--Video Widget-->
-  <h4 class="title-bg">Project Video</h4>
-  <!-- <iframe src="http://player.vimeo.com/video/24496773" width="1000" height="400"></iframe> -->
-  <span data-src="<%= @project.video_link %>" id="embeddedVideo" width="770" height="400"></span>
-
-<% end %>
-
 <!-- Gallery
   ================================================== --> 
 <% if @project.images.present? %>
-  <h4 class="title-bg">Gallery</h4>
 
   <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
 
   <!-- Wrapper for slides -->
     <div class="carousel-inner" role="listbox" style="border: 1px solid #ccc; background-color: white">
+      <% active = [] %>
       <% @project.images.each.with_index do |image, index| %>
-        <div class="item<%= ' active' if index == 0 %>">
+        <% next unless File.exists?(image.image.path(:large)); active << index %>
+        <div class="item<%= ' active' if index == active[0] %>">
           <%= image_tag image.image.url(:large) %>
         </div>
       <% end %>
     </div>
 
     <!-- Controls -->
-    <a data-slide="prev" href="#carousel-example-generic" class="left carousel-control">‹</a>
-    <a data-slide="next" href="#carousel-example-generic" class="right carousel-control">›</a>
+    <a data-slide="prev" href="#carousel-example-generic" role="button" class="left carousel-control">‹</a>
+    <a data-slide="next" href="#carousel-example-generic" role="button" class="right carousel-control">›</a>
   </div>
+
 <% end %>
