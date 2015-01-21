@@ -48,15 +48,17 @@ class Contribution < ActiveRecord::Base
   # -------------- SECTION FOR SCOPES AND METHODS ---------------
   # -------------------------------------------------------------
   scope :volunteered, -> { where(state: 'contributed') }
+  scope :accepted, -> { where(state: 'accepted') }
   scope :order_by_creation, -> { order(:created_at) }
 
   def purchase
     response = GATEWAY.purchase(price_in_cents, credit_card, ip: ip_address)
     @current_transaction = transactions.create!(action: 'Purchase', amount: price_in_cents, response: response)
-    payment_initiated!
+    initiate_payment!
     if response.success?
       update_total_contribution_cache
-      accepted!
+      accept!
+      project.complete! if project.contributions.accepted.sum(:amount) >= project.amount_required
     else
       payment_error!
     end
@@ -105,7 +107,7 @@ class Contribution < ActiveRecord::Base
 
     def credit_card
       @credit_card ||= ActiveMerchant::Billing::CreditCard.new(
-        type:               card_type,
+        type:               brand,
         number:             card_number,
         verification_value: card_verification,
         month:              card_expires_on.month,

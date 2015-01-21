@@ -51,7 +51,7 @@ class ContributionsController < ApplicationController
   protected
 
     def contribution_params
-      params.require(:contribution).permit(:amount, :project_id, :user_id, :card_type, :card_number, :card_verification, :card_expires_on)
+      params.require(:contribution).permit(:amount, :project_id, :user_id, :brand, :card_number, :card_verification, :card_expires_on)
     end
 
     def load_project

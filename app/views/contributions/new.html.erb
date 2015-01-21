@@ -7,7 +7,7 @@
         <%= f.number_field :amount, autofocus: true, class: 'form-control input-block-level', placeholder: 'Amount to Contribute*', required: true, minimum: @project.min_amount_per_contribution, max: @project.amount_required %>
       </div>
       <div class="field">
-        <%= f.select :card_type, [['Visa', 'visa'], ['MasterCard', 'master']], class: 'form-control input-block-level', required: true %>
+        <%= f.select :brand, [['Visa', 'visa'], ['MasterCard', 'master']], class: 'form-control input-block-level', required: true %>
       </div>
       <div class="field">
         <%= f.number_field :card_number, class: 'form-control input-block-level', placeholder: 'Your card number*', required: true %>

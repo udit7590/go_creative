@@ -7,7 +7,7 @@ class Project < ActiveRecord::Base
   paginates_per 28
   max_paginates_per 100
 
-  handle_asynchronously :expire_end_date, run_at: => Proc.new { end_date }
+  # handle_asynchronously :expire_end_date, run_at: => Proc.new { end_date }
 
   # -------------- SECTION FOR ASSOCIATIONS ---------------------
   # -------------------------------------------------------------
@@ -61,7 +61,7 @@ class Project < ActiveRecord::Base
     end
 
     event :successful do
-      transitions from: :payment_pending, to: :unpublished
+      transitions from: [:payment_pending, :published], to: :unpublished
     end
 
     event :payment_pending do
@@ -189,11 +189,29 @@ class Project < ActiveRecord::Base
   end
 
   def contributions_count
-    contributors_count.to_i > 0 ? contributors_count : contributions.count
+    contributors_count.to_i > 0 ? contributors_count : contributions.accepted.count
   end
 
   def amount_collected
-    collected_amount.to_i > 0 ? collected_amount : contributions.sum(:amount)
+    collected_amount.to_i > 0 ? collected_amount : contributions.accepted.sum(:amount)
+  end
+
+  def amount_left
+    amount_required - amount_collected
+  end
+
+  def min_amount
+    ((min_amount_per_contribution < amount_left) ? min_amount_per_contribution : amount_left).to_i
+  end
+
+  def complete!
+    if contributions.accepted.sum(:amount) >= amount_required
+      successful!
+    end
+  end
+
+  def requires_donation?
+    !(successful? || failed? || amount_left <= 0)
   end
   
   def can_be_accessed_by?(user)
@@ -235,7 +253,7 @@ class Project < ActiveRecord::Base
   def expire_end_date
     if end_date >= DateTime.current || successful? || failed? 
       # FUTURE: NEED TO CHECK IF MULTIPLE JOBS QUEUED
-    elsif amount_required <= contributions.sum(:amount) && published?
+    elsif amount_required <= contributions.accepted.sum(:amount) && published?
       successful!
     else
       failed!
