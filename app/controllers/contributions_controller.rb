@@ -33,9 +33,20 @@ class ContributionsController < ApplicationController
 
   def new; end
 
+  def show
+    @contribution = Contribution.find_by(id: params[:id])
+    @transaction = @contribution.transactions.where(success: true).first
+    pdf = ContributionPDF.new(@contribution, @transaction)
+    respond_to do |format|
+      format.pdf { send_data pdf.render, filename: 'invoice.pdf', type: 'application/pdf', disposition: 'inline' }
+      format.html { render :show }
+    end
+  end
+
   def create
     if(@contribution.save)
       if(@contribution.purchase)
+        ContributionMailer.payment_success(@contribution, @contribution.current_transaction).deliver
         render :success
       else
         @transaction = @contribution.current_transaction
