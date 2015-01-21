@@ -2,8 +2,9 @@
   <table class="table table-striped" id="projectComments">
     <thead>
       <tr>
-        <th>id</th>
+        <th>ID</th>
         <th>By</th>
+        <th>Email</th>
         <th>Amount</th>
         <th>On</th>
         <th>Status</th>
@@ -15,9 +16,10 @@
           <td style="width:25px"><%= contributor.id %></td>
           <td>
             <% if(contributor.user) %>
-              <%= contributor.user.name %>(<%= contributor.user.email %>)
+              <%= link_to contributor.user.name, admin_user_path(contributor.user_id) %>
             <% end %>
           </td>
+          <td><%= contributor.user.email %></td>
           <td><%= number_to_currency(contributor.amount, unit: 'INR ', precision: 0) %></td>
           <td><%= contributor.created_at.to_s(:short) %></td>
           <td><%= contributor.state.humanize %></td>

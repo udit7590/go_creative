@@ -11,7 +11,7 @@ class Admin::UsersController < ::ApplicationController
 
   def show
     @projects = @user.projects
-    @contributions = @user.contributions.order_by_creation
+    @contributions = @user.contributions.order(created_at: :desc)
   end
 
   def verify

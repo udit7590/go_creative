@@ -178,6 +178,14 @@ class Project < ActiveRecord::Base
     ((collected_amount / amount_required) * 100) if amount_required > 0
   end
 
+  def contributions_count
+    contributors_count.to_i > 0 ? contributors_count : contributions.count
+  end
+
+  def amount_collected
+    collected_amount.to_i > 0 ? collected_amount : contributions.sum(:amount)
+  end
+
   # -------------- SECTION FOR CACHING METHODS ----------------------
   # -----------------------------------------------------------------
 
