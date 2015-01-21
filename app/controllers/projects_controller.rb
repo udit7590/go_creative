@@ -25,7 +25,7 @@ class ProjectsController < ApplicationController
   before_action :check_if_published, only: [:edit, :update, :update_description]
 
   # To check if any sorting parameters are provided
-  before_action :check_sorting_details_and_load_projects, only: :index
+  before_action :check_sorting_or_filtering_details_and_load_projects, only: :index
 
 
   def new
@@ -95,7 +95,7 @@ class ProjectsController < ApplicationController
   # --------------------------- SECTION FOR PROJECTS PUBLIC VIEW --------------------
   # ---------------------------------------------------------------------------------
 
-  # HTML request for listing and JSON for sorting
+  # HTML request for listing and JSON for sorting and filtering
   def index
     @page_title = 'Projects'
     respond_to do |format|
@@ -104,19 +104,25 @@ class ProjectsController < ApplicationController
     end
   end
 
-  def charity_projects
+  def completed
+    @projects = Project.successful.page(1)
+    @page_title = 'Completed Projects'
+    render :completed
+  end
+
+  def charity
     @projects = Project.recent_published_charity.page(1)
     @page_title = 'Charity Projects'
     render :all
   end
 
-  def investment_projects
+  def investment
     @projects = Project.recent_published_investment.page(1)
     @page_title = 'Investment Projects'
     render :all
   end
 
-  def load_more_projects
+  def load_more
     #FIXME_AB: There is a better way to write same code so that you done repeat @project and Project many times
     case params[:for_action]
     when 'charity_projects'
@@ -211,9 +217,11 @@ class ProjectsController < ApplicationController
       end
     end
 
-    def check_sorting_details_and_load_projects
+    def check_sorting_or_filtering_details_and_load_projects
       if params[:sort_by]
         @projects = Project.sort_by(params[:sort_by].try(:to_sym), params[:order_by].try(:to_sym)).page(1)
+      elsif params[:filter_by]
+        @projects = Project.successful.filter_by(params[:filter_by].try(:to_sym), params[:order_by].try(:to_sym)).page(1)
       else
         @projects = Project.recent_published.page(1)
       end

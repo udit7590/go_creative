@@ -46,9 +46,10 @@ Gocreative::Application.routes.draw do
 
   scope '/projects', as: 'projects' do
     get '/', to: 'projects#index'
-    get :charity, to: 'projects#charity_projects'
-    get :investment, to: 'projects#investment_projects'
-    get :load_more, to: 'projects#load_more_projects'
+    get :charity, to: 'projects#charity'
+    get :investment, to: 'projects#investment'
+    get :load_more, to: 'projects#load_more'
+    get :completed, to: 'projects#completed'
   end
 
   resource :users do

@@ -47,7 +47,8 @@ var ProjectsListPage = (function() {
         var $this = $(this),
             data = {
               sort_by: $this.data('sort-by'),
-              order_by: $this.data('order-by')
+              order_by: $this.data('order-by'),
+              filter_by: $this.data('filter-by')
             };
         _this.sendRequestToSort($this.data('path'), data);
       });
@@ -71,18 +72,27 @@ var ProjectsListPage = (function() {
           _this.bindClickEventForLoadMoreButton();
         }
 
-        //Change the text of sorted by
-        $('#sort-by-criteria-button').text('Sorted by: ' + humanize( data['sort_by']));
+        if(data['sort_by'] != undefined) {
+          key = 'sort_by';
+          $('#sort-by-criteria-button').text('Sorted by: ' + humanize( data['sort_by']));
+        } else {
+          key = 'filter_by';
+          $('#filter-by-criteria-button').text('Filtered by: ' + humanize( data['filter_by']));
+        }
         
         //Maintain ajax history so that back button dosent send back a hit to server and serves old records
-        history.pushState(data['sort_by'], '', changeQueryParameters(window.url, data));
+        history.pushState(data[key], '', changeQueryParameters(window.url, data));
         if(localStorage) {
-          localStorage.setItem(data['sort_by'], $('div.all-projects').html());
+          localStorage.setItem(data[key], $('div.all-projects').html());
         }
         window.onpopstate = function(event) {
           if(localStorage && localStorage[event.state]) {
             $('div.all-projects').html(localStorage[event.state]);
-            $('#sort-by-criteria-button').text('Sorted by: ' + humanize(event.state));
+            if(data['sort_by'] != undefined) {
+              $('#sort-by-criteria-button').text('Sorted by: ' + humanize(event.state));
+            } else {
+              $('#filter-by-criteria-button').text('Filtered by: ' + humanize(event.state));
+            }
           }
         };
 

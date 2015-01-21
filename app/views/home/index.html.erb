@@ -30,7 +30,7 @@
   <div class="span12">
   <%= render partial: 'project_listings', locals: { projects: @recent_projects, message: 'Recent Projects', path: projects_path(sort_by: :recent, order_by: :desc) } %>
   <%= render partial: 'project_listings', locals: { projects: @popular_projects, message: 'Popular Projects', path: projects_path(sort_by: :popularity, order_by: :desc) } %>
-  <%= render partial: 'project_listings', locals: { projects: @completed_projects, message: 'Our Successful Projects', path: projects_path(sort_by: :ending_soon, order_by: :asc) } %>
+  <%= render partial: 'project_listings', locals: { projects: @completed_projects, message: 'Our Successful Projects', path: projects_completed_path } %>
   </div>
 
 </div><!-- End Headline -->     
