@@ -4,12 +4,12 @@ class ContributionMailer < ActionMailer::Base
   def payment_success(contribution, transaction)
     @user = contribution.user
     @project = contribution.project
-    attachments['contribution_invoice.pdf'] = generate_pdf
+    attachments['contribution_invoice.pdf'] = generate_pdf(contribution, transaction)
     mail(to: @user.email, subject: 'Thanks for your contribution')
   end
 
   def generate_pdf(contribution, transaction)
-    ContributionPDF.new(contribution, current_transaction).render
+    ContributionPDF.new(contribution, transaction).render
   end
 
 end
