@@ -104,25 +104,25 @@ class ProjectsController < ApplicationController
     end
   end
 
-  def completed_projects
+  def completed
     @projects = Project.successful.page(1)
     @page_title = 'Completed Projects'
     render :completed
   end
 
-  def charity_projects
+  def charity
     @projects = Project.recent_published_charity.page(1)
     @page_title = 'Charity Projects'
     render :all
   end
 
-  def investment_projects
+  def investment
     @projects = Project.recent_published_investment.page(1)
     @page_title = 'Investment Projects'
     render :all
   end
 
-  def load_more_projects
+  def load_more
     #FIXME_AB: There is a better way to write same code so that you done repeat @project and Project many times
     case params[:for_action]
     when 'charity_projects'

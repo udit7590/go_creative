@@ -146,8 +146,6 @@ class Project < ActiveRecord::Base
       Project.charity
     when :investment
       Project.investment
-    else
-      Project.successful
     end
   end
 
