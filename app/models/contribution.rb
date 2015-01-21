@@ -17,6 +17,7 @@ class Contribution < ActiveRecord::Base
     state :payment_initiated
     state :accepted
     state :rejected
+    state :payment_error_occurred
 
     event :initiate_payment do
       transitions from: :contributed, to: :payment_initiated
@@ -29,13 +30,18 @@ class Contribution < ActiveRecord::Base
     event :reject do
       transitions from: :payment_initiated, to: :rejected
     end
+
+    event :payment_error do
+      transitions from: :payment_initiated, to: :payment_error_occurred
+    end
+
   end
 
-  # -------------- SECTION FOR CALLBACKS  -----------------------
+  # -------------- SECTION FOR VALIDATIONS  ---------------------
   # -------------------------------------------------------------
 
-  after_save :update_total_contribution_cache
-  after_destroy :remove_contribution_amount_from_cache
+  # after_save :update_total_contribution_cache
+  # after_destroy :remove_contribution_amount_from_cache
 
   validate :validate_card
 
@@ -47,7 +53,13 @@ class Contribution < ActiveRecord::Base
   def purchase
     response = GATEWAY.purchase(price_in_cents, credit_card, ip: ip_address)
     @current_transaction = transactions.create!(action: 'Purchase', amount: price_in_cents, response: response)
-    # Update states on response.success?
+    payment_initiated!
+    if response.success?
+      update_total_contribution_cache
+      accepted!
+    else
+      payment_error!
+    end
     response.success?
   end
 

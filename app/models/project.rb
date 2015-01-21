@@ -7,6 +7,8 @@ class Project < ActiveRecord::Base
   paginates_per 28
   max_paginates_per 100
 
+  handle_asynchronously :expire_end_date, run_at: => Proc.new { end_date }
+
   # -------------- SECTION FOR ASSOCIATIONS ---------------------
   # -------------------------------------------------------------
   has_many :images, -> { where document: false }, as: :imageable
@@ -221,6 +223,22 @@ class Project < ActiveRecord::Base
   def self.cached_completed(number_of_records = INDEX_PROJECTS_LIMIT, exclude_ids = nil)
     Rails.cache.fetch([name, 'completed'], expires_in: 30.minutes) do
       exclude_ids ? Project.completed.where.not(id: exclude_ids).limit(number_of_records).to_a : Project.completed.limit(number_of_records).to_a
+    end
+  end
+
+  def schedule_end_date_expiration
+    if end_date >= DateTime.current
+      delay.expire_end_date
+    end
+  end
+
+  def expire_end_date
+    if end_date >= DateTime.current || successful? || failed? 
+      # FUTURE: NEED TO CHECK IF MULTIPLE JOBS QUEUED
+    elsif amount_required <= contributions.sum(:amount) && published?
+      successful!
+    else
+      failed!
     end
   end
 
