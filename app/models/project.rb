@@ -61,7 +61,7 @@ class Project < ActiveRecord::Base
     end
 
     event :successful do
-      transitions from: [:payment_pending, :published], to: :unpublished
+      transitions from: [:payment_pending, :published], to: :successful
     end
 
     event :payment_pending do
@@ -73,7 +73,7 @@ class Project < ActiveRecord::Base
     end
 
     event :fraud do
-      transitions from: [:published, :unpublished, :created, :payment_pending], to: :failed
+      transitions from: [:published, :unpublished, :created, :payment_pending], to: :fraud
     end
 
   end
@@ -215,7 +215,7 @@ class Project < ActiveRecord::Base
   end
   
   def can_be_accessed_by?(user)
-    published? || user_id == user.try(:id)
+    published? || successful? || payment_pending? || failed? || user_id == user.try(:id)
   end
 
   def owner?(user)

@@ -1,9 +1,14 @@
 <% @page_title = 'Go Creative: View Project' %>
 
-<% if !@project.published? %>
+<% if @project.created? || @project.unpublished? %>
   <div class="alert alert-error">
     <button type="button" class="close" data-dismiss="alert">×</button>
     <center><strong>Your project has not been published yet.</strong></center>
+  </div>
+<% elsif @project.successful? %>
+  <div class="alert alert-info">
+    <button type="button" class="close" data-dismiss="alert">×</button>
+    <center><strong>This project has been successfully funded.</strong></center>
   </div>
 <% end %>
 
