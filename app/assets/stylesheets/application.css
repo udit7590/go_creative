@@ -10,6 +10,7 @@
  *
  *= require_self
  *= require 'css/bootstrap.css'
+ *= require 'css/summernote.css'
  *= require 'css/dropzone.css'
  *= require 'css/bootstrap-filestyle.css'
  *= require 'css/bootstrap-responsive.css'
@@ -21,7 +22,5 @@
  *= require 'css/lightbox.css'
  *= require 'css/form.css'
  *= require 'css/project-listing.css'
- *= require 'css/summernote.css'
- *= require 'css/summernote-bs3.css'
  *= require_directory .
  */

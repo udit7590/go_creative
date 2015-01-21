@@ -5,7 +5,7 @@ $(document).ready(function () {
       videoObject = new EmbedVideo($embeddedVideo.data('src'), { width: 770, height: 400 }),
       commentsPage = new CommentsPage($('section.comments'), $('.comment-form-container'), $('#comments_load_more_button')),
       editMode = false,
-      $summerNote = null;
+      $summerNote;
   
   $embeddedVideo.html(videoObject.generateEmbedTag());
 
@@ -45,11 +45,10 @@ $(document).ready(function () {
       });
 
       $.getJSON($this.data('path'), { description: $summerNote.code() })
-        .done(function(jsonData) {
-          if(jsonData['error']) {
-            alert(jsonData['message']);
-          }
-      }).always(function() {
+      .error(function() {
+        alert(jsonData['message']);
+      })
+      .always(function() {
         $.loader('close');
         $this.text('Edit');
         $summerNote.destroy();

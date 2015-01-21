@@ -183,9 +183,15 @@ class Project < ActiveRecord::Base
 
   def amount_collected
     collected_amount.to_i > 0 ? collected_amount : contributions.sum(:amount)
-
+  end
+  
   def can_be_accessed_by?(user)
     published? || user_id == user.try(:id)
+  end
+
+  def owner?(user)
+    false unless user
+    user_id == user.id
   end
 
   # -------------- SECTION FOR CACHING METHODS ----------------------

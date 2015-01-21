@@ -45,7 +45,7 @@ var ProjectsPage = (function() {
 
 $(document).ready(function() {
   var projectsPage = new ProjectsPage($('#endDateTimePicker'),$('#project_amount_required'), $('#project_min_amount_per_contribution')),
-      $summernote = null;
+      $summernote;
 
   try {
     projectsPage.configureDateTimePicker();

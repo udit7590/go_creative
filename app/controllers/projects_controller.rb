@@ -4,7 +4,7 @@ class ProjectsController < ApplicationController
   before_action :store_location
   before_action :authenticate_user!, except: [:index, :show, :charity_projects, :investment_projects, :load_more_projects, :sort_projects]
   before_action :initialize_project, only: [:new, :create]
-  before_action :check_ajax_request, only: :update_description
+  before_action :only_allow_xhr, only: :update_description
 
   # Loads the project based on ID. Make sure project owner is the currently logged in user
   # in case of edit/update 
@@ -60,7 +60,7 @@ class ProjectsController < ApplicationController
   def update
     respond_to do |format|
       if @project.update(project_params)
-        flash[:notice] = I18n.t :project_edited, scope: [:projects, :views]
+        flash[:notice] = t :project_edited, scope: [:projects, :views]
         format.html { redirect_to action: :show }
         format.json { head :no_content }
       else
@@ -84,11 +84,11 @@ class ProjectsController < ApplicationController
   #JSON
   def update_description
     if @project.update(description: params[:description])
-      render json: { error: false }
+      render json: { message: 'success' }
     else
-      render json: { error: false }
+      render json: { error: true }, status: 422
     end
-    
+
   end
 
   # ---------------------------------------------------------------------------------
@@ -154,10 +154,10 @@ class ProjectsController < ApplicationController
       unless @project
         responds_to do |format|
           format.html do 
-            flash[:alert] = I18n.t :no_project, scope: [:projects, :views]
-            redirect_to controller: :home, action: :index 
+            flash[:alert] = t :no_project, scope: [:projects, :views]
+            redirect_to root_path
           end
-          format.json { render json: { error: true, message: 'Cannot find any such project.' } }
+          format.json { render json: { error: true, message: 'Cannot find any such project.' }, status: 422 }
         end
       end
     end
@@ -166,19 +166,19 @@ class ProjectsController < ApplicationController
       unless @project.user_id
         responds_to do |format|
           format.html do 
-            flash[:alert] = I18n.t :orphan_project, scope: [:projects, :views]
+            flash[:alert] = t :orphan_project, scope: [:projects, :views]
             redirect_to controller: :home, action: :index 
           end
-          format.json { render json: { error: true, message: 'The project is no longer available.' } }
+          format.json { render json: { error: true, message: 'The project is no longer available.' }, status: 422 }
         end
       end
     end
 
     def check_project_owner
-      unless(@project.user_id == current_user.id)
+      unless @project.owner?(current_user)
         responds_to do |format|
-          format.html { redirect_to root_path, alert: (I18n.t :not_project_owner, scope: [:projects, :update]) }
-          format.json { render json: { error: true, message: 'You are not the project owner.' } }
+          format.html { redirect_to root_path, alert: (t :not_project_owner, scope: [:projects, :update]) }
+          format.json { render json: { error: true, message: 'You are not the project owner.' }, status: 422 }
         end
         
       end
@@ -188,24 +188,24 @@ class ProjectsController < ApplicationController
       if @project.published?
         responds_to do |format|
           format.html do 
-            flash[:alert] = I18n.t :cannot_edit_published, scope: [:projects, :update]
+            flash[:alert] = t :cannot_edit_published, scope: [:projects, :update]
             redirect_to action: :show
           end
-          format.json { render json: { error: true, message: 'The project is no longer editable.' } }
+          format.json { render json: { error: true, message: 'The project is no longer editable.' }, status: 422 }
         end
       end
     end
 
     def verify_project_approved_or_owner
       unless(@project.can_be_accessed_by?(current_user))
-        redirect_to root_path, alert: (I18n.t :no_project, scope: [:projects, :views])
+        redirect_to root_path, alert: (t :no_project, scope: [:projects, :views])
       end
     end
 
-    def check_ajax_request
+    def only_allow_xhr
       unless request.xhr?
         responds_to do |format|
-          format.json { render json: { error: true, message: 'This action is only available on ajax requests.' } }
+          format.json { render json: { error: true, message: 'This action is only available on ajax requests.' }, status: 422 }
           format.html { head :bad_request }
         end
       end
