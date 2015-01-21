@@ -101,7 +101,7 @@ Gocreative::Application.configure do
 
   config.after_initialize do
     # Send requests to the gateway's test servers
-    ActiveMerchant::Billing::Base.mode = :production
+    ActiveMerchant::Billing::Base.mode = :test
 
     ::GATEWAY = ActiveMerchant::Billing::PaypalGateway.new(
       login: 'udit-facilitator_api1.vinsol.com',

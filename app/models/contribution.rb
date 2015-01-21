@@ -42,7 +42,7 @@ class Contribution < ActiveRecord::Base
   # -------------- SECTION FOR SCOPES AND METHODS ---------------
   # -------------------------------------------------------------
   scope :volunteered, -> { where(state: 'contributed') }
-
+  scope :order_by_creation, -> { order(:created_at) }
 
   def purchase
     response = GATEWAY.purchase(price_in_cents, credit_card, ip: ip_address)
