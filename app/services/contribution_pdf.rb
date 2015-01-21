@@ -8,18 +8,22 @@ class ContributionPDF < Prawn::Document
     table_row_color: 'ffffff',
     table_font_size: 16,
     head_font_size: 16
-  }
+  }.freeze
 
   attr_reader :constants
 
-  def initialize(project, user, contribution, contribution_transaction, constants = {})
+  def initialize(contribution, contribution_transaction, constants = {})
     super(top_margin: 70)
-    @project = project
-    @user = user
+    @project = contribution.project
+    @user = contribution.user
     @contribution = contribution
     @transaction = contribution_transaction
     @constants = ContributionPDF::CONSTANTS.merge(constants)
 
+    build
+  end
+
+  def build
     header_row
     thank_you
     user_box
@@ -65,13 +69,13 @@ class ContributionPDF < Prawn::Document
   end
 
   def contribution_details
-    [['Project ID', @contribution.id]] + 
-    [['Project Title', @project.title]] + 
-    [['Project End Date', @project.end_date.to_s(:long)]] + 
-    [['Timestamp', @contribution.created_at.to_s(:long)]] +
-    [['Amount Contributed', @transaction.try(:amount) || @contribution.amount]] +
-    [['Contribution Status', @contribution.state]] +
-    [['Transaction ID', @transaction.try(:authorization)]]
+    [['Project ID', @contribution.id], 
+    ['Project Title', @project.title],
+    ['Project End Date', @project.end_date.to_s(:long)],
+    ['Timestamp', @contribution.created_at.to_s(:long)],
+    ['Amount Contributed', @transaction.try(:amount) || @contribution.amount],
+    ['Contribution Status', @contribution.state],
+    ['Transaction ID', @transaction.try(:authorization)]]
   end
 
 end
