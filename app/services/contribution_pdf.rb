@@ -1,7 +1,7 @@
 class ContributionPDF < Prawn::Document
 
   CONSTANTS = {
-    table_head_color: '3399cc',
+    table_head_color: 'dddddd',
     notice_color: '3399cc',
     notice_font_size: 12,
     heading_color: 'f4733d',
@@ -48,6 +48,7 @@ class ContributionPDF < Prawn::Document
     table user_details do
       row(0).font_style = :bold
       columns(1..3).align = :left
+      self.column_widths = { 0 => 40, 1 => 200, 2 => 100, 3 => 100, 4 => 100 }
       self.row_colors = [_self.constants[:table_head_color], _self.constants[:table_row_color]]
     end
   end
@@ -71,10 +72,10 @@ class ContributionPDF < Prawn::Document
   def contribution_details
     [['Project ID', @contribution.id], 
     ['Project Title', @project.title],
-    ['Project End Date', @project.end_date.to_s(:long)],
+    ['Project End Date', @project.end_date.to_date.to_s(:long)],
     ['Timestamp', @contribution.created_at.to_s(:long)],
-    ['Amount Contributed', @transaction.try(:amount) || @contribution.amount],
-    ['Contribution Status', @contribution.state],
+    ['Amount Contributed', ActionController::Base.helpers.number_to_currency(@transaction.try(:amount) || @contribution.amount, unit: 'INR ', precision: 0)],
+    ['Contribution Status', @contribution.state.humanize],
     ['Transaction ID', @transaction.try(:authorization)]]
   end
 
