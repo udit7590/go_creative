@@ -158,7 +158,7 @@ class ProjectsController < ApplicationController
       @user = current_user
       @project = Project.find_by(id: (params[:project_id] || params[:id]))
       unless @project
-        responds_to do |format|
+        respond_to do |format|
           format.html do 
             flash[:alert] = t :no_project, scope: [:projects, :views]
             redirect_to root_path
@@ -170,7 +170,7 @@ class ProjectsController < ApplicationController
 
     def check_orphan_project
       unless @project.user_id
-        responds_to do |format|
+        respond_to do |format|
           format.html do 
             flash[:alert] = t :orphan_project, scope: [:projects, :views]
             redirect_to controller: :home, action: :index 
@@ -182,7 +182,7 @@ class ProjectsController < ApplicationController
 
     def check_project_owner
       unless @project.owner?(current_user)
-        responds_to do |format|
+        respond_to do |format|
           format.html { redirect_to root_path, alert: (t :not_project_owner, scope: [:projects, :update]) }
           format.json { render json: { error: true, message: 'You are not the project owner.' }, status: 422 }
         end
@@ -192,7 +192,7 @@ class ProjectsController < ApplicationController
 
     def check_if_published
       if @project.published?
-        responds_to do |format|
+        respond_to do |format|
           format.html do 
             flash[:alert] = t :cannot_edit_published, scope: [:projects, :update]
             redirect_to action: :show
@@ -210,7 +210,7 @@ class ProjectsController < ApplicationController
 
     def only_allow_xhr
       unless request.xhr?
-        responds_to do |format|
+        respond_to do |format|
           format.json { render json: { error: true, message: 'This action is only available on ajax requests.' }, status: 422 }
           format.html { head :bad_request }
         end
