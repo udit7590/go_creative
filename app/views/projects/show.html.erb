@@ -27,9 +27,6 @@
         <h3 class="title-bg"><%= @project.title %></h3>
         <ul class="nav nav-tabs">
           <li class="active"><a href="#project-details" data-toggle="tab" class="text-special">Project Details</a></li>
-          <% if @project.images.present? %>
-            <li class=""><a href="#project-gallery" data-toggle="tab" class="text-special">Gallery</a></li>
-          <% end %>
           <% if @comments || @project.published? || @user || @project.user_id == @user.id %>
             <li class=""><a href="#project-comments" data-toggle="tab" class="text-special">Comments</a></li>
           <% end %>
@@ -59,10 +56,6 @@
               <span data-src="<%= @project.video_link %>" id="embeddedVideo" width="770" height="400"></span>
 
             <% end %>
-          </div>
-          <div class="tab-pane" id="project-gallery">
-            <!-- Gallery
-            ================================================== -->
             <%= render 'project_gallery' %>
           </div>
           <div class="tab-pane" id="project-comments">
