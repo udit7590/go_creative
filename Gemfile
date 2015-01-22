@@ -88,3 +88,6 @@ gem 'delayed_job_active_record'
 # For PDF
 gem 'prawn', '~> 1.3.0'
 gem 'prawn-table', '~> 0.2.1'
+
+# For production exception 
+gem 'exception_notification', '~> 4.0.1', group: :production

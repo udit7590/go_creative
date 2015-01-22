@@ -1,3 +1,5 @@
+require 'exception_notification/rails'
+
 Gocreative::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -109,5 +111,27 @@ Gocreative::Application.configure do
       signature: 'AFcWxV21C7fd0v3bYYYRCpSSRl31AYKb-gwzAAGTZTmeRpmVwK9jlrP8'
       )
   end
+
+end
+
+ExceptionNotification.configure do |config|
+  # Ignore additional exception types.
+  # ActiveRecord::RecordNotFound, AbstractController::ActionNotFound and ActionController::RoutingError are already added.
+  # config.ignored_exceptions += %w{ActionView::TemplateError CustomError}
+
+  # Adds a condition to decide when an exception must be ignored or not.
+  # The ignore_if method can be invoked multiple times to add extra conditions.
+  # config.ignore_if do |exception, options|
+  #   not Rails.env.production?
+  # end
+
+  # Notifiers =================================================================
+
+  # Email notifier sends notifications by email.
+  config.add_notifier :email, {
+    email_prefix: 'Go Creative Exception Notification key: "value", ',
+    sender_address: %{"notifier" <notifier@gocreative.com>},
+    exception_recipients: %w{udit@vinsol.com}
+  }
 
 end
