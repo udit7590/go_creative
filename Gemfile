@@ -76,6 +76,8 @@ gem 'letter_opener', group: [:development, :test]
 
 gem 'quiet_assets', group: :development
 
+#For Paperclip s3 storage
+gem 'aws-sdk'
 gem 'paperclip-dropbox', '>= 1.1.7'
 
 # For payment
@@ -91,3 +93,4 @@ gem 'prawn-table', '~> 0.2.1'
 
 # For production exception 
 gem 'exception_notification', '~> 4.0.1', group: :production
+

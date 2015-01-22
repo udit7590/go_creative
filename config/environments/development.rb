@@ -50,4 +50,12 @@ Gocreative::Application.configure do
       signature: 'AFcWxV21C7fd0v3bYYYRCpSSRl31AYKb-gwzAAGTZTmeRpmVwK9jlrP8'
       )
   end
+
+  config.paperclip_defaults = {
+    storage: :s3,
+    s3_credentials: "#{Rails.root}/config/s3.yml",
+    url: ':s3_domain_url',
+    bucket: ENV['S3_BUCKET'],
+    path: '/:class/:attachment/:id_partition/:style/:filename'
+  }
 end

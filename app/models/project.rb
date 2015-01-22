@@ -25,8 +25,7 @@ class Project < ActiveRecord::Base
                               thumbnail: " -gravity center -crop '270x220+0+0'",
                               medium: " -gravity center -crop '370x300+0+0'",
                               large: " -gravity Center -extent 770x300"
-                            },
-                            default_url: '/images/img/gallery/default_project_:style.jpg'
+                            }
 
   has_many :contributions
   has_many :contributors, through: :contributions, dependent: :restrict_with_error
