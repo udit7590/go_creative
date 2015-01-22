@@ -27,10 +27,10 @@
         <h3 class="title-bg"><%= @project.title %></h3>
         <ul class="nav nav-tabs">
           <li class="active"><a href="#project-details" data-toggle="tab" class="text-special">Project Details</a></li>
-          <% if @project.images.present? || @project.published? || @project.user_id == @user.id %>
+          <% if @project.images.present? %>
             <li class=""><a href="#project-gallery" data-toggle="tab" class="text-special">Gallery</a></li>
           <% end %>
-          <% if @comments || @project.published? || @project.user_id == @user.id %>
+          <% if @comments || @project.published? || @user || @project.user_id == @user.id %>
             <li class=""><a href="#project-comments" data-toggle="tab" class="text-special">Comments</a></li>
           <% end %>
         </ul>
@@ -69,7 +69,7 @@
             <!-- Post Comments
             ================================================== --> 
             <%= render 'project_comments' %>
-          </div>
+          </div>current_user
         </div>
 
       </div><!--Close container row-->

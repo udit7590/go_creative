@@ -59,8 +59,7 @@ $(document).ready(function() {
         ['para', ['ul', 'ol', 'paragraph']],
         ['table', ['table']],
         ['view', ['fullscreen']],
-        ['help', ['help']],
-        ['misc', ['undo', 'redo']]
+        ['help', ['help']]
       ],
       styleTags: ['p', 'blockquote', 'h1', 'h2', 'h3', 'h4', 'h5'],
       fontNames: [

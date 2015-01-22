@@ -28,8 +28,7 @@ $(document).ready(function () {
           ['fontname', ['fontname']],
           ['color', ['color']],
           ['para', ['ul', 'ol', 'paragraph']],
-          ['table', ['table']],
-          ['misc', ['undo', 'redo']]
+          ['table', ['table']]
         ],
         styleTags: ['p', 'blockquote', 'h1', 'h2', 'h3', 'h4', 'h5'],
         airMode: true,
