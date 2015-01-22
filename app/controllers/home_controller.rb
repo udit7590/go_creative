@@ -1,9 +1,9 @@
 class HomeController < ApplicationController
   
   def index
-    @recent_projects = Project.cached_recent
+    @popular_projects = Project.cached_popular
+    @recent_projects = Project.cached_recent(Project::INDEX_PROJECTS_LIMIT, @popular_projects.collect(&:id))
     @completed_projects = Project.cached_completed
-    @popular_projects = Project.cached_popular(Project::INDEX_PROJECTS_LIMIT, @recent_projects.collect(&:id))
   end
 
 end
