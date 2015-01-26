@@ -35,7 +35,7 @@
       <%= render partial: 'project_listing', locals: { project: project } %>
     <% end %>
 
-    <% if @projects.length > (Project::INITIAL_PROJECT_DISPLAY_LIMIT - 1) %>
+    <% if @projects.length > (Constants::PROJECT_LIST_PAGE_LIMIT - 1) %>
       <%= button_tag 'I want to see more projects', path: projects_load_more_path, action: 'load_more', for_action: action_name, id: 'projects_load_more_button', class: 'btn btn-block', data: { page: 1 } %>
     <% end %>
   </div>

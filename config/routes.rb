@@ -27,6 +27,11 @@ Gocreative::Application.routes.draw do
       get :publish
       get :unpublish
     end
+    resources :projects, shallow: true, only: [] do
+      resources :comments, only: [:index, :new, :create, :destroy] do
+        get :load_more, on: :collection
+      end
+    end
   end
 
   #Singular resource for account
