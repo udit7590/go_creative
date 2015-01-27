@@ -1,0 +1,3 @@
+<% if @admin %>
+  $('#projectComments').find('tr[data-comment-id="<%= @comment.id %>"]').remove();
+<% end %>

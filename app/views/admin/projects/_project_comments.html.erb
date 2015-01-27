@@ -28,7 +28,7 @@
             <td><%= comment.abused_count %></td>
             <td><%= comment.spam %></td>
             <td>
-              <%= link_to (button_tag 'Delete'), comment_path(comment.id), method: :delete, remote: true, data: { confirm: 'Are you sure you want to delete this comment?' } %>
+              <%= link_to (button_tag 'Delete'), admin_comment_path(comment.id), method: :delete, remote: true, data: { confirm: 'Are you sure you want to delete this comment?' } %>
             </td>
           </tr>
         <% end %>
@@ -36,15 +36,15 @@
     </tbody>
   </table>
 
-  <% if @comment_count > (Comment::INITIAL_COMMENT_DISPLAY_LIMIT - 1) %>
-    <%= button_tag 'More Comments', path: load_more_project_comments_path(@project.id), action: 'load_more', id: 'comments_load_more_button', class: 'btn btn-block', data: { page: 1, admin: true } %>
+  <% if @comment_count > (Constants::INITIAL_COMMENT_DISPLAY_LIMIT - 1) %>
+    <%= button_tag 'More Comments', path: load_more_admin_project_comments_path(@project.id), action: 'load_more', id: 'comments_load_more_button', class: 'btn btn-block', data: { page: 1, admin: true } %>
   <% end %>
   <br />
 
 <!-- Comment Form -->
 <div class="well comment-form-container">
   <p class="special">Leave a Comment:</p>
-  <form action="<%= new_project_comment_path(@project) %>" id="comment-form" method="get">
+  <form action="<%= new_admin_project_comment_path(@project) %>" id="comment-form" method="get">
     <textarea name="comment[description]" rows="6" cols="100" class="span6" placeholder="Comment *" required="true"></textarea>
     <br />
     <input type="hidden" value="<%= current_admin_user.id %>" name="admin_user_id" />

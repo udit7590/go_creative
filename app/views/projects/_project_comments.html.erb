@@ -27,7 +27,7 @@
     <% end %>
   </ul>
 
-  <% if @comment_count > (Comment::INITIAL_COMMENT_DISPLAY_LIMIT - 1) %>
+  <% if @comment_count > (Constants::INITIAL_COMMENT_DISPLAY_LIMIT - 1) %>
     <%= button_tag 'More Comments', path: load_more_project_comments_path(@project.id), action: 'load_more', id: 'comments_load_more_button', class: 'btn btn-block', data: { page: 1 } %>
   <% end %>
   

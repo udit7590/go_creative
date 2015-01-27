@@ -26,7 +26,7 @@ FactoryGirl.define do
     factory :public_comment, traits: [:public_comment]
     factory :private_comment, traits: [:private_comment]
     factory :spam_comment, traits: [:spam]
-    factory :deleted_spam_comment, traits: [:deleted, :spam]    
+    factory :deleted_spam_comment, traits: [:deleted, :spam]
 
   end
 

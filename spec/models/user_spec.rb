@@ -52,12 +52,104 @@ RSpec.describe User, :type => :model do
   end
 
   context 'methods' do
-    before do
-      @userC = User.create!({email: 'guy3@gmail.com', password: '11111111', password_confirmation: '11111111', first_name: 'ABC', last_name: 'DEF' })
+
+    let(:user) { FactoryGirl.create(:user_complete) }
+    let(:user_without_name) { FactoryGirl.build(:user_without_name) }
+    let(:admin) { FactoryGirl.build(:admin_user) }
+
+    context '#name' do
+      it 'gives user name' do
+        expect(user.name).to eq('martin mathew')
+      end
+
+      it 'gives user string if name is blank' do
+        expect(user_without_name.name).to eq('User')
+      end
     end
 
-    it 'should check user pan details' do
+    context '#pan_details_complete?' do
+      it 'gives true if user pan details exists' do
+        allow(user.pan_card_copy).to receive(:exists?).and_return(true)
+        expect(user.pan_details_complete?).to eq(true)
+      end
+
+      it 'gives false if user pan details does not exist' do
+        expect(user_without_name.pan_details_complete?).to eq(false)
+      end
     end
+
+    context '#pan_details_verified?' do
+      it 'gives true if user pan details verified' do
+        expect(user.pan_details_verified?).to eq(true)
+      end
+
+      it 'gives false if user pan details is not verified' do
+        expect(user_without_name.pan_details_verified?).to eq(false)
+      end
+    end
+
+    context '#primary_address_details_complete?' do
+      # PENDING: Not able to stub
+      pending 'gives true if user primary address details exists' do
+        allow(user.addresses.primary_address.address_proof).to receive(:exists?).and_return(true)
+        expect(user.primary_address_details_complete?).to eq(true)
+      end
+
+      it 'gives false if user primary address details does not exist' do
+        allow(user.addresses.primary_address.address_proof).to receive(:exists?).and_return(false)
+        expect(user.primary_address_details_complete?).to eq(false)
+      end
+    end
+
+    context '#current_address_details_complete?' do
+      # PENDING: Not able to stub
+      pending 'gives true if user current details exists' do
+        allow(user.addresses.current_address.address_proof).to receive(:exists?).and_return(true)
+        expect(user.current_address_details_complete?).to eq(true)
+      end
+
+      it 'gives false if user current details does not exist' do
+        allow(user.addresses.current_address.address_proof).to receive(:exists?).and_return(false)
+        expect(user.current_address_details_complete?).to eq(false)
+      end
+    end
+    
+    context '#verified?' do
+      it 'gives true if user details verified' do
+        expect(user.verified?).to eq(true)
+      end
+
+      it 'gives false if user details are not verified' do
+        expect(user_without_name.verified?).to eq(false)
+      end
+    end
+
+    context '#complete?' do
+      # PENDING: Not able to stub
+      pending 'gives true if user details exist' do
+        allow(user.addresses.primary_address.address_proof).to receive(:exists?).and_return(true)
+        allow(user.pan_card_copy).to receive(:exists?).and_return(true)
+        expect(user.primary_address_details_complete?).to eq(true)
+      end
+
+      it 'gives false if user details do not exist' do
+        allow(user.addresses.primary_address.address_proof).to receive(:exists?).and_return(false)
+        allow(user.pan_card_copy).to receive(:exists?).and_return(false)
+        expect(user.primary_address_details_complete?).to eq(false)
+      end
+    end
+
+    # UserVerification Logic
+    context 'UserVerification::verify_details' do
+      it 'verifies user if all details complete and returns true if details complete and verified' do
+        expect(UserVerification.verify_details(user, admin)).to eq(true)
+      end
+
+      it 'verifies user if all details complete and returns false if details incomplete' do
+        expect(UserVerification.verify_details(user_without_name, admin)).to eq(false)
+      end
+    end
+
   end
 
 end

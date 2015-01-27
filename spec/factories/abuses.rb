@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :abus, :class => 'Abuse' do
+  factory :abuse do
     
   end
 
