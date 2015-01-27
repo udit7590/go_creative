@@ -214,6 +214,7 @@ class Project < ActiveRecord::Base
   end
   
   def can_be_accessed_by?(user)
+    #FIXME_AB: For readability wrap last condition in ()
     published? || successful? || payment_pending? || failed? || user_id == user.try(:id)
   end
 
@@ -238,12 +239,14 @@ class Project < ActiveRecord::Base
   end
 
   def self.cached_completed(number_of_records = INDEX_PROJECTS_LIMIT, exclude_ids = nil)
+    #FIXME_AB: Please refactor this method along with similar others
     Rails.cache.fetch([name, 'completed'], expires_in: 30.minutes) do
       exclude_ids ? Project.completed.where.not(id: exclude_ids).limit(number_of_records).to_a : Project.completed.limit(number_of_records).to_a
     end
   end
 
   def schedule_end_date_expiration
+    #FIXME_AB: should use date instead of datetime
     if end_date >= DateTime.current
       delay.expire_end_date
     end
@@ -269,6 +272,7 @@ class Project < ActiveRecord::Base
     end
 
     def sanitize_description
+      #FIXME_AB: As a best practice you should extract out thse html tags and attributes in a constant and use them here. 
       self.description = (ActionController::Base.helpers.sanitize description, tags: %w(table tr td h1 h2 h3 h4 h5 h6 p ul ol li b strong em i blockquote span hr br), attributes: %w(id class style)).html_safe
     end
 

@@ -93,6 +93,7 @@ class User < ActiveRecord::Base
 
   # Only admin can verify the user details
   def verify(admin, should_verify_current_address = false)
+    #FIXME_AB: You should not repeat DateTime.current. Save its value in local variable and use that local variable. 
     verified = false
 
     unless pan_details_verified?

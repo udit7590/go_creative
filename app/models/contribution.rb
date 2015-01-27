@@ -52,12 +52,14 @@ class Contribution < ActiveRecord::Base
   scope :order_by_creation, -> { order(:created_at) }
 
   def purchase
+    #FIXME_AB: You should wrap it in a db transaction.
     response = GATEWAY.purchase(price_in_cents, credit_card, ip: ip_address)
     @current_transaction = transactions.create!(action: 'Purchase', amount: price_in_cents, response: response)
     initiate_payment!
     if response.success?
       update_total_contribution_cache
       accept!
+      #FIXME_AB: This should be automatically done as a callback
       project.complete! if project.contributions.accepted.sum(:amount) >= project.amount_required
     else
       payment_error!
@@ -71,6 +73,7 @@ class Contribution < ActiveRecord::Base
 
   private
     def update_total_contribution_cache
+      #FIXME_AB: Please try to remove nested if-else 
       if project && project.collected_amount
         # To make sure that if if the cache is updated for first time, it is in valid state. (Useful for older data)
         if project.collected_amount == 0
