@@ -94,3 +94,6 @@ gem 'prawn-table', '~> 0.2.1'
 # For production exception 
 gem 'exception_notification', '~> 4.0.1', group: :production
 
+# For test coverage
+gem 'simplecov', require: false, group: :test
+
