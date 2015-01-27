@@ -267,6 +267,7 @@ class Project < ActiveRecord::Base
     projects.inject(projects.first.collected_amount) { |memo, proj| proj.collected_amount < memo ? proj.collected_amount : memo }
   end
 
+
   # -------------- PROTECTED METHODS SECTION ------------------------
   # -----------------------------------------------------------------
 
