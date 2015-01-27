@@ -1,4 +1,3 @@
-#FIXME_AB: Can we just name this model as Admin?
 class AdminUser < ActiveRecord::Base
   devise :database_authenticatable,
          :recoverable, :rememberable, :trackable, :validatable

@@ -1,4 +1,3 @@
-#FIXME_AB: No Database indexes. Please add to all tables. and Keep adding in future tables. You should take care of db indexes when you create/add table/field 
 class User < ActiveRecord::Base
 
   attr_accessor :missing_info_page
@@ -26,11 +25,10 @@ class User < ActiveRecord::Base
 
   # -------------- SECTION FOR VALIDATIONS ----------------------
   # -------------------------------------------------------------
-  #FIXME_AB: %w(image/jpg image/jpeg image/png) is being repeated, please think a way out
-  validates_attachment_content_type :pan_card_copy, content_type: %w(image/jpg image/jpeg image/png)
-  #FIXME_AB: I think instead of having validation for two address. you should have permanent and current address address. and validation on them
+
+  validates_attachment_content_type :pan_card_copy, content_type: Constants::IMAGE_UPLOAD_FORMATS
   validates :addresses, count: { limit: 2 }
-  validates :pan_card, allow_blank: true, format: { with: /\A[a-z]{3}[abcfghljpt]{1}[a-z]{1}[0-9]{4}[a-z]{1}\Z/i, message: 'should be in format AAA[ABCFGHLJPT]A9999A' }
+  validates :pan_card, allow_blank: true, format: { with: Constants::PAN_REGEXP, message: 'should be in format AAA[ABCFGHLJPT]A9999A' }
   validates :phone_number, allow_blank: true, format: { with: /\A[0-9]{8,10}\Z/, message: 'should have 8 or 10 digits' }
   validates :first_name, presence: true, length: { in: 2..50 }
   
@@ -43,6 +41,7 @@ class User < ActiveRecord::Base
     [first_name, last_name].join(' ').presence || 'User'
   end
 
+  # CALLBACK METHOD
   def delete_pan_card_copy
     self.pan_card_copy = nil
   end
@@ -62,7 +61,7 @@ class User < ActiveRecord::Base
 
   def primary_address_details_verified?
     primary_address = addresses.primary_address
-    !!primary_address.verified_at
+    !!(primary_address && primary_address.verified_at)
   end
 
   def current_address_details_complete?
@@ -72,7 +71,7 @@ class User < ActiveRecord::Base
 
   def current_address_details_verified?
     current_address = addresses.current_address
-    !!current_address.verified_at
+    !!(current_address && current_address.verified_at)
   end
 
   def complete?

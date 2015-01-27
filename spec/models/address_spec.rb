@@ -19,7 +19,7 @@ RSpec.describe Address, :type => :model do
   context 'paperclip' do
     it { should have_attached_file(:address_proof) }
     it { should validate_attachment_content_type(:address_proof).
-                  allowing('image/png', 'image/gif', 'image/jpg', 'image/jpeg').
+                  allowing('image/png', 'image/jpg', 'image/jpeg').
                   rejecting('text/plain', 'text/xml') }
   end
 

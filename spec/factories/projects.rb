@@ -1,6 +1,5 @@
 FactoryGirl.define do
   factory :project do
-    id 2020
     title 'Go Creative'
     description 'Crowdfunding platform'
     amount_required 100000
@@ -22,6 +21,22 @@ FactoryGirl.define do
       state :created
     end
 
+    trait :successful do
+      state :successful
+    end
+
+    trait :failed do
+      state :failed
+    end
+
+    trait :payment_pending do
+      state :payment_pending
+    end
+
+    trait :amount_collected do
+      collected_amount 10000
+    end
+
     trait :charity do
       type 'CharityProject'
     end
@@ -36,6 +51,8 @@ FactoryGirl.define do
     factory :unpublished_charity_project, traits: [:unpublished, :charity]
     factory :created_investment_project, traits: [:created, :investment]
     factory :created_charity_project, traits: [:created, :charity]
+    factory :funded_investment_project, traits: [:published, :amount_collected, :investment]
+    factory :successful_investment_project, traits: [:successful, :investment]
 
   end
 

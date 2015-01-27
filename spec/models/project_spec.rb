@@ -35,8 +35,7 @@ RSpec.describe Project, type: :model do
 
   context 'callbacks' do
     #DISCUSS: Can't include PROC here
-    it { should callback(:set_time_to_midnight).before(:create) }
-    it { should callback(:set_time_to_midnight).before(:update) }
+    it { should callback(:set_time_to_midnight).before(:save) }
   end
 
   context 'associations' do
@@ -83,15 +82,15 @@ RSpec.describe Project, type: :model do
       end
 
       it 'should return best projects' do
-        expect(Project.best_projects).to eq([@projectB, @projectA])
+        expect(Project.popular).to eq([@projectB, @projectA])
       end
 
       it 'should return published charity projects' do
-        expect(Project.published_charity_projects).to eq([@projectB, @projectA])
+        expect(Project.recent_published_charity).to eq([@projectB, @projectA])
       end
 
-      it 'should return published charity projects' do
-        expect(Project.published_investment_projects).to eq([])
+      it 'should return published investment projects' do
+        expect(Project.recent_published_investment).to eq([])
       end
 
       it 'should return page wise project records' do
@@ -112,7 +111,6 @@ RSpec.describe Project, type: :model do
         @project2 = Project.create!(type: 'CharityProject', title: 'PQR', description: 'ABCB', amount_required: 1000, min_amount_per_contribution: 10, end_date: 6.days.from_now.beginning_of_day, state: :published)
         @project3 = Project.create!(type: 'CharityProject', title: 'LMN', description: 'ABCB', amount_required: 1000, min_amount_per_contribution: 10, end_date: 6.days.from_now.beginning_of_day, state: :unpublished)
       end
-
       after do
         Project.delete_all
       end
@@ -120,17 +118,107 @@ RSpec.describe Project, type: :model do
       it 'should publish the project' do
         expect{ @project1.publish! }.to change{ @project1.state }.from(:created).to('published')
       end
-
       it 'should publish the project from unpublished' do
         expect{ @project3.publish! }.to change{ @project3.state }.from(:unpublished).to('published')
       end
-
       it 'should unpublish the project' do
         expect{ @project2.unpublish! }.to change{ @project2.state }.from(:published).to('unpublished')
       end
-
     end
-  
+
+  end
+
+  context 'instance methods' do
+    let(:user) { FactoryGirl.create(:user_complete) }
+    let(:another_user) { FactoryGirl.create(:user_complete) }
+    let(:projects) do
+      [
+        FactoryGirl.create(:published_investment_project, user: user),
+        FactoryGirl.create(:published_charity_project, user: another_user),
+        FactoryGirl.create(:unpublished_investment_project, user: user),
+        FactoryGirl.create(:unpublished_charity_project, user: another_user),
+        FactoryGirl.create(:created_investment_project, user: user),
+        FactoryGirl.create(:created_charity_project, user: another_user),
+        FactoryGirl.create(:funded_investment_project, user: another_user),
+        FactoryGirl.create(:funded_investment_project, user: user),
+        FactoryGirl.create(:successful_investment_project, user: another_user)
+      ]
+    end
+
+    context '#check_end_date' do
+      it 'checks end date greater than 5 days' do
+        expect(projects.first.check_end_date).to eq(true)
+      end
+      it 'checks end date greater than 5 days' do
+        expect(FactoryGirl.build(:project, end_date: DateTime.current).check_end_date).to eq(false)
+      end
+    end
+
+    # FIXME: Find better way instead of projects[6]
+    context '#percentage_completed' do
+      it 'gives percentage completed' do
+        expect(projects[6].percentage_completed).to eq(10.0)
+      end
+
+      it 'gives percentage completed' do
+        expect(projects[0].percentage_completed).to eq(0)
+      end
+    end
+
+    context '#check_end_date' do
+      it 'checks end date greater than 5 days' do
+        expect(projects.first.check_end_date).to eq(true)
+      end
+      it 'checks end date greater than 5 days' do
+        expect(FactoryGirl.build(:project, end_date: DateTime.current).check_end_date).to eq(false)
+      end
+    end
+  end
+
+  context 'class methods' do
+    let(:user) { FactoryGirl.create(:user_complete) }
+    let(:another_user) { FactoryGirl.create(:user_complete) }
+    let(:projects) do
+      [
+        FactoryGirl.create(:published_investment_project, user: user),
+        FactoryGirl.create(:published_charity_project, user: another_user, end_date: 6.days.from_now),
+        FactoryGirl.create(:unpublished_investment_project, user: user),
+        FactoryGirl.create(:unpublished_charity_project, user: another_user),
+        FactoryGirl.create(:created_investment_project, user: user),
+        FactoryGirl.create(:created_charity_project, user: another_user),
+        FactoryGirl.create(:funded_investment_project, user: another_user, collected_amount: 20000),
+        FactoryGirl.create(:funded_investment_project, user: user),
+        FactoryGirl.create(:successful_investment_project, user: another_user)
+      ]
+    end
+    before { projects }
+
+    context '::sort_by' do
+      it 'sorts the records by criteria: recent' do
+        expect(Project.sort_by(:recent).pluck(:id)).to eq([projects[7].id, projects[6].id, projects[1].id, projects[0].id])
+      end
+      it 'sorts the records by criteria: popularity' do
+        expect(Project.sort_by(:popularity).pluck(:id)).to eq([projects[6].id, projects[7].id, projects[1].id, projects[0].id])
+      end
+      it 'sorts the records by criteria: ending_soon' do
+        expect(Project.sort_by(:ending_soon).pluck(:id)).to eq([projects[1].id, projects[7].id, projects[6].id, projects[0].id])
+      end
+      it 'sorts the records by criteria. If criteria not defined, it simply returns published projects by order of creation' do
+        expect(Project.sort_by(:undefined).pluck(:id)).to eq([projects[0].id, projects[1].id, projects[6].id, projects[7].id])
+      end
+    end
+
+    context '::filter_by' do
+      it 'filters the records by criteria: charity' do
+        expect(Project.filter_by(:charity).pluck(:id)).to eq([projects[1].id, projects[3].id, projects[5].id])
+      end
+      it 'filters the records by criteria: investment' do
+        expect(Project.filter_by(:investment).pluck(:id)).to eq([projects[0].id, projects[2].id, projects[4].id, projects[6].id, projects[7].id, projects[8].id])
+      end
+      it 'filters the records by criteria: completed (successful)' do
+        expect(Project.filter_by(:completed).pluck(:id)).to eq([projects[8].id])
+      end
+    end
   end
 
 end

@@ -135,7 +135,7 @@ class ProjectsController < ApplicationController
       @projects = Project.recent_published.page(params[:page].to_i)
     end
     # @projects = Project.public_send("published_#{ params[:for_action] }projects", params[:page].to_i)
-    @is_more_available = @projects.length == Project::INITIAL_PROJECT_DISPLAY_LIMIT
+    @is_more_available = @projects.length == Constants::PROJECT_LIST_PAGE_LIMIT
     render 'load'
   end
 
@@ -225,7 +225,7 @@ class ProjectsController < ApplicationController
       else
         @projects = Project.recent_published.page(1)
       end
-      @is_more_available = @projects.length == Project::INITIAL_PROJECT_DISPLAY_LIMIT
+      @is_more_available = @projects.length == Constants::PROJECT_LIST_PAGE_LIMIT
     end
 
     # ---------------------------------------------------------------------------------
