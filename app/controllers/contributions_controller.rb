@@ -1,5 +1,6 @@
 class ContributionsController < ApplicationController
-  
+  include UserHelper
+
   before_action :store_location
   before_action :authenticate_user!
   before_action :load_project, only: [:new, :create]
@@ -113,13 +114,8 @@ class ContributionsController < ApplicationController
     # Pass the project id and params in session to be able to receive later
     def check_user_details
       unless @user.complete?
-        missing_page = (@user.missing_info_page == :missing_pan) ? :update_pan_details : :update_address_details
-        missing_message = (@user.missing_info_page == :missing_pan) ? :pan_details_incomplete : :address_details_incomplete
-        flash[:alert] = I18n.t missing_message, scope: [:projects, :views]
-        session[:process_project_id] = @project.id
-        session[:request_data] = params
-        session[:request_url] = request.fullpath 
-        redirect_to controller: :accounts, action: missing_page
+        store_redirect_location(@project, params, request.fullpath)
+        check_user_details_and_redirect(@user, @project)
       end
     end
 

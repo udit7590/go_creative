@@ -33,17 +33,15 @@ class ProjectsController < ApplicationController
   end
 
   def create
-    respond_to do |format|
-      @project = current_user.projects.build(project_params)
-      if @project.save
-        check_user_details_and_redirect(format, @user, @project)
-      else
-        @project = @project.becomes!(Project)
-        @project.type = params[:project][:type]
-        
-        format.html { render action: 'new', status: :bad_request }
-        format.json { render json: @project.errors, status: :unprocessable_entity }
-      end
+    @project = current_user.projects.build(project_params)
+    if @project.save
+      store_redirect_location(@project, params, project_path(@project))
+      check_user_details_and_redirect(@user, @project)
+    else
+      @project = @project.becomes!(Project)
+      @project.type = params[:project][:type]
+      
+      render action: 'new', status: :bad_request
     end
   end
 
