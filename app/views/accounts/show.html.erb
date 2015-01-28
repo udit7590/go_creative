@@ -1,0 +1,24 @@
+<% @page_title = 'Go Creative: Profile Page' %>
+<!-- Page Content
+================================================== --> 
+<div class="row"><!--Container row-->
+
+  <!-- Page Sidebar
+  ================================================== --> 
+  <%= render partial: 'public_sidebar' %>
+
+  <!-- Page Content
+  ================================================== --> 
+  <div class="span8"><!--Begin page content column-->
+
+    <h2 class="title-bg">Projects <%= image_tag 'site/profile1.png', size: '42x42', class: 'pull-right' %></h2>
+    <%= render partial: 'user_projects' %>
+      
+  </div> <!--End page content column--> 
+
+</div><!-- End container row -->
+
+<!-- JS --> 
+<% content_for :javascripts do %>
+  <%= javascript_include_tag 'accounts_page', 'data-turbolinks-track' => true %>
+<% end %>

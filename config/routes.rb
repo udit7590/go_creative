@@ -35,13 +35,18 @@ Gocreative::Application.routes.draw do
   end
 
   #Singular resource for account
-  resource :account, only: [:show, :edit, :destroy, :update] do
+  get ':id/profile', to: 'accounts#show', as: :profile
+  resource :account, only: [:edit, :update] do
+
+    # get ':id', to: 'accounts#show', as: :show
     # For PAN Card upload
     post :upload_pan_card_image
 
     # For Address proof upload
     post :upload_primary_address_proof
     post :upload_current_address_proof
+    get :edit_profile_picture
+    patch :upload_profile_picture
 
     # For updating address and PAN details
     get :update_pan_details

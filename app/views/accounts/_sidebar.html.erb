@@ -2,7 +2,7 @@
 
   <!--Latest News-->
   <h2 class="title-bg">Hi <%= @user.first_name%></h2>
-  <center><%= image_tag 'site/user_profile1.png' %></center>
+  <center><%= image_tag path_for_profile_picture(@user), class: 'profile-picture' %></center>
   <br />
 
   <!--Navigation-->
@@ -10,7 +10,8 @@
   <ul class="post-category-list">
     <li><%= link_to 'Update Profile', edit_account_path, method: :get %></li>
     <li><%= link_to 'Reset my password', edit_user_registration_path, method: :get %></li>
-    <li><a href="#">Change Profile Picture</a></li>
+    <li><%= link_to 'Change Profile Picture', edit_profile_picture_account_path %></li>
+    <li><%= link_to 'Public View', profile_path(@user.id), method: :get %></li>
   </ul>
 
   <!--Comments and Messages-->

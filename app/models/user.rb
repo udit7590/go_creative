@@ -10,6 +10,7 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable, :confirmable
 
   has_many :addresses, autosave: true
+  has_attached_file :profile_picture, styles: { thumbnail: '128x128#' }
   has_attached_file :pan_card_copy, styles: { thumbnail: '60x60#' }
 
   has_many :projects, dependent: :restrict_with_error
@@ -26,6 +27,7 @@ class User < ActiveRecord::Base
   # -------------- SECTION FOR VALIDATIONS ----------------------
   # -------------------------------------------------------------
 
+  validates_attachment_content_type :profile_picture, content_type: Constants::IMAGE_UPLOAD_FORMATS
   validates_attachment_content_type :pan_card_copy, content_type: Constants::IMAGE_UPLOAD_FORMATS
   validates :addresses, count: { limit: 2 }
   validates :pan_card, allow_blank: true, format: { with: Constants::PAN_REGEXP, message: 'should be in format AAA[ABCFGHLJPT]A9999A' }
@@ -90,24 +92,22 @@ class User < ActiveRecord::Base
     pan_details_verified? && primary_address_details_verified?
   end
 
-  # Only admin can verify the user details
-  def verify(admin, should_verify_current_address = false)
-    #FIXME_AB: You should not repeat DateTime.current. Save its value in local variable and use that local variable. 
-    verified = false
-
-    unless pan_details_verified?
-      verified = self.update(pan_verified_at: DateTime.current, pan_verified_by: admin.id)
+  def profile_projects(owner = false)
+    published_projects = []
+    completed_projects = []
+    other_projects     = []
+    new_projects       = []
+    projects.order(updated_at: :desc).each do |project|
+      if project.state == 'published'
+        published_projects << project
+      elsif project.state == 'successful'
+        completed_projects << project
+      elsif owner
+        new_projects << project if project.state == 'created'
+        other_projects << project unless project.state == 'created'
+      end
     end
-    
-    unless primary_address_details_verified?
-      verified = self.addresses.primary_address.update(verified_at: DateTime.current, admin_user_id: admin.id)
-    end
-
-    if should_verify_current_address
-      verified = self.addresses.current_address.update(verified_at: DateTime.current, admin_user_id: admin.id)
-    end
-
-    verified
+    new_projects + published_projects + completed_projects + other_projects
   end
 
 end

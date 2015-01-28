@@ -7,7 +7,7 @@
   <center>
     <h6 class="title-bg">
 
-      <%= image_tag 'site/user_profile1.png' %>
+      <%= image_tag path_for_profile_picture(@project.user), class: 'profile-picture' %>
       <p class="title-bg text-special">Project Starter: <%= @project.user.first_name%></p>
 
       <div class="progress" style="height: 10px">
