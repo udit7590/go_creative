@@ -55,6 +55,18 @@ var ProjectsListPage = (function() {
     }
   };
 
+  ProjectsListPage.prototype.checkURLForSortFilterParameters = function() {
+    var queryString = queryStringHash(window.url),
+        sort_by = queryString['sort_by'],
+        filter_by = queryString['filter_by'];
+    if(sort_by) {
+      $('#sort-by-criteria-button').text('Sorted by: ' + humanize(sort_by));
+    }
+    if(filter_by) {
+      $('#filter-by-criteria-button').text('Filtered by: ' + humanize(filter_by));
+    }
+  }
+
   ProjectsListPage.prototype.sendRequestToSort = function(path, data) {
     $.loader({
         className:"blue-with-image-2",
@@ -115,6 +127,16 @@ var ProjectsListPage = (function() {
     return url;
   }
 
+  function queryStringHash(url) {
+    var queryArray = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&'),
+        i, queryHash = {};
+    for(i = 0; i < queryArray.length; i++) {
+      var query = queryArray[i].split('=');
+      queryHash[query[0]] = query[1];
+    }
+    return queryHash;
+  }
+
   //Return the class
   return ProjectsListPage;
 })();
@@ -124,5 +146,6 @@ $(document).ready(function() {
   
   projectsListPage.bindClickEventForLoadMoreButton();
   projectsListPage.bindClickEventForSortButton();
+  projectsListPage.checkURLForSortFilterParameters();
 
 });

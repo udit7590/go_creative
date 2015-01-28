@@ -15,14 +15,9 @@ class ApplicationController < ActionController::Base
     def store_location
       # store last url - this is needed for post-login redirect to whatever the user last visited.
       return unless request.get? 
-      #FIXME_AB: simplify using include method
-      if (request.path != "/users/sign_in" &&
-          request.path != "/users/sign_up" &&
-          request.path != "/users/password/new" &&
-          request.path != "/users/password/edit" &&
-          request.path != "/users/confirmation" &&
-          request.path != "/users/sign_out" &&
-          !request.xhr?) # don't store ajax calls
+
+      skip_routes = %w(/users/sign_in /users/sign_up /users/password/new /users/password/edit /users/confirmation /users/sign_out)
+      unless (skip_routes.include? request.path && request.xhr?) # don't store ajax calls
         session[:previous_url] = request.fullpath 
       end
     end

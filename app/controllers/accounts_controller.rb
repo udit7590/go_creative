@@ -42,13 +42,10 @@ class AccountsController < ApplicationController
   end
 
   def update_incomplete_details
-    respond_to do |format|
-      if @user.update(account_params)
-        check_user_details_and_redirect(format, @user, @project)
-      else
-        format.html { render action: :edit, status: :bad_request }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
-      end
+    if @user.update(account_params)
+      check_user_details_and_redirect(@user, @project)
+    else
+      render action: :edit, status: :bad_request
     end
   end
 

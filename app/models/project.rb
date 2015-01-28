@@ -36,6 +36,7 @@ class Project < ActiveRecord::Base
   # -------------------------------------------------------------
   before_save :set_time_to_midnight, unless: Proc.new { |project| project.end_date.nil? }
   before_save :sanitize_description
+  after_save :expire_cache
 
   # -------------- SECTION FOR STATE MACHINE --------------------
   # -------------------------------------------------------------
@@ -215,23 +216,55 @@ class Project < ActiveRecord::Base
   # -------------- SECTION FOR CACHING METHODS ----------------------
   # -----------------------------------------------------------------
 
+  # To be Expired on project create/update
   def self.cached_recent(number_of_records = Constants::PROJECT_HOME_PAGE_LIMIT, exclude_ids = nil)
-    Rails.cache.fetch([name, 'recent'], expires_in: 30.minutes) do
+    Rails.cache.fetch([name, 'recent'], expires_in: 15.minutes) do
       exclude_ids ? Project.recent_published.where.not(id: exclude_ids).limit(number_of_records).to_a : Project.recent_published.limit(number_of_records).to_a
     end
   end
 
+  # To be Expired on project contribution
   def self.cached_popular(number_of_records = Constants::PROJECT_HOME_PAGE_LIMIT, exclude_ids = nil)
-    Rails.cache.fetch([name, 'popular'], expires_in: 30.minutes) do
+    Rails.cache.fetch([name, 'popular'], expires_in: 15.minutes) do
       exclude_ids ? Project.popular.where.not(id: exclude_ids).limit(number_of_records).to_a : Project.popular.limit(number_of_records).to_a
     end
   end
 
+  # To be Expired on project completion
   def self.cached_completed(number_of_records = Constants::PROJECT_HOME_PAGE_LIMIT, exclude_ids = nil)
     #FIXME_AB: Please refactor this method along with similar others
-    Rails.cache.fetch([name, 'completed'], expires_in: 30.minutes) do
+    Rails.cache.fetch([name, 'completed'], expires_in: 15.minutes) do
       exclude_ids ? Project.completed.where.not(id: exclude_ids).limit(number_of_records).to_a : Project.completed.limit(number_of_records).to_a
     end
+  end
+
+  def expire_cache
+    expire_recent_cache
+    expire_completed_cache
+    expire_popular_cache
+  end
+
+  def expire_recent_cache
+    cached_recent_projects = Rails.cache.read([self.class.superclass.name, 'recent'])
+    if (state_changed? && (%w(published unpublished successful failed).include? state)) ||
+       (collected_amount_changed? && cached_recent_projects && cached_recent_projects.any? { |project| project.id == id })
+      Rails.cache.delete([self.class.superclass.name, 'recent']) 
+    end
+  end
+
+  def expire_popular_cache
+    cached_popular_projects = Rails.cache.read([self.class.superclass.name, 'popular'])
+    if cached_popular_projects && collected_amount_changed? && collected_amount > Project.min_collected_amount(cached_popular_projects)
+      Rails.cache.delete([self.class.superclass.name, 'popular'])
+    end
+  end
+
+  def expire_completed_cache
+    Rails.cache.delete([self.class.superclass.name, 'completed']) if state_changed? && (%w(successful).include? state)
+  end
+
+  def self.min_collected_amount(projects)
+    projects.inject(projects.first.collected_amount) { |memo, proj| proj.collected_amount < memo ? proj.collected_amount : memo }
   end
 
   # -------------- PROTECTED METHODS SECTION ------------------------
