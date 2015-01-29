@@ -93,21 +93,14 @@ class User < ActiveRecord::Base
   end
 
   def profile_projects(owner = false)
-    published_projects = []
-    completed_projects = []
-    other_projects     = []
-    new_projects       = []
-    projects.order(updated_at: :desc).each do |project|
-      if project.state == 'published'
-        published_projects << project
-      elsif project.state == 'successful'
-        completed_projects << project
-      elsif owner
-        new_projects << project if project.state == 'created'
-        other_projects << project unless project.state == 'created'
-      end
+    grouped_projects = projects.order(updated_at: :desc).group_by { |project| project.state }
+    categorized_projects = []
+    states = %w(published payment_pending successful)
+    states = %w(created published payment_pending successful unpublished failed) if owner
+    states.each do |state| 
+      categorized_projects << grouped_projects[state] if grouped_projects[state]
     end
-    new_projects + published_projects + completed_projects + other_projects
+    categorized_projects.flatten
   end
 
 end

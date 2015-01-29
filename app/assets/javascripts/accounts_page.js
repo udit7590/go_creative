@@ -113,10 +113,6 @@ var AccountsPage = (function() {
 
   };
 
-  AccountsPage.prototype.uploadProfilePicture = function(image, path) {
-    
-  }
-
   //-----------------------------------
   //Section for private Functions
   //-----------------------------------

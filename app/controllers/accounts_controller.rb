@@ -31,8 +31,8 @@ class AccountsController < ApplicationController
         format.html { redirect_to (edit_account_path(anchor: params[:page].to_s)), notice: (I18n.t :details_updated, scope: [:account, :update]) }
         format.json { head :no_content }
       else
-        format.html { render action: :edit, status: :bad_request }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
+        format.html { render action: :edit, status: 400 }
+        format.json { render json: @user.errors, status: 422 }
       end
     end
   end
@@ -53,7 +53,7 @@ class AccountsController < ApplicationController
     if @user.update(account_params)
       check_user_details_and_redirect(@user, @project)
     else
-      render action: :edit, status: :bad_request
+      render action: :edit, status: 400
     end
   end
 
@@ -65,7 +65,7 @@ class AccountsController < ApplicationController
     if(@user.update(pan_card_copy: params[:user][:pan_card_copy]))
       render json: { message: 'success', filename: @user.pan_card_copy }, status: 200
     else
-      render json: { error: @user.errors.full_messages.join(',') }, status: :bad_request
+      render json: { error: @user.errors.full_messages.join(',') }, status: 400
     end
   end
 
@@ -73,7 +73,7 @@ class AccountsController < ApplicationController
     if(@user.addresses.primary_address.update(address_proof: params[:address][:address_proof]))
       render json: { message: 'success', filename: @user.addresses.primary_address.address_proof }, status: 200
     else
-      render json: { error: @user.errors.full_messages.join(',') }, status: :bad_request
+      render json: { error: @user.errors.full_messages.join(',') }, status: 400
     end
   end
 
@@ -81,7 +81,7 @@ class AccountsController < ApplicationController
     if(@user.addresses.current_address.update(address_proof: params[:address][:address_proof]))
       render json: { message: 'success', filename: @user.addresses.current_address.address_proof }, status: 200
     else
-      render json: { error: @user.errors.full_messages.join(',') }, status: :bad_request
+      render json: { error: @user.errors.full_messages.join(',') }, status: 400
     end
   end
 
@@ -91,7 +91,7 @@ class AccountsController < ApplicationController
     if(@user.update(profile_picture: params[:user][:profile_picture]))
       render json: { message: 'success', filename: @user.profile_picture }, status: 200
     else
-      render json: { error: @user.errors.full_messages.join(',') }, status: :bad_request
+      render json: { error: @user.errors.full_messages.join(',') }, status: 400
     end
   end
 
@@ -115,20 +115,18 @@ class AccountsController < ApplicationController
 
     def load_user
       @user = User.find_by(id: params[:id])
-      unless @user
-        redirect_to root_path, alert: (t :no_user, scope: [:account, :views])
-      end
+      redirect_to root_path, alert: (t :no_user, scope: [:account, :views]) unless @user
     end
 
     def check_current_address
       unless @user.addresses.current_address
-        render json: { error: 'Please provide address details first' }, status: :bad_request
+        render json: { error: 'Please provide address details first' }, status: 400
       end
     end
 
     def check_primary_address
       unless @user.addresses.primary_address
-        render json: { error: 'Please provide address details first' }, status: :bad_request
+        render json: { error: 'Please provide address details first' }, status: 400
       end
     end
 
