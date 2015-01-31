@@ -8,7 +8,7 @@
     <h6 class="title-bg">
 
       <%= image_tag path_for_profile_picture(@project.user), class: 'profile-picture' %>
-      <p class="title-bg text-special">Project Starter: <%= @project.user.first_name%></p>
+      <p class="title-bg text-special">Project Starter: <%= link_to @project.user.first_name, profile_path(@project.user) %></p>
 
       <div class="progress" style="height: 10px">
         <div class="bar bar-success animate" data-animate="progress" rel="tooltip" title="<%= @project.percentage_completed %>" data-progress-complete="<%= @project.percentage_completed %>" role="progressbar">
