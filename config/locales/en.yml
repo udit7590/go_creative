@@ -52,6 +52,8 @@ en:
       project_owner_cannot_contribute: 'The project owner cannot contribute to his/her own project'
       no_project_min_amount: 'This amount does not meet project minimum amount requirement criteria'
       project_amount_collected: 'This project has already collected the amount it required'
+      invalid_user: 'Something seems wrong with your session. Please try again'
+      no_token: "We didn't receive any payment. Please try again"
     notice:
       details_updated: 'Your details have been updated. You can now proceed further'
 

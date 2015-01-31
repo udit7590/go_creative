@@ -1,11 +1,8 @@
-
 class Project < ActiveRecord::Base
   include AASM
 
   paginates_per Constants::PROJECT_LIST_PAGE_LIMIT
   max_paginates_per 100
-
-  # handle_asynchronously :expire_end_date, run_at: => Proc.new { end_date }
 
   # -------------- SECTION FOR ASSOCIATIONS ---------------------
   # -------------------------------------------------------------
@@ -37,6 +34,9 @@ class Project < ActiveRecord::Base
   before_save :set_time_to_midnight, unless: Proc.new { |project| project.end_date.nil? }
   before_save :sanitize_description
   after_save :expire_cache
+  #Complete the project if amount received
+  after_save :complete!, if: Proc.new { |project| project.contributions.accepted.sum(:amount) >= project.amount_required }
+  # handle_asynchronously :expire_end_date, run_at: => Proc.new { end_date }
 
   # -------------- SECTION FOR STATE MACHINE --------------------
   # -------------------------------------------------------------

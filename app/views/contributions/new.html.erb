@@ -7,22 +7,10 @@
         <%= f.number_field :amount, autofocus: true, class: 'form-control input-block-level', placeholder: 'Amount to Contribute*', required: true, min: @project.min_amount_per_contribution, max: @project.amount_left %>
         <p>Amount shound be in range: (<%= @project.min_amount_per_contribution %>, <%= @project.amount_left %>)</p>
       </div>
-      <div class="field">
-        <%= f.select :brand, [['Visa', 'visa'], ['MasterCard', 'master']], class: 'form-control input-block-level', required: true %>
-      </div>
-      <div class="field">
-        <%= f.number_field :card_number, class: 'form-control input-block-level', placeholder: 'Your card number*', required: true %>
-      </div>
-      <div class="field">
-        <%= f.number_field :card_verification, class: 'form-control input-block-level', placeholder: 'CVV*', required: true %>
-      </div>
-      <div class="field">
-        <%= f.date_select :card_expires_on, discard_day: true, start_year: Date.today.year, end_year: (Date.today.year+10) %>
-      </div>
-
-      <div class="actions">
-        <%= f.submit 'Confirm Payment', class: 'btn btn-inverse btn-block' %>
-      </div>
+      <center><button id="contribution-confirm" data-min-amount="<%= @project.min_amount_per_contribution %>" data-max-amount="<%= @project.amount_left %>" data-user-email="<%= current_user.email %>" data-path="<%= project_contributions_path(@contribution.project_id) %>" disabled="true" class="btn btn-primary btn-block">Confirm Contribution Amount</button></center>
     <% end %>
-
 </div>
+
+<% content_for :javascripts do %>
+  <%= javascript_include_tag 'contributions_handler', 'data-turbolinks-track' => true %>
+<% end %> 

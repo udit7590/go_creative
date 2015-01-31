@@ -18,6 +18,7 @@ class Contribution < ActiveRecord::Base
     state :accepted
     state :rejected
     state :payment_error_occurred
+    state :refunded
 
     event :initiate_payment do
       transitions from: :contributed, to: :payment_initiated
@@ -35,6 +36,10 @@ class Contribution < ActiveRecord::Base
       transitions from: :payment_initiated, to: :payment_error_occurred
     end
 
+    event :refund do
+      transitions from: :accepted, to: :refunded
+    end
+
   end
 
   # -------------- SECTION FOR VALIDATIONS  ---------------------
@@ -43,7 +48,7 @@ class Contribution < ActiveRecord::Base
   # after_save :update_total_contribution_cache
   # after_destroy :remove_contribution_amount_from_cache
 
-  validate :validate_card
+  # validate :validate_card
 
   # -------------- SECTION FOR SCOPES AND METHODS ---------------
   # -------------------------------------------------------------
@@ -51,8 +56,29 @@ class Contribution < ActiveRecord::Base
   scope :accepted, -> { where(state: 'accepted') }
   scope :order_by_creation, -> { order(:created_at) }
 
-  def purchase
-    #FIXME_AB: You should wrap it in a db transaction.
+  def create_customer!(token)
+    raise 'Invalid arguments for creating customer' unless (token || user)
+    customer = Stripe::Customer.create(
+      card: token,
+      description: user.email
+    )
+    if customer
+      update(stripe_customer_id: customer.id)
+    end
+    raise 'Invalid token' unless (customer || stripe_customer_id)
+  end
+
+  def charge_customer!
+    response = Stripe::Charge.create(
+      amount: amount.to_i * 100, # in paisa
+      currency: 'inr',
+      customer: stripe_customer_id
+    )
+  end
+
+  def purchase(token)
+    create_customer!(token)
+    charge_customer!
     response = GATEWAY.purchase(price_in_cents, credit_card, ip: ip_address)
     @current_transaction = transactions.create!(action: 'Purchase', amount: price_in_cents, response: response)
     initiate_payment!
@@ -60,7 +86,7 @@ class Contribution < ActiveRecord::Base
       update_total_contribution_cache
       accept!
       #FIXME_AB: This should be automatically done as a callback
-      project.complete! if project.contributions.accepted.sum(:amount) >= project.amount_required
+      
     else
       payment_error!
     end
