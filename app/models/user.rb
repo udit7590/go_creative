@@ -10,6 +10,7 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable, :confirmable
 
   has_many :addresses, autosave: true
+  has_attached_file :profile_picture, styles: { thumbnail: '128x128#' }
   has_attached_file :pan_card_copy, styles: { thumbnail: '60x60#' }
 
   has_many :projects, dependent: :restrict_with_error
@@ -26,6 +27,7 @@ class User < ActiveRecord::Base
   # -------------- SECTION FOR VALIDATIONS ----------------------
   # -------------------------------------------------------------
 
+  validates_attachment_content_type :profile_picture, content_type: Constants::IMAGE_UPLOAD_FORMATS
   validates_attachment_content_type :pan_card_copy, content_type: Constants::IMAGE_UPLOAD_FORMATS
   validates :addresses, count: { limit: 2 }
   validates :pan_card, allow_blank: true, format: { with: Constants::PAN_REGEXP, message: 'should be in format AAA[ABCFGHLJPT]A9999A' }
@@ -90,24 +92,15 @@ class User < ActiveRecord::Base
     pan_details_verified? && primary_address_details_verified?
   end
 
-  # Only admin can verify the user details
-  def verify(admin, should_verify_current_address = false)
-    #FIXME_AB: You should not repeat DateTime.current. Save its value in local variable and use that local variable. 
-    verified = false
-
-    unless pan_details_verified?
-      verified = self.update(pan_verified_at: DateTime.current, pan_verified_by: admin.id)
+  def profile_projects(owner = false)
+    grouped_projects = projects.order(updated_at: :desc).group_by { |project| project.state }
+    categorized_projects = []
+    states = %w(published payment_pending successful)
+    states = %w(created published payment_pending successful unpublished failed) if owner
+    states.each do |state| 
+      categorized_projects << grouped_projects[state] if grouped_projects[state]
     end
-    
-    unless primary_address_details_verified?
-      verified = self.addresses.primary_address.update(verified_at: DateTime.current, admin_user_id: admin.id)
-    end
-
-    if should_verify_current_address
-      verified = self.addresses.current_address.update(verified_at: DateTime.current, admin_user_id: admin.id)
-    end
-
-    verified
+    categorized_projects.flatten
   end
 
 end

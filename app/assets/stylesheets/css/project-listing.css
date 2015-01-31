@@ -16,6 +16,28 @@ div.all-projects > div.project-listing {
 div.all-projects > div.project-listing img {
   border: 1px solid #ccc;
   border-radius: 5px;
+  height: 211px;
+}
+
+div.user-projects > div.project-listing.span4 {
+  width: 19.65%;
+  margin-bottom: 10px;
+  padding: 5px;
+  background-color: #fff;
+}
+
+div.user-projects > div.project-listing {
+  border: solid 1px #ccc;
+  border-radius: 5px;
+  border-color: #ccc;
+  box-shadow: 0 0 2px #999;
+  /*5eb95e #49afcd #eea236*/
+}
+
+div.user-projects > div.project-listing img {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  height: 129px;
 }
 
 div.project-listing div.description-fixed {
@@ -70,4 +92,11 @@ a.left.carousel-control, a.right.carousel-control {
   top: 200px;
   width: 50px;
   padding-top: 5px;
+}
+
+.profile-picture {
+  border: solid 1px #ccc;
+  border-radius: 125px;
+  border-color: #ccc;
+  box-shadow: 0 0 2px #999;
 }

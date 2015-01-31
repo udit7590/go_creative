@@ -1,0 +1,46 @@
+<% @page_title = 'Go Creative: Profile Page' %>
+<!-- Page Content
+================================================== --> 
+<div class="row"><!--Container row-->
+
+  <!-- Page Sidebar
+  ================================================== --> 
+  <%= render partial: 'sidebar' %>
+
+  <!-- Page Content
+  ================================================== --> 
+  <div class="span8"><!--Begin page content column-->
+
+    <h2 class="title-bg">Your Account Settings <%= image_tag 'site/account_settings.png', size: '42x42', class: 'pull-right' %></h2>
+
+    
+    <!-- Form Name -->
+    <legend>Your Email ID: <span class='text-special'><%= @user.email %></span></legend>
+
+    <%= form_for(@user, url: account_path, method: :patch, html: { class: 'form-horizontal' }) do |f| %>
+      <fieldset>
+        <div class="control-group">
+          <%= f.label :profile_picture, 'Profile Picture', class: 'control-label' %>
+          <div class="controls">
+            <%= f.file_field :profile_picture, multiple: false, class: 'filestyle', data: { buttonName: 'btn', buttonText: 'Select File', uploader: 'single', width: '350', height: '200', prev: image_path(f.object.profile_picture) } %>
+            <p class="help-block">Max file size: 2MB. Valid Image Types: PNG, JPEG</p>
+          </div>
+        </div>
+        <div class="control-group">
+          <div class="controls">
+            <%= f.submit 'Save Settings', class: 'btn btn-large btn-inverse' %>
+          </div>
+        </div>
+
+      </fieldset>
+    <% end %>
+      
+  </div> <!--End page content column--> 
+
+</div><!-- End container row -->
+
+<!-- JS --> 
+<% content_for :javascripts do %>
+  <%= javascript_include_tag 'accounts_page', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'edit_profile', 'data-turbolinks-track' => true %>
+<% end %>

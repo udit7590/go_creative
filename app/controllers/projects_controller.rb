@@ -75,8 +75,7 @@ class ProjectsController < ApplicationController
 
   def user_projects
     @user = current_user
-    @projects = @user.projects
-    render 'user_projects'
+    @projects = @user.profile_projects(true)
   end
 
   #JSON

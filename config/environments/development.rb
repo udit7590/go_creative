@@ -56,6 +56,7 @@ Gocreative::Application.configure do
     s3_credentials: "#{Rails.root}/config/s3.yml",
     url: ':s3_domain_url',
     bucket: ENV['S3_BUCKET'],
-    path: '/:class/:attachment/:id_partition/:style/:filename'
+    path: '/:class/:attachment/:id_partition/:style/:filename',
+    default_url: '/images/:attachment/missing_:style.jpg'
   }
 end

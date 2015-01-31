@@ -56,6 +56,8 @@ en:
       details_updated: 'Your details have been updated. You can now proceed further'
 
   account:
+    views:
+      no_user: 'Cannot find any such user'
     update:
       details_updated: 'Your account has successfully been updated.'
       cannot_edit_published:  'This project cannot be edited now'
