@@ -8,7 +8,7 @@ class ContributionsController < ApplicationController
   before_action :build_contribution, only: :new
   before_action :extract_token_params, only: :create
   before_action :build_contribution_from_params, only: :create
-  before_action :build_contribution_transaction, only: :create
+  # before_action :build_contribution_transaction, only: :create
 
   # This makes sure that user has not modified the response from stripe
   before_action :check_user, only: :create
@@ -52,7 +52,7 @@ class ContributionsController < ApplicationController
 
   def create
     if(@contribution.save)
-      if(@contribution.purchase)
+      if(@contribution.purchase(@token))
         ContributionMailer.payment_success(@contribution, @contribution.current_transaction).deliver
         render :success
       else
@@ -135,8 +135,8 @@ class ContributionsController < ApplicationController
     end
 
     def build_contribution_from_params
-      debugger
       @contribution = @project.contributions.build
+      @contribution.amount = params[:contribution][:amount]
       @contribution.user_id = @user.id
       @contribution.ip_address = @token_params['client_ip']
     end

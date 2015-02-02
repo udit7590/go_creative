@@ -69,28 +69,33 @@ class Contribution < ActiveRecord::Base
   end
 
   def charge_customer!
-    response = Stripe::Charge.create(
-      amount: amount.to_i * 100, # in paisa
+    Stripe::Charge.create(
+      amount: amount_in_paisa, # in paisa
       currency: 'inr',
       customer: stripe_customer_id
     )
   end
 
+  def amount_in_paisa
+    amount.to_i * 100
+  end
+
   def purchase(token)
-    create_customer!(token)
-    charge_customer!
-    response = GATEWAY.purchase(price_in_cents, credit_card, ip: ip_address)
-    @current_transaction = transactions.create!(action: 'Purchase', amount: price_in_cents, response: response)
-    initiate_payment!
-    if response.success?
-      update_total_contribution_cache
-      accept!
-      #FIXME_AB: This should be automatically done as a callback
-      
-    else
-      payment_error!
+    Contribution.transaction do
+      create_customer!(token)
+      # debugger
+      response = charge_customer!
+      # response = GATEWAY.purchase(price_in_cents, credit_card, ip: ip_address)
+      @current_transaction = transactions.create!(action: 'Purchase', amount: amount_in_paisa, response: response)
+      initiate_payment!
+      if response.captured
+        update_total_contribution_cache
+        accept!        
+      else
+        payment_error!
+      end
+      response.captured
     end
-    response.success?
   end
 
   def price_in_cents
