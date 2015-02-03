@@ -13,3 +13,5 @@ var error = 'Not able to publish. ';
 <% else  %>
   alert(error + '<%= @project.errors.full_messages %>');
 <% end %>
+
+$.loader('close');

@@ -1,4 +1,16 @@
-<h2 class="sub-header">Go Creative Projects</h2>
+<h2 class="sub-header">Go Creative Projects
+<div class="btn-group pull-right" data-toggle="buttons" id="projects-filter">
+  <label class="btn btn-primary <%= 'active' if action_name == 'index' %>">
+    <input type="radio" name="filter_options" id="all-projects" autocomplete="off" data-path="<%= admin_projects_path %>">All
+  </label>
+  <label class="btn btn-primary <%= 'active' if action_name == 'published' %>">
+    <input type="radio" name="filter_options" id="published-projects" autocomplete="off" data-path="<%= published_admin_projects_path %>" <%= 'checked' if action_name == 'published' %>>Published
+  </label>
+  <label class="btn btn-primary <%= 'active' if action_name == 'initial' %>">
+    <input type="radio" name="filter_options" id="new-projects" autocomplete="off" data-path="<%=  initial_admin_projects_path %>" <%= 'checked' if action_name == 'initial' %>>New
+  </label>
+</div>
+</h2>
 
 <div class="table-responsive">
   <table class="table table-striped">
@@ -10,7 +22,7 @@
         <th>Started By</th>
         <th>Created At</th>
         <th>End Date</th>
-        <th>Contributors</th>
+        <th>State</th>
         <th>Action</th>
       </tr>
     </thead>
@@ -20,3 +32,7 @@
   </table>
   <%= paginate @projects %>
 </div>
+<!-- JS --> 
+<% content_for :javascripts do %>
+  <%= javascript_include_tag 'admin_projects_page', 'data-turbolinks-track' => true %>
+<% end %> 

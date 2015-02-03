@@ -2,14 +2,27 @@ class Admin::ProjectsController < ::ApplicationController
   layout 'dashboard'
 
   before_action :authenticate_admin_user!
-  before_action :load_project, only: [:show, :publish, :unpublish]
+  before_action :load_project, only: [:show, :publish, :unpublish, :cancel]
   before_action :check_project_unpublished, only: [:publish]
   before_action :check_project_details, only: [:publish]
   before_action :check_user_details, only: :publish
 
+  before_action :check_project_state, only: :cancel
+
   def index
     #FIXME_AB: I have not seen you using include or egarload. Please check you log and egarload data
     @projects = Project.all.order_by_creation.page(params[:page]).per(20)
+    @filter = 'all'
+  end
+
+  def published
+    @projects = Project.published.order_by_creation.page(params[:page]).per(20)
+    render :index
+  end
+
+  def initial
+    @projects = Project.created.order_by_creation.page(params[:page]).per(20)
+    render :index
   end
 
   def show
@@ -25,12 +38,16 @@ class Admin::ProjectsController < ::ApplicationController
       @project.admin_user_id = current_admin_user.id
       if @project.publish!
         format.js { render 'publish', locals: { is_published: true } }
-        flash[:notice]= 'Project published'
-        format.html { redirect_to action: :index }
+        format.html do
+          flash[:notice] = 'Project has been successfully published'
+          redirect_to action: :index 
+        end
       else
         format.js { render 'error_publish' }
-        flash[:alert] = 'Project not published.'
-        format.html { redirect_to action: :index }
+        format.html do
+          flash[:alert] = 'Project not published.'
+          redirect_to action: :index 
+        end
       end
     end
   end
@@ -41,12 +58,36 @@ class Admin::ProjectsController < ::ApplicationController
       @project.admin_user_id = current_admin_user.id
       if @project.unpublish!
         format.js { render 'publish', locals: { is_published: false } }
-        flash[:notice]= 'Project unpublished'
-        format.html { redirect_to action: :index }
+        format.html do
+          flash[:notice]= 'Project has been successfully unpublished'
+          redirect_to action: :index
+        end
       else
         format.js { render 'error_publish', locals: { project: nil, errors: @project.errors.full_messages } }
-        flash[:alert] = @project.errors.full_messages
-        format.html { redirect_to admin_project_path(params[:project_id]) }
+        format.html do
+          flash[:alert] = @project.errors.full_messages
+          redirect_to admin_project_path(params[:project_id])
+        end
+      end
+    end
+  end
+
+  def cancel
+    respond_to do |format|
+      if @project.cancel!
+        @error_message = 'The project is successfully cancelled'
+        format.js { render 'cancel' }
+        format.html do 
+          flash[:notice] = @error_message
+          redirect_to action: :index
+        end
+      else
+        @error_message = @project.errors.full_messages
+        format.js { render 'error_cancel' }
+        format.html do 
+          flash[:alert] = @error_message
+          redirect_to admin_project_path(params[:project_id])
+        end
       end
     end
   end
@@ -77,8 +118,10 @@ class Admin::ProjectsController < ::ApplicationController
         unless @project.check_end_date
           respond_to do |format|
             format.js { render 'error_publish', locals: { project: :end_date_inapt } }
-            flash[:alert] = 'Cannot publish the project as end date is not appropriate.'
-            format.html { redirect_to admin_project_path(params[:project_id]) }
+            format.html do 
+              flash[:alert] = 'Cannot publish the project as end date is not appropriate.'
+              redirect_to admin_project_path(params[:project_id])
+            end
           end
         end
       else
@@ -96,6 +139,19 @@ class Admin::ProjectsController < ::ApplicationController
           format.js { render 'error_publish', locals: { project: :user_incomplete } }
           flash[:alert] = 'Cannot publish the project as user details are incomplete or not verified.'
           format.html { redirect_to admin_project_path(params[:project_id]) }
+        end
+      end
+    end
+
+    def check_project_state
+      unless @project.cancelable?
+        respond_to do |format|
+          @error_message = 'Cannot cancel the project as project is successful, expired or already cancelled.'
+          format.js { render 'error_cancel' }
+          format.html do
+            flash[:alert] = @error_message
+            redirect_to admin_project_path(params[:project_id])
+          end
         end
       end
     end

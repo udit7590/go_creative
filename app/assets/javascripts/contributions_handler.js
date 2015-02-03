@@ -10,8 +10,6 @@ $(document).ready(function() {
     var handler = StripeCheckout.configure({
       key: 'pk_test_SHyWyP14xAqLDiJnxR0Q2Kdc',
       token: function(token) {
-        //TODO SUBMIT THE FORM HERE
-        alert(token.id);
         console.log(token);
         var $form = $('#new_contribution');
         //Send the request to add contributor(if not already added) and hold the payment 
@@ -26,7 +24,7 @@ $(document).ready(function() {
     $paymentButton.on('click', function(e) {
       e.preventDefault();
       var $amountField = $('#contribution_amount'),
-          contributedAmount = Math.floor($amountField.val())*100, //amount to be sent in paisa and integer figure
+          contributedAmount = Math.floor($amountField.val()), //amount to be sent in paisa and integer figure
           $this = $(this);
       $this.attr('disabled', true);
       if(contributedAmount >= $this.data('min-amount') && contributedAmount <= $this.data('max-amount')) {
@@ -34,7 +32,7 @@ $(document).ready(function() {
         handler.open({
           name: 'Go Creative',
           description: 'Project Contribution',
-          amount: contributedAmount, //In Paisa
+          amount: contributedAmount * 100, //In Paisa
           currency: 'INR',
           email: $this.data('user-email')
         });

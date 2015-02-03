@@ -12,4 +12,5 @@
  *= require 'dashboard_css/bootstrap.min.css'
  *= require 'dashboard_css/styles.css'
  *= require 'dashboard_css/signin.css'
+ *= require 'css/jquery.loader.min.css'
  */

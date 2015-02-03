@@ -26,6 +26,11 @@ Gocreative::Application.routes.draw do
     resources :projects, only: [:index, :show], concerns: :paginatable do
       get :publish
       get :unpublish
+      get :cancel
+      collection do
+        get :published, concerns: :paginatable
+        get :initial, concerns: :paginatable
+      end
     end
     resources :projects, shallow: true, only: [] do
       resources :comments, only: [:index, :new, :create, :destroy] do
