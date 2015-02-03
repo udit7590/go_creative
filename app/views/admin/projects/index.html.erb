@@ -7,7 +7,7 @@
     <input type="radio" name="filter_options" id="published-projects" autocomplete="off" data-path="<%= published_admin_projects_path %>" <%= 'checked' if action_name == 'published' %>>Published
   </label>
   <label class="btn btn-primary <%= 'active' if action_name == 'initial' %>">
-    <input type="radio" name="filter_options" id="new-projects" autocomplete="off" data-path="<%=  initial_admin_projects_path %>" <%= 'checked' if action_name == 'initial' %>>New
+    <input type="radio" name="filter_options" id="new-projects" autocomplete="off" data-path="<%=  initial_admin_projects_path %>" <%= 'checked' if action_name == 'initial' %>>Unpublished
   </label>
 </div>
 </h2>

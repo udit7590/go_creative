@@ -4,9 +4,9 @@
   </div>
   <div class="panel-body">
     <ul class="nav nav-tabs" role="tablist">
-      <li role="presentation" class="active"><a href="#user-details" role="tab" data-toggle="tab">User Details</a></li>
-      <li role="presentation"><a href="#user-projects" role="tab" data-toggle="tab">User Projects</a></li>
-      <li role="presentation"><a href="#user-contributions" role="tab" data-toggle="tab">User Contributions</a></li>
+      <li role="presentation" class="active"><a href="#user-details" role="tab" data-toggle="tab">Details</a></li>
+      <li role="presentation"><a href="#user-projects" role="tab" data-toggle="tab">Projects Created</a></li>
+      <li role="presentation"><a href="#user-contributions" role="tab" data-toggle="tab">Contributions Made</a></li>
     </ul>
     <div id="myTabContent" class="tab-content">
       <div role="tabpanel" class="tab-pane fade in active" id="user-details">
@@ -32,4 +32,5 @@
   <%= javascript_include_tag 'comment', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'comments_page', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'admin_project_view', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'admin_user_detail_page', 'data-turbolinks-track' => true %>
 <% end %> 

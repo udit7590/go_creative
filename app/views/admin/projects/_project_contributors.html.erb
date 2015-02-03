@@ -8,6 +8,7 @@
         <th>Amount</th>
         <th>On</th>
         <th>Status</th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
@@ -23,6 +24,7 @@
           <td><%= number_to_currency(contributor.amount, unit: Constants::DEFAULT_CURRENCY, precision: 0) %></td>
           <td><%= contributor.created_at.to_s(:short) %></td>
           <td><%= contributor.state.humanize %></td>
+          <td><button class="transactions-detail" data-contribution-id="<%= contributor.id %>" data-path="<%= admin_contribution_transactions_path(contributor.id) %>">Details</button></td>
         </tr>
       <% end %>
     </tbody>
@@ -30,3 +32,6 @@
 <% else %>
   <p class="missing">This project has not received any contributions yet.</p>
 <% end %>
+
+<%= render 'admin/shared/transaction_modal' %>
+<div id="transactionModal"></div>

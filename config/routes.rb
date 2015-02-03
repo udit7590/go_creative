@@ -20,6 +20,7 @@ Gocreative::Application.routes.draw do
 
   namespace :admin do
     root 'dashboard#index', controller: 'admin/dashboard'
+    get ':contribution_id/filter', to: 'contributions#transactions', as: 'contribution_transactions'
     resources :users, only: [:index, :show], concerns: :paginatable do
       post :verify
     end
