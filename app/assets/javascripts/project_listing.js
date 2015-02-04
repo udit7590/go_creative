@@ -20,7 +20,7 @@ var ProjectListing = (function() {
         <a href="{{view_url}}"><img src="{{listing_image}}" /></a> \
         <span class="project-details"> \
           <h5 title="{{title}}"><a href="{{view_url}}">{{truncated_title}}</a></h5> \
-          <div class="description-fixed">{{truncated_description}}</div> \
+          <!-- <div class="description-fixed">{{truncated_description}}</div> --> \
           <div rel="tooltip" title="{{percentage_completed}}% Completed" class="progress" style="height: 7px"> \
             <div class="bar bar-success" role="progressbar" style="width: {{percentage_completed}}%;"> \
                \

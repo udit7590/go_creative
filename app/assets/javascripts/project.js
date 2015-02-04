@@ -56,10 +56,9 @@ $(document).ready(function() {
         ['font', ['bold', 'italic', 'underline', 'clear']],
         ['fontname', ['fontname']],
         ['color', ['color']],
-        ['para', ['ul', 'ol', 'paragraph']],
+        ['para', ['paragraph']],
         ['table', ['table']],
-        ['view', ['fullscreen']],
-        ['help', ['help']]
+        ['view', ['fullscreen']]
       ],
       styleTags: ['p', 'blockquote', 'h1', 'h2', 'h3', 'h4', 'h5'],
       fontNames: [

@@ -27,7 +27,7 @@ $(document).ready(function () {
           ['font', ['bold', 'italic', 'underline', 'clear']],
           ['fontname', ['fontname']],
           ['color', ['color']],
-          ['para', ['ul', 'ol', 'paragraph']],
+          ['para', ['paragraph']],
           ['table', ['table']]
         ],
         styleTags: ['p', 'blockquote', 'h1', 'h2', 'h3', 'h4', 'h5'],

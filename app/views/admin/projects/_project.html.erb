@@ -1,5 +1,5 @@
 <tr>
-  <td><%= project.title %></td>
+  <td><%= project.title.truncate(40) %></td>
   <td><%= humanize_sti_class(project.type) %></td>
   <td><%= number_to_currency(project.amount_required, unit: 'INR ', precision: 0) %></td>
   <td><a href="#" data-toggle="tooltip" data-placement="bottom" data-original-title="<%= project.user.email %>"><%= project.user.name %></a></td>
