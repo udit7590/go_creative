@@ -31,7 +31,10 @@ class AccountsController < ApplicationController
         format.html { redirect_to (edit_account_path(anchor: params[:page].to_s)), notice: (I18n.t :details_updated, scope: [:account, :update]) }
         format.json { head :no_content }
       else
-        format.html { render action: :edit, status: 400 }
+        format.html do
+          flash[:alert] = @user.errors.full_messages.join('. ')
+          render action: :edit, status: 400
+        end 
         format.json { render json: @user.errors, status: 422 }
       end
     end

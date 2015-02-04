@@ -50,7 +50,7 @@ $(function() {
                              .html($('<img>', { src: $this.data('prev') }));
 
         $imagePreviewer.html($lightboxImage);
-         $imagePreviewer.removeClass('before-select');
+        $imagePreviewer.removeClass('before-select');
       }
 
       $this.before($imagePreviewer);
@@ -59,8 +59,7 @@ $(function() {
         var file = this.files[0],
             $this = $(this);
         $imagePreviewer.removeClass('before-select').removeClass('select-error');
-
-        if (typeof FileReader !== "undefined" && (/image/i).test(file.type)) {
+        if (typeof FileReader !== "undefined" && (/image/i).test(file.type) && file.type != "image/gif") {
           var $lightboxImageContainer = $('<a>', { href: $this.data('prev')})
                                         .attr('data-lightbox', $this.data('prev')),
               $image = $('<img>');
@@ -76,6 +75,7 @@ $(function() {
         } else {
           $this.prev('.image-uploader-container').html('Not an image file.');
           $imagePreviewer.addClass('select-error');
+          $this.reset();
         }
       });
     }

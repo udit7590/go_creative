@@ -96,6 +96,9 @@ class Project < ActiveRecord::Base
   validate :min_amount_multiple_of_10
   validates_attachment_content_type :project_picture, content_type: %w(image/jpg image/jpeg image/png image/gif)
 
+  validates :images, length: { maximum: 10, message: 'can have maximum 10 images' }
+  validates :legal_documents, length: { maximum: 10, message: 'can have maximum 10 legal documents' }
+
   # -------------- SECTION FOR SCOPES ---------------
   # -------------------------------------------------------------
   # Scopes for project type

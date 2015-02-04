@@ -29,6 +29,9 @@ class User < ActiveRecord::Base
 
   validates_attachment_content_type :profile_picture, content_type: Constants::IMAGE_UPLOAD_FORMATS
   validates_attachment_content_type :pan_card_copy, content_type: Constants::IMAGE_UPLOAD_FORMATS
+  validates_attachment_size :profile_picture, less_than: 2.megabyte, 
+                            unless: Proc.new { |picture| picture.profile_picture_file_name.blank? }
+
   validates :addresses, count: { limit: 2 }
   validates :pan_card, allow_blank: true, format: { with: Constants::PAN_REGEXP, message: 'should be in format AAA[ABCFGHLJPT]A9999A' }
   validates :phone_number, allow_blank: true, format: { with: /\A[0-9]{8,10}\Z/, message: 'should have 8 or 10 digits' }
