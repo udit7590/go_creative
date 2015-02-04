@@ -98,3 +98,4 @@ gem 'exception_notification', '~> 4.0.1', group: :production
 # For test coverage
 gem 'simplecov', require: false, group: :test
 
+gem 'whenever', require: false

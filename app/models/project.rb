@@ -224,12 +224,20 @@ class Project < ActiveRecord::Base
   end
 
   def expire_end_date
-    if end_date >= DateTime.current || successful? || failed? 
+    if end_date >= DateTime.current
       # FUTURE: NEED TO CHECK IF MULTIPLE JOBS QUEUED
-    elsif amount_required <= contributions.accepted.sum(:amount) && published?
-      successful!
-    else
-      failed!
+      if (amount_required <= amount_collected) && published?
+        successful!
+      else
+        fail!
+      end
+    end
+  end
+
+  # Used by rake task
+  def self.expire_old
+    where(state: :published).each do |project|
+      project.expire_end_date
     end
   end
 
