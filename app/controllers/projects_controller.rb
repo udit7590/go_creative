@@ -1,5 +1,5 @@
 class ProjectsController < ApplicationController
-  include UserHelper
+  include UserConcern
 
   before_action :store_location
   before_action :authenticate_user!, except: [:index, :show, :charity, :investment, :load_more, :sort, :completed]

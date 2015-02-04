@@ -1,4 +1,4 @@
-module UserHelper
+module UserConcern
 
   # Checks if details of the user are complete and redirect accordingly.
   # Takes format argument to redirect based on requested format.
@@ -24,7 +24,7 @@ module UserHelper
     # store redirect url - this is needed for redirect to some page after filling out missing details.
     session[:request_url] = redirect_url
     session[:process_project_id] = project.id
-    session[:request_data] = params
+    # session[:request_data] = params
   end
 
   def clear_redirect_location

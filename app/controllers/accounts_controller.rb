@@ -1,5 +1,5 @@
 class AccountsController < ApplicationController
-  include AddressesFormHelper, UserHelper
+  include AddressesFormHelper, UserConcern
 
   # To store the previous accessed URL
   before_action :store_location

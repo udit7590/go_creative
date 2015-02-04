@@ -57,4 +57,7 @@ $(document).ready(function () {
     }
   });
 
+  //Initialize Gallery
+  $("#project-gallery").PikaChoose();
+
 });

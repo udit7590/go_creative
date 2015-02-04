@@ -7,20 +7,20 @@
   <center>
     <h6 class="title-bg">
 
-      <%= image_tag path_for_profile_picture(@project.user), class: 'profile-picture' %>
-      <p class="title-bg text-special">Project Starter: <%= link_to @project.user.first_name, profile_path(@project.user) %></p>
+      <%= link_to (image_tag path_for_profile_picture(@project.user), class: 'profile-picture'), profile_path(@project.user) %>
+      <p class="title-bg text-special"><%= link_to 'Project Starter: '+@project.user.first_name, profile_path(@project.user) %></p>
 
       <div class="progress" style="height: 10px">
         <div class="bar bar-success animate" data-animate="progress" rel="tooltip" title="<%= @project.percentage_completed %>" data-progress-complete="<%= @project.percentage_completed %>" role="progressbar">
           <!-- <span>60% Complete of INR <%= @project.amount_required %></span> -->
         </div>
       </div>
-      <center>
-        <span class="multi-span">Collected <br /><span class="text-special"><%= number_to_currency(@project.collected_amount, unit: 'INR ', precision: 0) %></span></span>
-        <span class="multi-span">Contributors <br /><span class="text-special"><%= @project.contributors_count || 0 %></span></span>
-        <span class="multi-span">Target <br /><span class="text-special"><%= number_to_currency(@project.amount_required, unit: 'INR ', precision: 0) %></span></span>
-        <span class="multi-span">Ends <br /><span class="text-special"><%= @project.end_date.to_date.to_s(:short) %></span></span></span>
-      </center>
+      <div class="project-detail-info">
+        <div class="multi-span">Collected <br /><span class="text-special"><%= number_to_currency(@project.collected_amount, unit: 'INR ', precision: 0) %></span></div>
+        <div class="multi-span">Contributors <br /><span class="text-special"><%= @project.contributors_count || 0 %></span></div>
+        <div class="multi-span">Target <br /><span class="text-special"><%= number_to_currency(@project.amount_required, unit: 'INR ', precision: 0) %></span></div>
+        <div class="multi-span">Ends <br /><span class="text-special"><%= @project.end_date.to_date.to_s(:short) %></span></div>
+      </div>
       <br class="clear" />
     </h6>
   </center>

@@ -1,23 +1,14 @@
 <!-- Gallery
   ================================================== --> 
 <% if @project.images.present? %>
-
-  <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
-
-  <!-- Wrapper for slides -->
-    <div class="carousel-inner" role="listbox" style="border: 1px solid #ccc; background-color: white">
-      <% active = [] %>
-      <% @project.images.each.with_index do |image, index| %>
-        <% active << index %>
-        <div class="item<%= ' active' if index == active[0] %>">
-          <%= image_tag image.image.url(:large) %>
-        </div>
-      <% end %>
-    </div>
-
-    <!-- Controls -->
-    <a data-slide="prev" href="#carousel-example-generic" role="button" class="left carousel-control">‹</a>
-    <a data-slide="next" href="#carousel-example-generic" role="button" class="right carousel-control">›</a>
-  </div>
+  
+  <h4 class="title-bg">Gallery</h4>
+  <center>
+  <ul id="project-gallery" >
+    <% @project.images.each.with_index do |image, index| %>
+      <li><%= image_tag image.image.url(:large) %></li>
+    <% end %>
+  </ul>
+</center>
 
 <% end %>

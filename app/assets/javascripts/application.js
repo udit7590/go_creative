@@ -25,6 +25,9 @@
 //= require 'js/mustache.js'
 //= require 'js/jquery.custom.js'
 //= require 'js/lightbox.js'
+//= require 'js/jquery.jcarousel.min.js'
+//= require 'js/jquery.pikachoose.js'
+//= require 'js/jquery.touchwipe.min.js'
 
 //= require 'init_theme.js'
 //= require constants.js

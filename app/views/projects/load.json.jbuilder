@@ -3,7 +3,7 @@ json.is_more_projects_available @is_more_available
 json.projects @projects do |project|
 
   json.title project.title
-  json.truncated_title truncate(project.title)
+  json.truncated_title truncate(project.title, length: 40)
   json.description project.description
   json.truncated_description truncate(project.description)
   json.created_at project.created_at

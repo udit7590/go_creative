@@ -44,8 +44,13 @@ div.project-listing div.description-fixed {
   height: 120px;
 }
 
-span.multi-span {
-  margin: 0 18px;
+div.project-detail-info {
+  text-align: center;
+  margin: 0 auto;
+}
+
+div.multi-span {
+  margin: 0 8px;
 }
 
 .clear {

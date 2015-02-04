@@ -1,5 +1,5 @@
 class ContributionsController < ApplicationController
-  include UserHelper
+  include UserConcern
 
   before_action :store_location
   before_action :authenticate_user!
