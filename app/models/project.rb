@@ -34,8 +34,7 @@ class Project < ActiveRecord::Base
   before_save :set_time_to_midnight, unless: Proc.new { |project| project.end_date.nil? }
   before_save :sanitize_description
   after_save :expire_cache
-  #Complete the project if amount received
-  after_save :complete!, if: Proc.new { |project| project.contributions.accepted.sum(:amount) >= project.amount_required }
+  
   # handle_asynchronously :expire_end_date, run_at: => Proc.new { end_date }
 
   # -------------- SECTION FOR STATE MACHINE --------------------
@@ -67,7 +66,7 @@ class Project < ActiveRecord::Base
       transitions from: :published, to: :payment_pending
     end
 
-    event :failed do
+    event :fail do
       transitions from: [:published, :payment_pending], to: :failed
     end
 

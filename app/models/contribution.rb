@@ -45,7 +45,8 @@ class Contribution < ActiveRecord::Base
   # -------------- SECTION FOR VALIDATIONS  ---------------------
   # -------------------------------------------------------------
 
-  # after_save :update_total_contribution_cache
+  #Complete the project if amount received
+  after_save :complete_project, if: :amount_fully_funded?
   # after_destroy :remove_contribution_amount_from_cache
 
   # validate :validate_card
@@ -169,6 +170,14 @@ class Contribution < ActiveRecord::Base
     rescue Stripe::InvalidRequestError => err
       puts "#{err}"
       raise ActiveRecord::Rollback      
+    end
+
+    def amount_fully_funded?
+      project.amount_collected >= project.amount_required
+    end
+
+    def complete_project
+      project.complete!
     end
 
 end

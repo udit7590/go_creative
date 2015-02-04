@@ -8,9 +8,9 @@ $(document).ready(function() {
 
     // Configure the stripe checkout form and define what happens on response
     var handler = StripeCheckout.configure({
-      key: 'pk_test_SHyWyP14xAqLDiJnxR0Q2Kdc',
+      key: stripeConfigurations['publicKey'],
       token: function(token) {
-        console.log(token);
+        $.loader({ className:"blue-with-image-2", content:'' });
         var $form = $('#new_contribution');
         //Send the request to add contributor(if not already added) and hold the payment 
         $('#stripe_token').val(token);

@@ -75,10 +75,10 @@ class Admin::ProjectsController < ::ApplicationController
   def cancel
     respond_to do |format|
       if @project.cancel!
-        @error_message = 'The project is successfully cancelled'
+        @success_message = 'The project is successfully cancelled'
         format.js { render 'cancel' }
         format.html do 
-          flash[:notice] = @error_message
+          flash[:notice] = @success_message
           redirect_to action: :index
         end
       else

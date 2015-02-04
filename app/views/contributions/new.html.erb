@@ -12,5 +12,10 @@
 </div>
 
 <% content_for :javascripts do %>
+  <script>
+    const stripeConfigurations = {
+      publicKey : "<%= ENV['STRIPE_PUBLISHABLE_KEY'] %>"
+    }
+  </script>
   <%= javascript_include_tag 'contributions_handler', 'data-turbolinks-track' => true %>
 <% end %> 
