@@ -6,7 +6,12 @@ class ContributionsController < ApplicationController
   before_action :load_project, only: [:new, :create]
   before_action :load_user, only: [:new, :create]
   before_action :build_contribution, only: :new
+  before_action :extract_token_params, only: :create
   before_action :build_contribution_from_params, only: :create
+  # before_action :build_contribution_transaction, only: :create
+
+  # This makes sure that user has not modified the response from stripe
+  before_action :check_user, only: :create
 
   # Checks if the project is not orphan. It is only a security check.
   # FUTURE: Do some critical action here
@@ -30,6 +35,7 @@ class ContributionsController < ApplicationController
   # No need for more contributions if amount has been completely collected
   before_action :check_if_more_contribution_required, only: [:new, :create]
 
+
   def index; end
 
   def new; end
@@ -46,7 +52,7 @@ class ContributionsController < ApplicationController
 
   def create
     if(@contribution.save)
-      if(@contribution.purchase)
+      if(@contribution.purchase(@token))
         ContributionMailer.payment_success(@contribution, @contribution.current_transaction).deliver
         render :success
       else
@@ -69,16 +75,38 @@ class ContributionsController < ApplicationController
     def load_project
       @project = Project.find_by(id: (params[:project_id]))
       unless @project
-        flash[:alert] = I18n.t :no_project, scope: [:projects, :views]
-        redirect_to controller: :home, action: :index
+        respond_to do |format|
+          format.html do
+            flash[:alert] = t :no_project, scope: [:projects, :views]
+            redirect_to controller: :home, action: :index
+          end
+          format.json { render json: { error: (t :no_project, scope: [:projects, :views]) }, status: 422 }
+        end
       end
     end
 
     def load_user
       @user = current_user
       unless @user
-        flash[:alert] = I18n.t :no_user, scope: [:errors, :views]
-        redirect_to controller: :home, action: :index
+        respond_to do |format|
+          format.html do
+            flash[:alert] = t :no_user, scope: [:errors, :views]
+            redirect_to controller: :home, action: :index
+          end
+          format.json { render json: { error: (t :no_user, scope: [:errors, :views]) }, status: 422 }
+        end
+      end
+    end
+
+    def check_user
+      unless @user.email.downcase != params[:email].try(:downcase) 
+        respond_to do |format|
+          format.html do
+            flash[:alert] = t :invalid_user, scope: [:contributions, :errors]
+            redirect_to controller: :home, action: :index
+          end
+          format.json { render json: { error: (t :invalid_user, scope: [:contributions, :errors]) }, status: 422 }
+        end
       end
     end
 
@@ -91,59 +119,111 @@ class ContributionsController < ApplicationController
       end
     end
 
+    def extract_token_params
+      # Get the credit card details submitted by the form
+      @token = params[:stripeToken]
+      @token_params = JSON.parse(params[:stripeTokenParams])
+      unless @token || @token_params
+        flash[:alert] = t :no_token, scope: [:contributions, :errors]
+        redirect_to project_path(@project)
+      end
+    end
+
+    def build_contribution_transaction
+      # Create a Customer
+      @contribution.transactions.build.create_customer!
+    end
+
     def build_contribution_from_params
-      @contribution = @project.contributions.build(contribution_params)
+      @contribution = @project.contributions.build
+      @contribution.amount = params[:contribution][:amount]
       @contribution.user_id = @user.id
-      @contribution.ip_address = request.remote_ip
+      @contribution.ip_address = @token_params['client_ip']
     end
 
     def check_orphan_project
       unless @project.user_id
-        flash[:alert] = I18n.t :orphan_project, scope: [:projects, :views]
-        redirect_to controller: :home, action: :index
+        respond_to do |format|
+          format.html do
+            flash[:alert] = t :orphan_project, scope: [:projects, :views]
+            redirect_to controller: :home, action: :index
+          end
+          format.json { render json: { error: (t :orphan_project, scope: [:projects, :views]) }, status: 422 }
+        end
       end
     end
 
     def check_project_owner
       if @project.user_id == @user.id
-        flash[:alert] = I18n.t :project_owner_cannot_contribute, scope: [:contributions, :errors]
-        redirect_to controller: :home, action: :index
+        respond_to do |format|
+          format.html do
+            flash[:alert] = t :project_owner_cannot_contribute, scope: [:contributions, :errors]
+            redirect_to controller: :home, action: :index
+          end
+          format.json { render json: { error: (t :orphan_project, scope: [:projects, :views]) }, status: 422 }
+        end
       end
     end
 
     # Pass the project id and params in session to be able to receive later
     def check_user_details
       unless @user.complete?
-        store_redirect_location(@project, params, request.fullpath)
-        check_user_details_and_redirect(@user, @project)
+        respond_to do |format|
+          format.html do
+            store_redirect_location(@project, params, request.fullpath)
+            check_user_details_and_redirect(@user, @project)
+          end
+          format.json { render json: { error: ('Incomplete User Details') }, status: 422 }
+        end
       end
     end
 
     def check_project_end_date
       if !@project.end_date && @project.end_date < DateTime.current
-        flash[:alert] = I18n.t :project_expired, scope: [:contributions, :errors]
-        redirect_to controller: :home, action: :index
+        respond_to do |format|
+          format.html do
+            flash[:alert] = t :project_expired, scope: [:contributions, :errors]
+            redirect_to controller: :home, action: :index
+          end
+          format.json { render json: { error: (t :project_expired, scope: [:contributions, :errors]) }, status: 422 }
+        end
       end
     end
 
     def check_project_state
       unless @project.published?
-        flash[:alert] = I18n.t :project_not_published, scope: [:contributions, :errors]
-        redirect_to controller: :home, action: :index
+        respond_to do |format|
+          format.html do
+            flash[:alert] = t :project_not_published, scope: [:contributions, :errors]
+            redirect_to controller: :home, action: :index
+          end
+          format.json { render json: { error: (t :project_not_published, scope: [:contributions, :errors]) }, status: 422 }
+        end
       end
     end
 
     def check_minimum_amount
       if @contribution.amount < @project.min_amount_per_contribution 
-        flash[:alert] = I18n.t :no_project_min_amount, scope: [:contributions, :errors]
-        render :new
+        respond_to do |format|
+          format.html do
+            flash[:alert] = t :no_project_min_amount, scope: [:contributions, :errors]
+            render :new
+          end
+          format.json { render json: { error: (t :no_project_min_amount, scope: [:contributions, :errors]) }, status: 422 }
+        end
       end
     end
 
     def check_if_more_contribution_required
       if @project.amount_required <= @project.collected_amount
-        flash[:alert] = I18n.t :project_amount_collected, scope: [:contributions, :errors]
-        redirect_to root_path
+        respond_to do |format|
+          format.html do
+            flash[:alert] = t :project_amount_collected, scope: [:contributions, :errors]
+            redirect_to root_path
+          end
+          format.json { render json: { error: (t :project_amount_collected, scope: [:contributions, :errors]) }, status: 422 }
+        end
+
       end
     end    
 end

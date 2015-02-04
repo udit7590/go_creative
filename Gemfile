@@ -82,6 +82,7 @@ gem 'paperclip-dropbox', '>= 1.1.7'
 
 # For payment
 gem 'activemerchant'
+gem 'stripe', git: 'https://github.com/stripe/stripe-ruby'
 
 # For scheduling
 gem 'daemons'

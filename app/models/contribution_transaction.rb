@@ -5,10 +5,10 @@ class ContributionTransaction < ActiveRecord::Base
   serialize :params
 
   def response=(response)
-    self.success = response.success?
-    self.authorization = response.authorization
-    self.message = response.message
-    self.params = response.params
+    self.success = response.captured
+    self.authorization = response.id
+    self.message = response.failure_message
+    self.params = response
   rescue ActiveMerchant::ActiveMerchantError => e
     self.success = false
     self.authorization = nil

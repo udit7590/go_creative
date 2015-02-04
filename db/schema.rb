@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150121112625) do
+ActiveRecord::Schema.define(version: 20150131074050) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -91,7 +91,7 @@ ActiveRecord::Schema.define(version: 20150121112625) do
   create_table "contributions", force: true do |t|
     t.integer  "project_id"
     t.integer  "user_id"
-    t.string   "state",           default: "contributed"
+    t.string   "state",              default: "contributed"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "amount"
@@ -99,6 +99,7 @@ ActiveRecord::Schema.define(version: 20150121112625) do
     t.date     "card_expires_on"
     t.inet     "ip_address"
     t.cidr     "network_address"
+    t.string   "stripe_customer_id"
   end
 
   add_index "contributions", ["project_id"], name: "index_contributions_on_project_id", using: :btree
