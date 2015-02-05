@@ -1,18 +1,19 @@
 <tr>
-  <td><%= project.title.truncate(40) %></td>
+  <td title="<%= project.title %>"><%= project.title.truncate(25) %></td>
   <td><%= humanize_sti_class(project.type) %></td>
-  <td><%= number_to_currency(project.amount_required, unit: 'INR ', precision: 0) %></td>
+  <td><%= number_to_currency(project.amount_required, unit: Constants::DEFAULT_CURRENCY, precision: 0) %></td>
   <td><a href="<%= admin_user_path(project.user) %>" data-toggle="tooltip" data-placement="bottom" data-original-title="<%= project.user.email %>"><%= project.user.name %></a></td>
   <td><%= project.created_at.to_s(:short) %></td>
   <td><%= project.end_date.to_date.to_s(:long) %></td>
-  <td><%= project.state.humanize %></td>
+  <td><strong><%= project.state.humanize %></strong></td>
   <td>
-    <%= link_to (button_tag 'View'), admin_project_path(project) %>
+    <%= link_to (button_tag 'View', class: 'btn btn-primary'), admin_project_path(project) %>
     <% if project.publishable? %>
-      <%= link_to (button_tag 'Publish'), admin_project_publish_path(project), remote: true, data: { project_id: project.id, confirm_message: 'Are you sure you want to publish this project?' }, class: 'publish project-actions' %>
+      <%= link_to (button_tag 'Publish', class: 'btn btn-warning'), admin_project_publish_path(project), remote: true, data: { project_id: project.id, confirm_message: 'Are you sure you want to publish this project?' }, class: 'publish project-actions' %>
+      <%= link_to (button_tag 'Reject', class: 'btn btn-danger'), admin_project_reject_path(project), remote: true, data: { project_id: project.id, confirm_message: 'Are you sure you want to reject this project?' }, class: 'reject project-actions' %>
     <% end %>
     <% if project.cancelable? %>
-      <%= link_to (button_tag 'Cancel'), admin_project_cancel_path(project), remote: true, data: { project_id: project.id, confirm_message: 'Are you sure you want to cancel this project?' }, class: 'cancel project-actions' %>
+      <%= link_to (button_tag 'Cancel', class: 'btn btn-danger'), admin_project_cancel_path(project), remote: true, data: { project_id: project.id, confirm_message: 'Are you sure you want to cancel this project?' }, class: 'cancel project-actions' %>
     <% end %>
   </td>
 </tr>

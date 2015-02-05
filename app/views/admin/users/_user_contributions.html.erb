@@ -16,7 +16,7 @@
           <td><%= contribution.id %></td>
           <td><%= link_to contribution.project.title, admin_project_path(contribution.project_id) %></td>
           <td><%= contribution.created_at.to_s(:short) %></td>
-          <td><%= number_to_currency(contribution.amount, unit: 'INR ', precision: 0) %></td>
+          <td><%= number_to_currency(contribution.amount, unit: Constants::DEFAULT_CURRENCY, precision: 0) %></td>
           <td><%= contribution.state.humanize %></td>
           <td>
             <%= link_to (button_tag 'View'), admin_project_path(contribution.project_id) %>

@@ -72,7 +72,7 @@ class Contribution < ActiveRecord::Base
   def charge_customer!
     Stripe::Charge.create(
       amount: amount_in_paisa, # in paisa
-      currency: 'inr',
+      currency: Constants::DEFAULT_CURRENCY,
       customer: stripe_customer_id
     )
   end

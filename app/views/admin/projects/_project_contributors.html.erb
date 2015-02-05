@@ -20,7 +20,7 @@
             <% end %>
           </td>
           <td><%= contributor.user.email %></td>
-          <td><%= number_to_currency(contributor.amount, unit: 'INR ', precision: 0) %></td>
+          <td><%= number_to_currency(contributor.amount, unit: Constants::DEFAULT_CURRENCY, precision: 0) %></td>
           <td><%= contributor.created_at.to_s(:short) %></td>
           <td><%= contributor.state.humanize %></td>
         </tr>

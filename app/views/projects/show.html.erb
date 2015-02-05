@@ -5,6 +5,10 @@
     <button type="button" class="close" data-dismiss="alert">×</button>
     <center><strong>Your project has not been published yet.</strong></center>
   </div>
+<% elsif @project.rejected? %>
+  <div class="alert alert-error">
+    <center><strong>This project has been rejected by the admin.</strong></center>
+  </div>
 <% elsif @project.successful? %>
   <div class="alert alert-info">
     <button type="button" class="close" data-dismiss="alert">×</button>

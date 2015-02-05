@@ -48,6 +48,7 @@ class Project < ActiveRecord::Base
     state :fraud
     state :payment_pending
     state :reached_end_date
+    state :rejected
     state :cancelled
 
     event :publish do
@@ -56,6 +57,10 @@ class Project < ActiveRecord::Base
 
     event :unpublish do
       transitions from: [:created, :published, :fraud], to: :unpublished
+    end
+
+    event :reject do
+      transitions from: [:created, :unpublished], to: :rejected
     end
 
     event :successful do

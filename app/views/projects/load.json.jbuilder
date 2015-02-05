@@ -8,7 +8,7 @@ json.projects @projects do |project|
   json.truncated_description truncate(project.description)
   json.created_at project.created_at
   json.amount_required project.amount_required
-  json.amount_required_display number_to_currency(project.amount_required, unit: 'INR ', precision: 0)
+  json.amount_required_display number_to_currency(project.amount_required, unit: Constants::DEFAULT_CURRENCY, precision: 0)
   json.end_date project.end_date
   json.end_date_display project.end_date.to_date.to_s(:short)
   json.min_amount_per_contribution project.min_amount_per_contribution

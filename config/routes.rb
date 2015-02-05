@@ -27,6 +27,7 @@ Gocreative::Application.routes.draw do
       get :publish
       get :unpublish
       get :cancel
+      get :reject
       collection do
         get :published, concerns: :paginatable
         get :initial, concerns: :paginatable

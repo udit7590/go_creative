@@ -2,12 +2,13 @@ class Admin::ProjectsController < ::ApplicationController
   layout 'dashboard'
 
   before_action :authenticate_admin_user!
-  before_action :load_project, only: [:show, :publish, :unpublish, :cancel]
+  before_action :load_project, only: [:show, :publish, :unpublish, :cancel, :reject]
   before_action :check_project_unpublished, only: [:publish]
   before_action :check_project_details, only: [:publish]
   before_action :check_user_details, only: :publish
 
   before_action :check_project_state, only: :cancel
+  before_action :check_project_in_created_state, only: :reject
 
   def index
     @projects = Project.order_by_creation.page(params[:page]).per(Constants::ADMIN_RECORDS_PAGINATION_LIMIT)
@@ -44,7 +45,7 @@ class Admin::ProjectsController < ::ApplicationController
         format.js { render 'error_publish' }
         format.html do
           flash[:alert] = 'Project not published.'
-          redirect_to action: :index 
+          render action: admin_project_path(params[:project_id])
         end
       end
     end
@@ -64,7 +65,28 @@ class Admin::ProjectsController < ::ApplicationController
         format.js { render 'error_publish', locals: { project: nil, errors: @project.errors.full_messages } }
         format.html do
           flash[:alert] = @project.errors.full_messages
-          redirect_to admin_project_path(params[:project_id])
+          render admin_project_path(params[:project_id])
+        end
+      end
+    end
+  end
+
+  def reject
+    respond_to do |format|
+      @project.verified_at = nil
+      @project.admin_user_id = current_admin_user.id
+      if @project.reject!
+        success_message = 'The project is successfully rejected'
+        format.js { render 'reject' }
+        format.html do 
+          flash[:notice] = success_message
+          redirect_to action: :index
+        end
+      else
+        format.js { render 'error_publish', locals: { project: nil, errors: @project.errors.full_messages } }
+        format.html do
+          flash[:alert] = @project.errors.full_messages
+          render admin_project_path(params[:project_id])
         end
       end
     end
@@ -73,15 +95,15 @@ class Admin::ProjectsController < ::ApplicationController
   def cancel
     respond_to do |format|
       if @project.cancel!
-        @success_message = 'The project is successfully cancelled'
-        format.js { render 'cancel' }
+        success_message = 'The project is successfully cancelled'
+        format.js { render 'reject' }
         format.html do 
-          flash[:notice] = @success_message
+          flash[:notice] = success_message
           redirect_to action: :index
         end
       else
         error_message = @project.errors.full_messages
-        format.js { render 'error_cancel', locals: { error_message: error_message } }
+        format.js { render 'error_reject', locals: { error_message: error_message } }
         format.html do 
           flash[:alert] = error_message
           redirect_to admin_project_path(params[:project_id])
@@ -146,6 +168,19 @@ class Admin::ProjectsController < ::ApplicationController
         respond_to do |format|
           error_message = 'Cannot cancel the project as project is successful, expired or already cancelled.'
           format.js { render 'error_cancel', locals: { error_message: error_message } }
+          format.html do
+            flash[:alert] = error_message
+            redirect_to admin_project_path(params[:project_id])
+          end
+        end
+      end
+    end
+
+    def check_project_in_created_state
+      unless @project.created?
+        respond_to do |format|
+          error_message = 'Cannot reject the project as project is not new.'
+          format.js { render 'error_reject', locals: { error_message: error_message } }
           format.html do
             flash[:alert] = error_message
             redirect_to admin_project_path(params[:project_id])

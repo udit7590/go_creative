@@ -71,5 +71,5 @@
 </table>
 
 <% unless @user && @user.verified? %>
-  <%= button_to 'Verify', admin_user_verify_path(user_id: @user.id), method: :post, class: 'btn btn-block btn-primary' %>
+  <%= button_to 'Verify', admin_user_verify_path(user_id: @user.id), method: :post, class: 'btn btn-block btn-warning' %>
 <% end %>
