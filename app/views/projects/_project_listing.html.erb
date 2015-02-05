@@ -2,7 +2,7 @@
   <% #FIXME_AB: project.project_picture => project.picture. -%>
   <a href="<%= project_path(project) %>"><%= image_tag project.project_picture.url(:medium) %></a>
   <span class="project-details">
-    <h5 title="<%= project.title %>"><a href="<%= project_path(project) %>"><%= truncate(project.title, length: 40) %></a></h5>
+    <h5 title="<%= project.title %>"><a href="<%= project_path(project) %>"><%= truncate(project.title, length: 25) %></a></h5>
     <div class="progress" style="height: 7px" rel="tooltip" title="<%= project.percentage_completed %>% Completed" >
       <div class="bar bar-success" role="progressbar" style="width: <%= project.percentage_completed %>%;">
         <!-- <span>60% Complete of INR <%= project.amount_required %></span> -->
