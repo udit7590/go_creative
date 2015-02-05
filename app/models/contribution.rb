@@ -36,7 +36,7 @@ class Contribution < ActiveRecord::Base
       transitions from: :payment_initiated, to: :payment_error_occurred
     end
 
-    event :refund, before: :refund_amount do
+    event :refund, before: :refund_amount, success: :send_refund_mail do
       transitions from: :accepted, to: :refunded
     end
 
@@ -166,6 +166,10 @@ class Contribution < ActiveRecord::Base
           # Already Refunded
         end
       end
+
+    def send_refund_mail
+      ContributionMailer.project_cancelled(self, @current_transaction).deliver
+    end
         
     rescue Stripe::InvalidRequestError => err
       puts "#{err}"
