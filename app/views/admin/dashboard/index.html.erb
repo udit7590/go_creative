@@ -3,6 +3,29 @@
   <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas"><i class="glyphicon glyphicon-chevron-left"></i></button>
 </p>
 
-<h1 class="page-header">Welcome Admin
-  <p class="lead">(Last visited: <%= current_admin_user.last_sign_in_at.to_s(:long) %>)</p>
+<h1 class="page-header">Admin Dashboard
+  <p class="heading-span info pull-right">(Last visited: <%= current_admin_user.last_sign_in_at.to_s(:long) %>)</p>
 </h1>
+
+<div>
+  <div class='action-icons'>
+    <%= link_to (image_tag 'dashboard/new_projects.png'), initial_admin_projects_path %><br />
+    <%= link_to 'Unpublished Projects', initial_admin_projects_path, class: 'action' %>
+  </div>
+  <div class='action-icons'>
+    <%= link_to (image_tag 'dashboard/published_projects.png'), published_admin_projects_path %><br />
+    <%= link_to 'Published Projects', published_admin_projects_path, class: 'action' %>
+  </div>
+  <div class='action-icons'>
+    <%= link_to (image_tag 'dashboard/all_projects.png', class: 'dashboard-action'), admin_projects_path %><br />
+    <%= link_to 'All Projects', admin_projects_path, class: 'action' %>
+  </div>
+  <div class='action-icons'>
+    <%= image_tag 'dashboard/users.png', class: 'dashboard-action' %><br />
+    <%= link_to 'Users', admin_users_path, class: 'action' %>
+  </div>
+  <div class='action-icons'>
+    <%= image_tag 'dashboard/expire_projects.png', class: 'dashboard-action' %><br />
+    <%= link_to 'Expire Old Projects', initial_admin_projects_path, class: 'action' %>
+  </div>
+</div>

@@ -105,6 +105,11 @@ table.table-horizontal > tbody > tr > td:first-child {
   font-weight: bold;
 }
 
+.info {
+  color: #428bca;
+  font-weight: bold;
+}
+
 .warning {
   color: #cc9900;
   font-weight: bold;
@@ -114,7 +119,40 @@ table.table-horizontal > tbody > tr > td:first-child {
   color: #cc0000;
   font-weight: bold;
 }
+
 .special {
   font-weight: bold;
   color: #003399;
+}
+
+.heading-span {
+  font-size: 16px;
+}
+
+.action-icons {
+  background-color: #FAFAFA;
+  width: 200px;
+  height: 200px;
+  text-align: center;
+  -moz-box-shadow:    3px 3px 2px 1px #ccc;
+  -webkit-box-shadow: 3px 3px 2px 1px #ccc;
+  box-shadow:         3px 3px 2px 1px #ccc;
+  float: left;
+  margin-left: 60px;
+  margin-bottom: 50px;
+}
+
+.action-icons > a.action {
+  font-weight: bold;
+  font-family: sans-serif;
+  color: #428bca;
+  position: relative;
+  top: 65px;
+}
+
+.action-icons img {
+  width: 100px;
+  height: 100px;
+  position: relative;
+  top: 15px;
 }
