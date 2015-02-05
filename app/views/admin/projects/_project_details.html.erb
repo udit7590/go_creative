@@ -18,7 +18,7 @@
     </tr>
     <tr>
       <td>Amount Required</td>
-      <td><%= number_to_currency(@project.amount_required, unit: 'INR ', precision: 0) %></td>
+      <td><%= number_to_currency(@project.amount_required, unit: Constants::DEFAULT_CURRENCY, precision: 0) %></td>
     </tr>
     <tr>
       <td>Minimum amount required per contribution</td>
@@ -84,6 +84,7 @@
 
 <% if @project.publishable? %>
   <%= button_to 'Publish', admin_project_publish_path(@project.id), method: :get, class: 'btn btn-block btn-primary' %>
+  <%= button_to 'Reject', admin_project_reject_path(@project.id), method: :get, class: 'btn btn-block btn-danger' %>
 <% elsif @project.cancelable? %>
   <%= button_to 'Cancel', admin_project_cancel_path(@project.id), method: :get, class: 'btn btn-block btn-primary' %>
 <% end %>

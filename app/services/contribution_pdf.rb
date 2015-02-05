@@ -74,7 +74,7 @@ class ContributionPDF < Prawn::Document
     ['Project Title', @project.title],
     ['Project End Date', @project.end_date.to_date.to_s(:long)],
     ['Timestamp', @contribution.created_at.to_s(:long)],
-    ['Amount Contributed', ActionController::Base.helpers.number_to_currency(@transaction.try(:amount) || @contribution.amount, unit: 'INR ', precision: 0)],
+    ['Amount Contributed', ActionController::Base.helpers.number_to_currency(@transaction.try(:amount) || @contribution.amount, unit: Constants::DEFAULT_CURRENCY, precision: 0)],
     ['Contribution Status', @contribution.state.humanize],
     ['Transaction ID', @transaction.try(:authorization)]]
   end
