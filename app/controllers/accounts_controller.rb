@@ -33,7 +33,13 @@ class AccountsController < ApplicationController
       else
         format.html do
           flash[:alert] = @user.errors.full_messages.join('. ')
-          render action: :edit, status: 400
+          if(params[:update_action] == 'profile_picture')
+            # @user.restore_attributes
+            @user.restore_profile_picture
+            render 'edit_profile_picture', status: 400
+          else
+            render action: :edit, status: 400
+          end
         end 
         format.json { render json: @user.errors, status: 422 }
       end

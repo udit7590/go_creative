@@ -28,7 +28,7 @@
   <% if @project.user != current_user && @project.requires_donation? %>
   <%= form_for(@project, url: new_project_contribution_path(@project), method: :get, html: { class: 'form-horizontal' }) do |f| %>
   <div class="input-prepend">
-    <span class="add-on-block">Constants::DEFAULT_CURRENCY</span>
+    <span class="add-on-block"><%= Constants::DEFAULT_CURRENCY %></span>
     <%= f.number_field :min_amount_per_contribution, class: 'input-block', placeholder: 'Contribute', required: true, max: @project.amount_left, min: @project.min_amount %>
   </div>
 

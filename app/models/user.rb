@@ -106,4 +106,10 @@ class User < ActiveRecord::Base
     categorized_projects.flatten
   end
 
+  def restore_profile_picture
+    self.profile_picture_file_name = changed_attributes[:profile_picture_file_name]
+    self.profile_picture_content_type = changed_attributes[:profile_picture_content_type]
+    self.profile_picture_file_size = changed_attributes[:profile_picture_file_size]
+  end
+
 end
