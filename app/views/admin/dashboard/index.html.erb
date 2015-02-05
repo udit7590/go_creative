@@ -26,6 +26,6 @@
   </div>
   <div class='action-icons'>
     <%= image_tag 'dashboard/expire_projects.png', class: 'dashboard-action' %><br />
-    <%= link_to 'Expire Old Projects', initial_admin_projects_path, class: 'action' %>
+    <%= link_to 'Expire Old Projects', expire_admin_projects_path, remote: true, method: 'post', class: 'action' %>
   </div>
 </div>

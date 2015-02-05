@@ -30,6 +30,13 @@ class Admin::ProjectsController < ::ApplicationController
     @contributors = @project.contributions.order(created_at: :desc)
   end
 
+  #post
+  def expire
+    count = Project.expire_old
+    render js: "alert('#{count} projects expired.')"
+
+  end
+
   def publish
     respond_to do |format|
       #FIXME_AB: We should set verified_at and admin_user_id in the callback of publish!

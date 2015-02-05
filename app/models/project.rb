@@ -236,9 +236,10 @@ class Project < ActiveRecord::Base
 
   # Used by rake task
   def self.expire_old
-    where(state: :published).each do |project|
-      project.expire_end_date
-    end
+    query_params = { state: :published, date_today: DateTime.current }
+    (where("state = :state AND end_date <= :date_today", query_params).each do |project|
+          project.expire_end_date
+        end).length
   end
 
   # -------------- SECTION FOR CACHING METHODS ----------------------

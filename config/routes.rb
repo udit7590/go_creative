@@ -32,6 +32,7 @@ Gocreative::Application.routes.draw do
       collection do
         get :published, concerns: :paginatable
         get :initial, concerns: :paginatable
+        post :expire
       end
     end
     resources :projects, shallow: true, only: [] do

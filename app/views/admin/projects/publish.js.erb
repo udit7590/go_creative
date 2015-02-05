@@ -1,4 +1,5 @@
 var $publishButton = $('a.publish[data-project-id="<%= @project.id %>"]');
-$publishButton.attr('href', '<%= publish_button_path(is_published, @project) %>');
-$publishButton.children('button').text('<%= is_published ? "Unpublish" : "Publish" %>');
+// $publishButton.attr('href', '<%= publish_button_path(is_published, @project) %>');
+// $publishButton.children('button').text('<%= is_published ? "Unpublish" : "Publish" %>');
+$publishButton.remove();
 $.loader('close');
