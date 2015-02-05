@@ -25,7 +25,7 @@ Gocreative::Application.configure do
   # This option may cause significant delays in view rendering with a large
   # number of complex assets.
   config.assets.debug = true
-  config.assets.precompile += %w(dashboard_js/dashboard.js dashboard_css/dashboard.css, *.js)
+  config.assets.precompile += %w(dashboard_js/dashboard.js dashboard_css/dashboard.css, *.js, dashboard_css/signin.css, dashboard_css/styles.css)
 
   #For Mailer
   config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
