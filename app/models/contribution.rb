@@ -36,7 +36,7 @@ class Contribution < ActiveRecord::Base
       transitions from: :payment_initiated, to: :payment_error_occurred
     end
 
-    event :refund do
+    event :refund, before: :refund_amount do
       transitions from: :accepted, to: :refunded
     end
 
@@ -45,7 +45,8 @@ class Contribution < ActiveRecord::Base
   # -------------- SECTION FOR VALIDATIONS  ---------------------
   # -------------------------------------------------------------
 
-  # after_save :update_total_contribution_cache
+  #Complete the project if amount received
+  after_save :complete_project, if: :amount_fully_funded?
   # after_destroy :remove_contribution_amount_from_cache
 
   # validate :validate_card
@@ -83,10 +84,8 @@ class Contribution < ActiveRecord::Base
   def purchase(token)
     Contribution.transaction do
       create_customer!(token)
-      # debugger
       response = charge_customer!
-      # response = GATEWAY.purchase(price_in_cents, credit_card, ip: ip_address)
-      @current_transaction = transactions.create!(action: 'Purchase', amount: amount_in_paisa, response: response)
+      @current_transaction = transactions.create!(action: 'Purchase', amount: amount, response: response)
       initiate_payment!
       if response.captured
         update_total_contribution_cache
@@ -149,6 +148,36 @@ class Contribution < ActiveRecord::Base
         first_name:         user.first_name,
         last_name:          user.last_name
       )
+    end
+
+    def check_stripe_customer_id
+      !!stripe_customer_id
+    end
+
+    def refund_amount
+      if stripe_customer_id
+        charge_id = transactions.where(action: 'Purchase', success: true).last.authorization
+        charge = Stripe::Charge.retrieve(charge_id)
+        refunded_amount = charge.refunds.inject(0) {|memo, refund| memo + refund.amount  }
+        if amount_in_paisa > refunded_amount
+          response = charge.refunds.create
+          @current_transaction = transactions.create!(action: 'Refund', amount: amount_in_paisa / 100, response: response)
+        else
+          # Already Refunded
+        end
+      end
+        
+    rescue Stripe::InvalidRequestError => err
+      puts "#{err}"
+      raise ActiveRecord::Rollback      
+    end
+
+    def amount_fully_funded?
+      project.amount_collected >= project.amount_required
+    end
+
+    def complete_project
+      project.complete!
     end
 
 end

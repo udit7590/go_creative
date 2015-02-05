@@ -34,8 +34,7 @@ class Project < ActiveRecord::Base
   before_save :set_time_to_midnight, unless: Proc.new { |project| project.end_date.nil? }
   before_save :sanitize_description
   after_save :expire_cache
-  #Complete the project if amount received
-  after_save :complete!, if: Proc.new { |project| project.contributions.accepted.sum(:amount) >= project.amount_required }
+  
   # handle_asynchronously :expire_end_date, run_at: => Proc.new { end_date }
 
   # -------------- SECTION FOR STATE MACHINE --------------------
@@ -49,6 +48,7 @@ class Project < ActiveRecord::Base
     state :fraud
     state :payment_pending
     state :reached_end_date
+    state :cancelled
 
     event :publish do
       transitions from: [:created, :unpublished], to: :published
@@ -66,12 +66,16 @@ class Project < ActiveRecord::Base
       transitions from: :published, to: :payment_pending
     end
 
-    event :failed do
+    event :fail do
       transitions from: [:published, :payment_pending], to: :failed
     end
 
     event :fraud do
       transitions from: [:published, :unpublished, :created, :payment_pending], to: :fraud
+    end
+
+    event :cancel, before: :refund_collected_amount do
+      transitions from: [:published, :unpublished, :created, :payment_pending], to: :cancelled
     end
 
   end
@@ -165,6 +169,14 @@ class Project < ActiveRecord::Base
   def owner?(user)
     return false unless user
     user_id == user.id
+  end
+
+  def publishable?
+    created? || unpublished?
+  end
+
+  def cancelable?
+    published? || payment_pending?
   end
 
   # CRITICAL: Completes a project
@@ -267,7 +279,8 @@ class Project < ActiveRecord::Base
   end
 
   def self.min_collected_amount(projects)
-    projects.inject(projects.first.collected_amount) { |memo, proj| proj.collected_amount < memo ? proj.collected_amount : memo }
+    return 0 if projects.length <= 0
+    projects.inject(projects.first.collected_amount || 0) { |memo, proj| proj.collected_amount < memo ? proj.collected_amount : memo }
   end
 
 
@@ -310,6 +323,12 @@ class Project < ActiveRecord::Base
         errors.add(key, value)
       end
       
+    end
+
+    def refund_collected_amount
+      contributions.where(state: ['accepted', 'contributed']).each do |contribution|
+        contribution.refund!
+      end
     end
 
 end

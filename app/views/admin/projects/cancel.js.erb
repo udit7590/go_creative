@@ -1,0 +1,4 @@
+var $cancelButton = $('a.cancel[data-project-id="<%= @project.id %>"]');
+$cancelButton.prop('disabled', 'true');
+$cancelButton.children('button').text('Cancelled').prop('disabled', 'true');
+$.loader('close');
