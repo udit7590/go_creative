@@ -20,4 +20,8 @@ module DeviseHelper
     resource.errors.empty? ? false : true
   end
 
+  def user_logged_in?
+    !!current_user
+  end
+
 end

@@ -4,7 +4,7 @@
   </div>
   <div class="panel-body">
     <ul class="nav nav-tabs" role="tablist">
-      <li role="presentation" class="active"><a href="#project-details" role="tab" data-toggle="tab" aria-expanded="true">Project Details</a></li>
+      <li role="presentation" class="active"><a href="#project-details" role="tab" data-toggle="tab" aria-expanded="true">Details</a></li>
       <li role="presentation"><a href="#user-details" role="tab" data-toggle="tab">User Details</a></li>
       <li role="presentation"><a href="#project-comments" role="tab" data-toggle="tab">Comments</a></li>
       <li role="presentation"><a href="#project-contributors" role="tab" data-toggle="tab">Contributors</a></li>
@@ -37,4 +37,5 @@
   <%= javascript_include_tag 'comment', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'comments_page', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'admin_project_view', 'data-turbolinks-track' => true %>
-<% end %> 
+  <%= javascript_include_tag 'admin_user_detail_page', 'data-turbolinks-track' => true %>
+<% end %>

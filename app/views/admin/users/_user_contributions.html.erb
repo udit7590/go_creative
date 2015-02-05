@@ -2,12 +2,12 @@
   <table class="table table-striped">
     <thead>
       <tr>
-        <th>Contribution ID</th>
+        <th>ID</th>
         <th>Contributed For</th>
         <th>Contributed On</th>
         <th>Amount Contributed</th>
-        <th>Status</th>
-        <th>Action</th>
+        <th>Current Status</th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
@@ -19,7 +19,7 @@
           <td><%= number_to_currency(contribution.amount, unit: Constants::DEFAULT_CURRENCY, precision: 0) %></td>
           <td><%= contribution.state.humanize %></td>
           <td>
-            <%= link_to (button_tag 'View'), admin_project_path(contribution.project_id) %>
+            <button class="transactions-detail" data-contribution-id="<%= contribution.id %>" data-path="<%= admin_contribution_transactions_path(contribution.id) %>">Details</button>
           </td>
         </tr>
       <% end %>
@@ -28,3 +28,6 @@
 <% else %>
   <p class="missing">This user has not made any contributions yet</p>
 <% end %>
+
+<%= render 'admin/shared/transaction_modal' %>
+<div id="transactionModal"></div>
