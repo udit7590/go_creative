@@ -10,18 +10,16 @@ class Admin::ProjectsController < ::ApplicationController
   before_action :check_project_state, only: :cancel
 
   def index
-    #FIXME_AB: I have not seen you using include or egarload. Please check you log and egarload data
-    @projects = Project.all.order_by_creation.page(params[:page]).per(20)
-    @filter = 'all'
+    @projects = Project.order_by_creation.page(params[:page]).per(Constants::ADMIN_RECORDS_PAGINATION_LIMIT)
   end
 
   def published
-    @projects = Project.published.order_by_creation.page(params[:page]).per(20)
+    @projects = Project.published.order_by_creation.page(params[:page]).per(Constants::ADMIN_RECORDS_PAGINATION_LIMIT)
     render :index
   end
 
   def initial
-    @projects = Project.created.order_by_creation.page(params[:page]).per(20)
+    @projects = Project.created.order_by_creation.page(params[:page]).per(Constants::ADMIN_RECORDS_PAGINATION_LIMIT)
     render :index
   end
 
@@ -82,10 +80,10 @@ class Admin::ProjectsController < ::ApplicationController
           redirect_to action: :index
         end
       else
-        @error_message = @project.errors.full_messages
-        format.js { render 'error_cancel' }
+        error_message = @project.errors.full_messages
+        format.js { render 'error_cancel', locals: { error_message: error_message } }
         format.html do 
-          flash[:alert] = @error_message
+          flash[:alert] = error_message
           redirect_to admin_project_path(params[:project_id])
         end
       end
@@ -146,10 +144,10 @@ class Admin::ProjectsController < ::ApplicationController
     def check_project_state
       unless @project.cancelable?
         respond_to do |format|
-          @error_message = 'Cannot cancel the project as project is successful, expired or already cancelled.'
-          format.js { render 'error_cancel' }
+          error_message = 'Cannot cancel the project as project is successful, expired or already cancelled.'
+          format.js { render 'error_cancel', locals: { error_message: error_message } }
           format.html do
-            flash[:alert] = @error_message
+            flash[:alert] = error_message
             redirect_to admin_project_path(params[:project_id])
           end
         end
