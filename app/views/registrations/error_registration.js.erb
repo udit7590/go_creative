@@ -1,0 +1,28 @@
+alert('We found some errors in the form.');
+
+var $errorBox = $('<div>', { class: 'alert alert-error' }),
+    $modalBox = $("#userRegistrationModal"),
+    $modalBoxBody = $modalBox.find(".modal-body"),
+    $modalErrorBox = $modalBoxBody.find("div.alert-error"),
+    errorMessages = null;
+
+// Generates a list of error messages found while registering the user
+<% @user.errors.full_messages.each do |msg| %>
+  if(errorMessages) {
+    errorMessages += '<%= msg %><br />'
+  } else {
+    errorMessages = '<%= msg %><br />'
+  }
+<% end %>
+$errorBox.html(errorMessages);
+
+// Displays the error box on the modal registration box
+if ($modalErrorBox.length != 0) {
+  $modalErrorBox.html(errorMessages);
+} else {
+  $modalBoxBody.prepend($errorBox);
+}
+
+$modalBox.find('input[type=submit]').removeAttr("disabled");
+$modalBox.find('input[type=submit]').attr('value', "Sign up");
+  

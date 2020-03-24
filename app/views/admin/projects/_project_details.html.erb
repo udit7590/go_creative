@@ -1,0 +1,90 @@
+<table class="table table-striped table-horizontal">
+  <tbody>
+    <tr>
+      <td>ID</td>
+      <td><%= @project.id %></td>
+    </tr>
+    <tr>
+      <td>Type</td>
+      <td><%= humanize_sti_class(@project.type) %></td>
+    </tr>
+    <tr>
+      <td>Description</td>
+      <td><%= @project.description.html_safe %></td>
+    </tr>
+    <tr>
+      <td>Started By</td>
+      <td><%= @project.user.name %> (<%= @project.user.email %>)</td>
+    </tr>
+    <tr>
+      <td>Amount Required</td>
+      <td><%= number_to_currency(@project.amount_required, unit: Constants::DEFAULT_CURRENCY, precision: 0) %></td>
+    </tr>
+    <tr>
+      <td>Minimum amount required per contribution</td>
+      <td><%= number_to_currency(@project.min_amount_per_contribution, unit: 'INR ', precision: 0) %></td>
+    </tr>
+    <tr>
+      <td>Amount Collected</td>
+      <td><%= number_to_currency(@project.collected_amount, unit: 'INR ', precision: 0) %></td>
+    </tr>
+    <tr>
+      <td>Contributors</td>
+      <td><%= @project.contributions_count %></td>
+    </tr>
+    <tr>
+      <td>Status</td>
+      <td><em class="special"><%= @project.state.humanize %></em></td>
+    </tr>
+    <tr>
+      <td>Created On</td>
+      <td><%= @project.created_at.to_s(:long) %></td>
+    </tr>
+    <tr>
+      <td>End Date</td>
+      <td><%= @project.end_date.to_date.to_s(:long) %></td>
+    </tr>
+    
+    <tr>
+      <td>Project Image</td>
+      <td>
+        <% if @project.project_picture.exists? %>
+          <%= link_to image_tag(@project.project_picture.url, size: '300x200'), @project.project_picture.url, target: '_blank' %>
+        <% else %>
+          <span class="missing">Missing</span>
+        <% end %>
+      </td>
+    </tr>
+    <tr>
+      <td>Project Gallery</td>
+      <td>
+        <% if @project.images.length.nonzero? %>
+          <% @project.images.each do |image| %>
+            <%= link_to image_tag(image.image.url , size: '150x100'), image.image.url, target: '_blank' %>
+          <% end %>
+        <% else %>
+          <span class="missing">Missing</span>
+        <% end %> 
+      </td>
+    </tr>
+    <tr>
+      <td>Legal Documents</td>
+      <td>
+        <% if @project.legal_documents.length.nonzero? %>
+          <% @project.legal_documents.each do |document| %>
+            <%= link_to document.image_file_name, document.image.url, target: '_blank' %><br />
+          <% end %>
+        <% else %>
+          <span class="missing">Missing</span>
+        <% end %>  
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<% if @project.publishable? %>
+  <%= button_to 'Publish', admin_project_publish_path(@project.id), method: :get, class: 'btn btn-block btn-primary' %>
+  <%= button_to 'Reject', admin_project_reject_path(@project.id), method: :get, class: 'btn btn-block btn-danger' %>
+<% elsif @project.cancelable? %>
+  <%= button_to 'Cancel', admin_project_cancel_path(@project.id), method: :get, class: 'btn btn-block btn-primary' %>
+<% end %>

@@ -55,3 +55,47 @@ gem 'thin'
 
 # Required for deployment on heroku
 gem 'rails_12factor', group: :production
+
+group :development, :test do
+  gem 'rspec-rails', '~> 3.0'
+  gem 'shoulda-matchers'
+  gem 'shoulda-callback-matchers', '~> 1.1.1'
+  gem 'factory_girl_rails'
+end
+
+gem 'non-stupid-digest-assets', group: :production
+
+#For Pagination
+gem 'kaminari'
+
+#For State Machine
+gem 'aasm', '~> 4.0.7'
+
+#For mails in test and development
+gem 'letter_opener', group: [:development, :test]
+
+gem 'quiet_assets', group: :development
+
+#For Paperclip s3 storage
+gem 'aws-sdk'
+gem 'paperclip-dropbox', '>= 1.1.7'
+
+# For payment
+gem 'activemerchant'
+gem 'stripe', git: 'https://github.com/stripe/stripe-ruby'
+
+# For scheduling
+gem 'daemons'
+gem 'delayed_job_active_record'
+
+# For PDF
+gem 'prawn', '~> 1.3.0'
+gem 'prawn-table', '~> 0.2.1'
+
+# For production exception 
+gem 'exception_notification', '~> 4.0.1', group: :production
+
+# For test coverage
+gem 'simplecov', require: false, group: :test
+
+gem 'whenever', require: false

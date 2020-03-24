@@ -1,0 +1,27 @@
+<div class="span4 sidebar page-sidebar"><!-- Begin sidebar column -->
+
+  <!--Latest News-->
+  <h2 class="title-bg">Hi <%= @user.first_name%></h2>
+  <center><%= image_tag path_for_profile_picture(@user), class: 'profile-picture' %></center>
+  <br />
+
+  <!--Navigation-->
+  <h5 class="title-bg">More Settings</h5>
+  <ul class="post-category-list">
+    <li><%= link_to 'Update Profile', edit_account_path, method: :get %></li>
+    <li><%= link_to 'Reset my password', edit_user_registration_path, method: :get %></li>
+    <li><%= link_to 'Change Profile Picture', edit_profile_picture_account_path %></li>
+    <li><%= link_to 'Public View', profile_path(@user.id), method: :get %></li>
+  </ul>
+
+  <!--Comments and Messages-->
+  <h5 class="title-bg">Messages &amp; Comments</h5> 
+  <ul class="popular-posts">
+    <li>
+      <%= image_tag 'img/gallery/gallery-img-2-thumb.jpg', alt: 'Popular Post' %></a>
+      <h6><a href="#">Lorem ipsum dolor sit amet consectetur adipiscing elit</a></h6>
+      <em>Posted on 09/01/15</em>
+    </li>
+  </ul>
+
+</div><!-- End sidebar column -->

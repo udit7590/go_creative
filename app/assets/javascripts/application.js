@@ -14,10 +14,20 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require 'js/bootstrap.js'
+//= require 'js/dropzone.js'
+//= require 'js/bootstrap-filestyle.js'
+//= require 'js/bootstrap-datetimepicker.min.js'
 //= require 'js/jquery.prettyPhoto.js'
+//= require 'js/jquery.loader.min.js'
 //= require 'js/jquery.flexslider.js'
 //= require 'js/jquery.easing.1.3.js'
+//= require 'js/summernote.js'
+//= require 'js/mustache.js'
 //= require 'js/jquery.custom.js'
-//= require 'init_theme.js'
+//= require 'js/lightbox.js'
+//= require 'js/jquery.jcarousel.min.js'
+//= require 'js/jquery.pikachoose.js'
+//= require 'js/jquery.touchwipe.min.js'
 
-//= require_directory .
+//= require 'init_theme.js'
+//= require constants.js

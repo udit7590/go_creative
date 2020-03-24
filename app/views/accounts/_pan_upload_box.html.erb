@@ -1,0 +1,3 @@
+<h5>PAN Card Attachment</h5>
+<%= pancard_upload_text_image(@user.pan_card_copy) %>
+<%= form_tag('/account/upload_pan_card_image', method: :post, multipart: true, class: 'dropzone', id: 'pancard_upload') {} %>

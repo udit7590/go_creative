@@ -6,4 +6,8 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
+
+#FIXME_AB: Since we will launch this app in opensource so lets ask user to input email and password instead of hardcoding. 
+
 AdminUser.create!(email: 'udit@vinsol.com', password: 'admin123', password_confirmation: 'admin123')
+AdminUser.create!(email: 'akhil.gupta@vinsol.com', password: 'admin123', password_confirmation: 'admin123')

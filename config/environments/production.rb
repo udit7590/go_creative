@@ -1,3 +1,5 @@
+require 'exception_notification/rails'
+
 Gocreative::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -13,7 +15,8 @@ Gocreative::Application.configure do
   # Full error reports are disabled and caching is turned on.
   config.consider_all_requests_local       = false
   config.action_controller.perform_caching = true
-
+  config.cache_store = :memory_store
+  
   # Enable Rack::Cache to put a simple HTTP cache in front of your application
   # Add `rack-cache` to your Gemfile before enabling this.
   # For large-scale production use, consider using a caching reverse proxy like nginx, varnish or squid.
@@ -33,7 +36,7 @@ Gocreative::Application.configure do
   config.assets.digest = true
 
   # Version of your assets, change this if you want to expire all your assets.
-  config.assets.version = '1.0'
+  config.assets.version = '1.1'
 
   # Specifies the header that your server uses for sending files.
   # config.action_dispatch.x_sendfile_header = "X-Sendfile" # for apache
@@ -60,6 +63,7 @@ Gocreative::Application.configure do
   # Precompile additional assets.
   # application.js, application.css, and all non-JS/CSS in app/assets folder are already added.
   # config.assets.precompile += %w( search.js )
+  config.assets.precompile += %w(dashboard_js/dashboard.js dashboard_css/dashboard.css, *.js, dashboard_css/signin.css, dashboard_css/styles.css)
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
@@ -77,4 +81,66 @@ Gocreative::Application.configure do
 
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
+
+  #For Mailer
+  config.action_mailer.default_url_options = { host: 'gocreative.herokuapp.com'}
+
+  #load mail server settings
+  config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.perform_deliveries = true
+  
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    user_name: ENV['SENDGRID_USERNAME'],
+    password: ENV['SENDGRID_PASSWORD'], 
+    address: 'smtp.sendgrid.net',
+    port: 587,
+    authentication: :plain,
+    enable_starttls_auto: true
+  }
+
+  config.action_mailer.default_options = { from: 'site@gocreative.com' }
+
+  config.after_initialize do
+    # Send requests to the gateway's test servers
+    ActiveMerchant::Billing::Base.mode = :test
+
+    ::GATEWAY = ActiveMerchant::Billing::PaypalGateway.new(
+      login: 'udit-facilitator_api1.vinsol.com',
+      password: '9ZDXLHZMG6MTYWPE',
+      signature: 'AFcWxV21C7fd0v3bYYYRCpSSRl31AYKb-gwzAAGTZTmeRpmVwK9jlrP8'
+      )
+  end
+
+  config.paperclip_defaults = {
+    storage: :s3,
+    s3_credentials: "#{Rails.root}/config/s3.yml",
+    url: ':s3_domain_url',
+    bucket: ENV['S3_BUCKET'],
+    path: '/:class/:attachment/:id_partition/:style/:filename',
+    default_url: '/images/:attachment/missing_:style.jpg'
+  }
+
+end
+
+ExceptionNotification.configure do |config|
+  # Ignore additional exception types.
+  # ActiveRecord::RecordNotFound, AbstractController::ActionNotFound and ActionController::RoutingError are already added.
+  # config.ignored_exceptions += %w{ActionView::TemplateError CustomError}
+
+  # Adds a condition to decide when an exception must be ignored or not.
+  # The ignore_if method can be invoked multiple times to add extra conditions.
+  # config.ignore_if do |exception, options|
+  #   not Rails.env.production?
+  # end
+
+  # Notifiers =================================================================
+
+  # Email notifier sends notifications by email.
+  config.add_notifier :email, {
+    email_prefix: 'Go Creative Exception Notification key: "value", ',
+    sender_address: %{"notifier" <notifier@gocreative.com>},
+    exception_recipients: %w{udit@vinsol.com}
+  }
+
 end

@@ -1,0 +1,49 @@
+<div class="span7 navigation">
+  <div class="navbar hidden-phone">
+    <ul class="nav">
+      <li>
+        <%= link_to_if !current_page?(root_path), :Home, root_path, method: :get do %>
+          <a href="#" class="active">Home</a>
+        <% end %>
+      </li>
+      <li>
+        <%= link_to_if !current_page?(projects_path), :Projects, projects_path, method: :get do %>
+          <a href="#" class="active">Projects</a>
+        <% end %>
+      </li>
+      <li><a href="#">Contact</a></li>
+      <% unless user_logged_in? %>
+      <li><a href="#userLoginModal" role="button" data-backdrop="static" data-toggle="modal">Login</a></li>
+      <li><a href="#userRegistrationModal" data-backdrop="static" role="button" data-toggle="modal">Signup</a></li>
+      <%= render '/sessions/login_modal' %>
+      <%= render '/registrations/register_modal' %>
+      <%= render '/shared/loader_modal' %>
+      <% else %>
+
+      <li class="dropdown">
+        <a class="dropdown-toggle <%= 'active' if controller.class == AccountsController %>" href="#account">My Account <b class="caret"></b></a>
+        <ul class="dropdown-menu">
+          <li><%= link_to :Profile, edit_account_path, method: :get %></li>
+          <li><%= link_to :Projects, current_users_projects_path, method: :get %></li>
+          <li><%= link_to :Start_a_project, new_users_project_path, method: :get %></li>
+          <li><%= link_to :Logout, destroy_user_session_path, method: :delete %></li>
+        </ul>
+      </li>
+      <% end %>
+    </ul>
+  </div>
+
+  <!-- Mobile Nav
+  ================================================== -->
+  <form action="#" id="mobile-nav" class="visible-phone">
+    <div class="mobile-nav-select">
+      <select onchange="window.open(this.options[this.selectedIndex].value,'_top')">
+        <option value="">Navigation</option>
+        <option value="">Home</option>
+        <option value="blog-single.htm">- Blog Single</option>
+        <option value="page-contact.htm">Contact</option>
+      </select>
+    </div>
+  </form>
+  
+</div>

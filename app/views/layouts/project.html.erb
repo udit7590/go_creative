@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <%= render 'shared/public_head' %>
+
+  <body class="home">
+    <!-- Color Bars (above header)-->
+    <div class="color-bar-1"></div>
+    <div class="color-bar-2 color-bg"></div>
+    <%= render 'shared/flash_message' %>
+
+    <div class="container">
+      
+      <div class="row header"><!-- Begin Header -->
+      
+        <!-- Logo
+        ================================================== -->
+        <div class="span5 logo">
+          <a href="index.htm"><%= image_tag 'img/go-creative-logo.png' %></a>
+          <h5>Big Greams... Global Way</h5>
+        </div>
+        
+        <!-- Main Navigation
+        ================================================== -->
+        <%= render 'shared/public_navigation' %>
+        
+      </div><!-- End Header -->
+      
+      <%= yield %>
+      
+    </div> <!-- End Container -->
+
+    <!-- Footer Area
+    ================================================== -->
+    <%= render 'shared/public_footer' %>
+    
+    <!-- JS -->
+    <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+
+  </body>
+</html>

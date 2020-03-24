@@ -1,0 +1,14 @@
+<!-- Gallery
+  ================================================== --> 
+<% if @project.images.present? %>
+  
+  <h4 class="title-bg">Gallery</h4>
+  <center>
+  <ul id="project-gallery" >
+    <% @project.images.each.with_index do |image, index| %>
+      <li><%= image_tag image.image.url(:large) %></li>
+    <% end %>
+  </ul>
+</center>
+
+<% end %>

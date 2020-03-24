@@ -7,15 +7,17 @@
 
   <link href='http://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
   <%= stylesheet_link_tag 'dashboard_css/dashboard', media: 'all', 'data-turbolinks-track' => true %>
+  <%= stylesheet_link_tag 'dashboard_css/signin', media: 'all', 'data-turbolinks-track' => true %>
+  <%= stylesheet_link_tag 'dashboard_css/styles', media: 'all', 'data-turbolinks-track' => true %>
 
   <!-- Favicons (Customize)
-  ================================================== -->
-  <link rel="shortcut icon" href="assets/img/favicon.ico">
-  <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
-  <link rel="apple-touch-icon" sizes="72x72" href="assets/img/apple-touch-icon-72x72.png">
-  <link rel="apple-touch-icon" sizes="114x114" href="assets/img/apple-touch-icon-114x114.png">
+    ================================================== -->
+    <%= favicon_link_tag 'img/favicon.ico', rel: 'shortcut icon' %>
+    <%= favicon_link_tag 'img/apple-touch-icon.png', rel: 'apple-touch-icon' %>
+    <%= favicon_link_tag 'img/apple-touch-icon-72x72.png', rel: 'apple-touch-icon' %>
+    <%= favicon_link_tag 'img/apple-touch-icon-114x114.png', rel: 'apple-touch-icon' %>
 
-  <%= javascript_include_tag 'dashboard_js/dashboard', 'data-turbolinks-track' => true %>
+  
 
   <%= csrf_meta_tags %>
 </head>

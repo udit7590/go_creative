@@ -1,0 +1,58 @@
+<% @page_title = 'Go Creative: Change Password' %>
+
+<!-- Page Content
+  ================================================== --> 
+  <div class="row"><!--Container row-->
+
+  <!-- Page Sidebar
+  ================================================== --> 
+  <%= render partial: 'accounts/sidebar' %>
+
+  <!-- Page Content
+  ================================================== --> 
+  <div class="span8"><!--Begin page content column-->
+
+    <h2 class="title-bg">Your Account Settings <%= image_tag 'site/account_settings.png', size: '42x42', class: 'pull-right' %></h2>
+
+    
+    <!-- Form Name -->
+    <legend>Your Email ID: <span class='text-special'><%= @user.email %></span></legend>
+    <%= devise_error_messages %>
+    <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, class: 'form-horizontal' }) do |f| %>
+
+    <fieldset>
+
+      <div class="control-group">
+        <%= f.label :current_password, class: 'control-label' %> 
+        <div class="controls">
+          <%= f.password_field :current_password, autocomplete: "off", class: 'input-xlarge', placeholder: 'Current Password', size: 24, required: true, pattern: '.{8,128}' %>
+          <p class="help-block">We need your current password to confirm your changes.</p>
+        </div>
+      </div>
+      <hr />
+      <div class="control-group">
+        <%= f.label :password, class: 'control-label' %>
+        <div class="controls">
+          <%= f.password_field :password, autocomplete: "off", class: 'input-xlarge', placeholder: 'New Password', size: 24, required: true, pattern: '.{8,128}' %>
+          <p class="help-block">Leave blank if you don't want to change it. Minimum 8 characters if you want to change it.</p>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <%= f.label :password_confirmation, class: 'control-label' %>
+        <div class="controls">
+          <%= f.password_field :password_confirmation, autocomplete: "off", class: 'input-xlarge', placeholder: 'Confirm Password', size: 24, required: true, pattern: '.{8,128}' %>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <div class="controls">
+          <%= f.submit 'Update Password', class: 'btn btn-large btn-inverse' %>
+        </div>
+      </div>
+    </fieldset>
+    <% end %>
+
+  </div> <!--End page content column--> 
+
+</div><!-- End container row -->

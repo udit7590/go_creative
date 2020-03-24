@@ -10,9 +10,18 @@
  *
  *= require_self
  *= require 'css/bootstrap.css'
+ *= require 'css/summernote.css'
+ *= require 'css/dropzone.css'
+ *= require 'css/bootstrap-filestyle.css'
  *= require 'css/bootstrap-responsive.css'
+ *= require 'css/bootstrap-datetimepicker.min.css'
  *= require 'css/prettyPhoto.css'
+ *= require 'css/jquery.loader.min.css'
  *= require 'css/flexslider.css'
  *= require 'css/custom-styles.css'
+ *= require 'css/lightbox.css'
+ *= require 'css/form.css'
+ *= require 'css/project-listing.css'
+ *= require 'css/pickachose.css'
  *= require_directory .
  */

@@ -1,0 +1,7 @@
+$('#userRegistrationModal').modal('hide');
+$('#userRegistrationModal').find('form').trigger('reset');
+$("div.modal-body div.alert-error").remove();
+$('#userRegistrationModal').find('input[type=submit]').click(function() {
+  $(this).removeAttr("disabled");
+});
+window.location = '<%= @redirect_to_path %>'

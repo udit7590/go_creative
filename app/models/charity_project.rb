@@ -1,0 +1,1 @@
+class CharityProject < Project; end

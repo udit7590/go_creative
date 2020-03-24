@@ -1,0 +1,27 @@
+<%= form_for(@user, url: action_redirect, method: :patch, html: { class: 'form-horizontal' }) do |f| %>
+  <fieldset>
+    <div class="control-group">
+      <%= f.label :pan_card, 'PAN', class: 'control-label' %>
+      <div class="controls">
+        <% #FIXME_AB: I can guess this pattern can be repeated, so lets extract it in a constant and use.   -%>
+        <%= f.text_field :pan_card, class: 'input-xlarge', placeholder: 'PAN Card Number', size: 16, pattern: '^[A-Za-z]{3}[AaBbCcFfGgHhLlJjPpTt]{1}[A-Za-z]{1}[0-9]{4}[A-Za-z]{1}', title:'Please provide a valid PAN detail.', required: true %>
+        <p class="help-block">Required if you want to start a project here.<br />
+        PAN card has 10 alphanumeric characters of format AAA[ABCFGHLJPT]A9999A. (One of alphabets in square brackets)</p>
+      </div>
+    </div>
+    <div class="control-group">
+      <%= f.label :pan_card_copy, 'PAN Proof', class: 'control-label' %>
+      <div class="controls">
+        <%= f.file_field :pan_card_copy, multiple: false, class: 'filestyle', data: { buttonName: 'btn', buttonText: 'Select File', uploader: 'single', width: '350', height: '200', prev: image_path(f.object.pan_card_copy) } %>
+        <p class="help-block">Max file size: 2MB. Valid Image Types: PNG, JPEG</p>
+      </div>
+    </div>
+    <input type="hidden" name="page" value="user_pan_card" />
+    <div class="control-group">
+      <div class="controls">
+        <%= f.submit 'Save Settings', class: 'btn btn-large btn-inverse' %>
+      </div>
+    </div>
+
+  </fieldset>
+<% end %>

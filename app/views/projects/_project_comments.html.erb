@@ -1,0 +1,51 @@
+<% if @user || @comments.present? %>
+<section class="comments">
+  <!-- <h4 class="title-bg"><a name="comments"></a>Comments</h4> -->
+  <ul>
+    <% @comments.each do |comment| %>
+      <li class="comment" data-project-id="<%= @project.id %>" data-comment-id="<%= comment.id %>">
+        <%= image_tag 'img/user-avatar.jpg' %>
+        <span class="comment-name">
+          <% #FIXME_AB: we haven't eagerloaded user -%>
+          <% if comment.user %>
+            <%= comment.user.name %>
+          <% else %>
+            Admin
+          <% end %>
+        </span>
+        <span class="comment-date">
+          <%= comment.updated_at.to_s(:short) %>
+           <% if comment.user %>
+            | <%= link_to 'Report Abuse', comment_report_abuse_path(comment.id, user_id: @user), remote: true, class: 'abuse-comment' %> (<%= comment.abused_count %>)
+           <% end %>
+           <% if comment.user && current_user && current_user.id == comment.user.id %>
+            | <%= link_to 'Delete', comment_delete_path(comment.id), remote: true, class: 'delete-comment', data: { confirm: 'Are you sure?' } %>
+           <% end %>
+        </span>
+        <div class="comment-content"><%= comment.description %></div>
+      </li>
+    <% end %>
+  </ul>
+
+  <% if @comment_count > (Constants::INITIAL_COMMENT_DISPLAY_LIMIT - 1) %>
+    <%= button_tag 'More Comments', path: load_more_project_comments_path(@project.id), action: 'load_more', id: 'comments_load_more_button', class: 'btn btn-block', data: { page: 1 } %>
+  <% end %>
+  
+  <% if @user %>
+    <!-- Comment Form -->
+    <div class="comment-form-container">
+      <h6>Leave a Comment</h6>
+      <form action="<%= new_project_comment_path(@project, user_id: @user) %>" id="comment-form" method="get">
+        <textarea name="comment[description]" class="span6" placeholder="Please share your views and comments.*"></textarea>
+        <input type="hidden" value="<%= @user.id %>" name="user_id" />
+        <div class="row">
+          <div class="span2">
+            <input type="button" class="btn btn-inverse add-comment" value="Post My Comment">
+          </div>
+        </div>
+        
+      </form>
+    </div>
+  <% end %>
+</section><!-- Close comments section-->
+<% end %>

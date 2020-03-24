@@ -1,0 +1,17 @@
+var error = 'Not able to publish. ';
+<% case project %>
+<% when :not_found %>
+  alert(error + 'Could not find any such project');
+<% when :already_published %>
+  alert(error + 'This project is already published');
+<% when :user_incomplete %>
+  alert(error + 'User details are not complete or not verified.');
+<% when :project_invalid %>
+  alert(error + '<%= @project.errors.full_messages %>');
+<% when :end_date_inapt %>
+  alert(error + 'Project end date is invalid.');
+<% else  %>
+  alert(error + '<%= @project.errors.full_messages %>');
+<% end %>
+
+$.loader('close');

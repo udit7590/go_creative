@@ -1,0 +1,45 @@
+<% @page_title = 'Go Creative: Profile Page' %>
+<!-- Page Content
+================================================== --> 
+<div class="row"><!--Container row-->
+
+  <!-- Page Sidebar
+  ================================================== --> 
+  <%= render partial: 'sidebar' %>
+
+  <!-- Page Content
+  ================================================== --> 
+  <div class="span8"><!--Begin page content column-->
+
+    <h2 class="title-bg">Your Account Settings <%= image_tag 'site/account_settings.png', size: '42x42', class: 'pull-right' %></h2>
+
+    
+      <!-- Form Name -->
+      <legend>Your Email ID: <span class='text-special'><%= @user.email %></span></legend>
+
+    <ul class="nav nav-tabs">
+      <li class="active"><a href="#user_profile" data-toggle="tab" class="text-special">Edit Profile</a></li>
+      <li class=""><a href="#user_address" data-toggle="tab" class="text-special">Edit Address</a></li>
+      <li class=""><a href="#user_pan_card" data-toggle="tab" class="text-special">Edit PAN</a></li>
+    </ul>
+    <div class="tab-content">
+      <div class="tab-pane active" id="user_profile">
+        <%= render partial: 'general_profile_form' %>
+      </div>
+      <div class="tab-pane" id="user_address">
+        <%= render partial: 'address_fields_for_form', locals: { action_redirect: account_path } %>
+      </div>
+      <div class="tab-pane" id="user_pan_card">
+        <%= render partial: 'pan_details_form', locals: { action_redirect: account_path } %>
+      </div>
+    </div>
+      
+  </div> <!--End page content column--> 
+
+</div><!-- End container row -->
+
+<!-- JS --> 
+<% content_for :javascripts do %>
+  <%= javascript_include_tag 'accounts_page', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'edit_profile', 'data-turbolinks-track' => true %>
+<% end %>

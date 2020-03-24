@@ -1,0 +1,98 @@
+
+<%= form_for(project, html: { class: 'form-horizontal', multipart: true }) do |f| %>
+<fieldset>
+
+  <%= render 'errors' %>
+
+  <div class="control-group">
+    <%= f.label :type, 'Type of project', class: 'control-label' %>
+    <div class="form-group controls">
+      <%= f.select :type, [['Select',''],['Charity','CharityProject'], ['Investment','InvestmentProject']], class: 'form-control', autofocus: true %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :title, 'Title', class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :title, class: 'input-xlarge', placeholder: 'Project Title*', size: 16, required: true %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :amount_required, 'Amount', class: 'control-label' %>
+    <div class="controls">
+      <%= f.number_field :amount_required, class: 'input-xlarge', placeholder: 'Amount to be raised*', size: 16, required: true, step: 100, max: 10000000 %>
+      <p class="help-block">Should be in multiples of 100 and at max 10 million.</p>
+    </div>
+    
+  </div>
+
+  <div class="control-group">
+    <%= f.label :end_date, 'End Date', class: 'control-label' %>
+    <div class="controls">
+      <div id="endDateTimePicker" class="input-append date">
+        <%= f.text_field :end_date, class: 'input-xlarge', data: { format: 'dd/MM/yyyy' }, size: 16, required: true, readonly: true %>
+        <span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
+      </div>
+      <p class="help-block">Should be a future date greater than 5 days.</p>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :description, 'Description', class: 'control-label' %>
+    <div class="controls">
+      <div id="summernote_description"></div>
+      <%= f.hidden_field :description %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :video_link, 'Video Link', class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :video_link, class: 'input-xlarge', placeholder: 'Video Link', size: 16, data: { embed: 'video' } %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :min_amount_per_contribution, 'Min amount per contribution', class: 'control-label' %>
+    <div class="controls">
+      <%= f.number_field :min_amount_per_contribution, class: 'input-xlarge', placeholder: 'Min amount per contribution*', size: 16, step: 10, required: true, max: 10000000 %>
+      <p class="help-block">Minimum amount you want the user to contribute.</p>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :project_picture, 'Project Picture', class: 'control-label' %>
+    <div class="controls">
+      <%= f.file_field :project_picture, multiple: false, class: 'filestyle', data: { buttonName: 'btn', buttonText: 'Select File', uploader: 'single', width: '290', height: '290' } %>
+      <p class="help-block">Max file size: 2MB. Valid Image Types: PNG, JPEG, GIF<br />
+        This will be the main display pic of your project page.</p>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :images, 'Images', class: 'control-label' %>
+    <div class="controls">
+      <%= f.file_field :images, multiple: true, class: 'filestyle', name: 'project[images_attributes][][image]', data: { buttonName: 'btn', buttonText: 'Select Files' } %>
+      <p class="help-block">Max file size: 2MB. Valid Image Types: PNG, JPEG, GIF<br /></p>
+      These images will be used to build a gallery for your project or style your project page.
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :legal_documents, 'Legal Documents', class: 'control-label' %>
+    <div class="controls">
+      <%= f.file_field :legal_documents, multiple: true, class: 'filestyle', name: 'project[legal_documents_attributes][][image]', data: { buttonName: 'btn', buttonText: 'Select Files' } %>
+      <p class="help-block">Max file size: 2MB. Valid Image Types: PNG, JPEG, GIF, PDF</p>
+      <p class="help-block text-special">Please provide us any legal documents related to your project so that we can verify that your project is legitimate.<br />For eg. In case of charity project, it can be your NGO certificate.</p>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <div class="controls">
+      <%= f.submit 'Save', class: 'btn btn-large btn-inverse' %>
+    </div>
+  </div>
+
+</fieldset>
+<% end %>

@@ -1,0 +1,26 @@
+<% @page_title = 'Go Creative: Edit Project' %>
+
+<!-- Page Content
+================================================== --> 
+<div class="row"><!--Container row-->
+
+  <!-- Title Header -->
+  <div class="span8"><!--Begin page content column-->
+
+    <h2 class="title-bg">Edit your project details: </h2>
+    <legend>Your Email ID: <span class='text-special'><%= @user.email %></span></legend>
+    
+     <%= render partial: 'project_form', locals: { project: @project.becomes(Project) } %>
+
+  </div> <!--End page content column-->
+
+  <!-- Blog Sidebar
+  ================================================== --> 
+  <%= render 'right_sidebar' %>
+
+</div><!-- End container row -->
+
+<!-- JS --> 
+<% content_for :javascripts do %>
+  <%= javascript_include_tag 'project', 'data-turbolinks-track' => true %>
+<% end %>  

@@ -26,5 +26,9 @@ module Gocreative
     # config.i18n.default_locale = :de
 
     # config.force_ssl = true
+    config.autoload_paths << Rails.root.join('lib')
+    config.autoload_paths << Rails.root.join('app','services')
+    # LATER: Does not work for heroku
+    # config.autoload_paths << Rails.root.join('/app/sweepers')
   end
 end

@@ -1,0 +1,27 @@
+<% @page_title = 'Go Creative: Create Project' %>
+
+<!-- Page Content
+================================================== --> 
+<div class="row"><!--Container row-->
+
+  <!-- Title Header -->
+  <div class="span8"><!--Begin page content column-->
+
+    <h2 class="title-bg">Start a project: </h2>
+    <legend>Your Email ID: <span class='text-special'><%= @user.email %></span></legend>
+    <p class="lead">Please provide us the details of the project.</p>
+    
+    <%= render partial: 'project_form', locals: { project: [:users, @project] } %>
+
+  </div> <!--End page content column-->
+
+  <!-- Blog Sidebar
+  ================================================== --> 
+  <%= render 'right_sidebar' %>
+
+</div><!-- End container row -->
+
+<!-- JS --> 
+<% content_for :javascripts do %>
+  <%= javascript_include_tag 'project', 'data-turbolinks-track' => true %>
+<% end %>  

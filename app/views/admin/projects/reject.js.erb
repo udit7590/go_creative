@@ -1,0 +1,5 @@
+var $rejectButton = $('a.reject[data-project-id="<%= @project.id %>"]'),
+    $publishButton = $('a.publish[data-project-id="<%= @project.id %>"]');
+$rejectButton.remove();
+$publishButton.remove();
+$.loader('close');

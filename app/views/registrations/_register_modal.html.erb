@@ -1,0 +1,46 @@
+<!-- Modal -->
+<div class="modal fade" id="userRegistrationModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only"></span></button>
+        <h4 class="modal-title" id="myModalLabel">Go Creative Signup Page</h4>
+      </div>
+      <div class="modal-body">
+
+        <%= form_for(User.new, url: user_registration_path, class: 'form-signin', remote: true) do |f| %>
+
+            <div class="input-prepend">
+              <span class="add-on">F</span>
+              <%= f.text_field :first_name, autofocus: true, class: 'span2', placeholder: 'First Name*', size: 16, required: true, data: { pattern: 'name' } %>
+            </div>
+            <div class="input-prepend">
+              <span class="add-on">L</span>
+              <%= f.text_field :last_name, class: 'span2', placeholder: 'Last Name', size: 16, data: { pattern: 'name' } %>
+            </div>
+            <div class="input-prepend">
+              <span class="add-on">@</span>
+              <%= f.email_field :email, class: 'span2', placeholder: 'Email Address*', size: 16, required: true, data: { pattern: 'email' }, title: 'Please provide a valid email address.' %>
+              <span rel="popover" data-content="Valid examples: abc@xyz.com<br />Invalid examples: ab @xy.com, abc@xyz, abc@xyz.co" data-animation="true" data-original-title="Email Instructions"><i class="icon-question-sign"></i></span>
+            </div>
+            <div class="input-prepend">
+              <span class="add-on">P</span>
+              <%= f.password_field :password, autocomplete: "off", class: 'span2', size: 18, placeholder: 'Password*', data: { pattern: 'password' } %>
+              <% if @validatable %>
+              <em>(<%= @minimum_password_length %> characters minimum)</em>
+              <% end %><span rel="popover" data-content="Must have atleast 8 characters" data-animation="true" data-original-title="Password Instructions"><i class="icon-question-sign"></i></span>
+              <br />
+            </div>
+            <div class="input-prepend">
+              <span class="add-on">C</span>
+              <%= f.password_field :password_confirmation, autocomplete: "off", class: 'span2', placeholder: 'Confirm Password*', data: { pattern: 'password' } %>
+            </div> 
+          </div>
+          <div class="modal-footer">
+            <button type="button" id='loginModalButton' class="btn btn-large" onclick='switchModalWindow("userRegistrationModal", "userLoginModal")'>Login</button>
+            <%= f.submit 'Sign up', class: 'btn btn-large btn-inverse' %>
+          </div>
+        <% end %>
+    </div>
+  </div>
+</div>

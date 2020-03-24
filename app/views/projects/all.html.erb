@@ -1,0 +1,50 @@
+<% @page_title = "Go Creative: #{ @page_title }" %>
+
+<% if @projects.length > 0 %>
+  <h3 class="title-bg">Our <%= @page_title %></h3>
+  
+  <div class="pull-right place-header">
+    <div class="btn-group">
+      <!-- Sort button -->
+      <button type="button" class="btn" id="sort-by-criteria-button">Sort By</button>
+      <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+        <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu" role="menu">
+        <li><%= link_to 'Popularity', projects_path(sort_by: :popularity, order_by: :desc), class: 'sort_by', data: { sort_by: :popularity, order_by: :desc, path: projects_path } %>
+        <li><%= link_to 'Recent', projects_path(sort_by: :recent, order_by: :desc), class: 'sort_by', data: { sort_by: :recent, order_by: :desc, path: projects_path } %></li>
+        <li><%= link_to 'Ending Soon', projects_path(sort_by: :ending_soon, order_by: :asc),  class: 'sort_by', data: { sort_by: :ending_soon, order_by: :desc, path: projects_path } %></li>
+      </ul>
+    </div>
+    <!-- <div class="btn-group">
+      <! Filter button - - >
+      <button type="button" class="btn">Filter By</button>
+      <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+        <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu" role="menu">
+        <li><a href="#">Charity</a></li>
+        <li><a href="#">Investment</a></li>
+        <li><a href="#">Completed</a></li>
+      </ul>
+    </div> -->
+  </div>
+
+  <div class="row all-projects">
+    <% @projects.each do |project| %>
+      <%= render partial: 'project_listing', locals: { project: project } %>
+    <% end %>
+
+    <% if @projects.length > (Constants::PROJECT_LIST_PAGE_LIMIT - 1) %>
+      <%= button_tag 'I want to see more projects', path: projects_load_more_path, action: 'load_more', for_action: action_name, id: 'projects_load_more_button', class: 'btn btn-block', data: { page: 1 } %>
+    <% end %>
+  </div>
+<% else %>
+  <h3 class='text-warning'>Sorry. Currently there are no ongoing projects.</h3>
+<% end %>
+
+<!-- JS --> 
+<% content_for :javascripts do %>
+  <%= javascript_include_tag 'project_listing', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'projects_list_page', 'data-turbolinks-track' => true %>
+<% end %>  

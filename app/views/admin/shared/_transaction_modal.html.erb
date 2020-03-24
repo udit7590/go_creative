@@ -1,0 +1,45 @@
+<script id="contribution_transactions_template" type="text/html">
+<div class="modal fade" id="contributionTransactionsModal" data-dismiss="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only"></span></button>
+        <center><h4 class="modal-title" id="myModalLabel">Transactions related to Contribution ID: {{contribution_id}} </h4></center>
+      </div>
+      <div class="modal-body">
+        {{#transactions}}
+          <table class="table table-striped table-horizontal">
+            <tbody>
+                <tr>
+                  <td>Type</td>
+                  <td>{{action}}</td>
+                </tr>
+                <tr>
+                  <td>ID</td>
+                  <td>{{id}}</td>
+                </tr>
+                <tr>
+                  <td>Timestamp</td>
+                  <td>{{timestamp}}</td>
+                </tr>
+                <tr>
+                  <td>Amount</td>
+                  <td>{{amount}}</td>
+                </tr>
+                <tr></tr>
+                <tr></tr>
+            </tbody>
+          </table>
+          <hr />
+        {{/transactions}}  
+        {{^transactions}}
+          <p class="missing">No transactions can be found for this contribution.</p>
+        {{/transactions}}      
+      </div>
+      <div class="modal-footer">
+        <button type="button" id='signupModalButton' class="btn btn-primary" data-dismiss="modal">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>
+</script>

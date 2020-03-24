@@ -1,0 +1,32 @@
+<%= form_for(@user, url: account_path, method: :patch, html: { class: 'form-horizontal' }) do |f| %>
+<fieldset>
+  <div class="control-group">
+    <%= f.label :first_name, 'First Name', class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :first_name, autofocus: true, class: 'input-xlarge', placeholder: 'First Name', size: 16, required: true %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :last_name, 'Last Name', class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :last_name, class: 'input-xlarge', placeholder: 'Last Name', size: 16, required: true %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :phone_number, 'Phone Number', class: 'control-label' %>
+    <div class="controls">
+      <%= f.phone_field :phone_number, class: 'input-xlarge', placeholder: 'Phone Number', size: 16, pattern: '.{8,10}' %>
+      <p class="help">Consists of 8 to 10 numbers</p>
+    </div>
+  </div>
+  <input type="hidden" name="page" value="user_profile" />
+  <div class="control-group">
+    <div class="controls">
+      <%= f.submit 'Save Settings', class: 'btn btn-large btn-inverse' %>
+    </div>
+  </div>
+
+</fieldset>
+<% end %>

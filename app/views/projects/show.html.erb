@@ -1,0 +1,91 @@
+<% @page_title = 'Go Creative: View Project' %>
+
+<% if @project.created? || @project.unpublished? %>
+  <div class="alert alert-error">
+    <button type="button" class="close" data-dismiss="alert">×</button>
+    <center><strong>Your project has not been published yet.</strong></center>
+  </div>
+<% elsif @project.rejected? %>
+  <div class="alert alert-error">
+    <center><strong>This project has been rejected by the admin.</strong></center>
+  </div>
+<% elsif @project.successful? %>
+  <div class="alert alert-info">
+    <center><strong>This project has been successfully funded.</strong></center>
+  </div>
+<% elsif @project.failed? %>
+  <div class="alert alert-error">
+    <center><strong>This project was not able to get the required funding and has been closed now. :(</strong></center>
+  </div>
+<% end %>
+
+<% if @transaction %>
+  <%= transaction_error(@transaction) %>
+<% end %>
+  
+<!-- Blog Content
+  ================================================== --> 
+  <div class="row"><!--Container row-->
+
+        <!-- Blog Full Post
+        ================================================== --> 
+        <div class="span8 blog">
+
+        <h3 class="title-bg"><%= @project.title %></h3>
+        <ul class="nav nav-tabs">
+          <li class="active"><a href="#project-details" data-toggle="tab" class="text-special">Project Details</a></li>
+          <% if @comments || @project.published? || @user || @project.user_id == @user.id %>
+            <li class=""><a href="#project-comments" data-toggle="tab" class="text-special">Comments</a></li>
+          <% end %>
+        </ul>
+        <div class="tab-content">
+          <div class="tab-pane active" id="project-details">
+            <!-- Blog Post 1 -->
+            <article>
+              <div class="post-content">
+                <%= image_tag @project.project_picture.url(:large) %>
+              </div>
+            </article>
+            <div>
+              <!-- Description, main image and video
+                ================================================== -->
+              <h4 class="title-bg">Project Description
+                <% if !@project.published? && current_user && current_user.id == @project.user_id %>
+                  <button id="editDescription" class="btn btn-info pull-right" data-toggle="button" data-path="<%= project_update_description_path(@project) %>">Edit</button>
+                <% end %>
+              </h4>
+              <div class="lead" id="descriptionEditable"><%= @project.description.html_safe %></div>
+            </div>
+            <% unless @project.video_link.empty? %>
+              <!--Video Widget-->
+              <h4 class="title-bg">Project Video</h4>
+              <!-- <iframe src="http://player.vimeo.com/video/24496773" width="1000" height="400"></iframe> -->
+              <span data-src="<%= @project.video_link %>" id="embeddedVideo" width="770" height="400"></span>
+
+            <% end %>
+            <%= render 'project_gallery' %>
+          </div>
+          <div class="tab-pane" id="project-comments">
+            <!-- Post Comments
+            ================================================== --> 
+            <%= render 'project_comments' %>
+          </div>
+        </div>
+
+      </div><!--Close container row-->
+
+      <!-- Sidebar
+      ================================================== --> 
+      <%= render 'project_sidebar' %>
+    </div>
+      
+  </div> <!-- End Container -->
+
+<!-- JS --> 
+<% content_for :javascripts do %>
+  <%= javascript_include_tag 'content_loader', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'comment', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'comments_page', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'embed_video', 'data-turbolinks-track' => true %>
+<%= javascript_include_tag 'project_show', 'data-turbolinks-track' => true %>
+<% end %> 

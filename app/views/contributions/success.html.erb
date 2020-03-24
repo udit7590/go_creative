@@ -1,0 +1,11 @@
+<div class="span4 col-md-6 "></div>
+  <div class="formContainer span4 col-md-6 ">
+    <h2>Thank you for your contribution in <%= @project.try(:title) %> project.</h2>
+    
+    <h5 class="text-special">You can perform one of the following actions now:</h5>
+    <ul>
+      <li><%= link_to 'Go back to project you contributed on', project_path(@project) %></li>
+      <li><%= link_to 'Go to Home Page', root_path %></li>
+      <li><%= link_to 'View all your contributions', '#' %></li>
+    </ul>
+</div>

@@ -21,3 +21,58 @@
 
 en:
   hello: "Hello world"
+  views:
+    pagination:
+      first: "&laquo;"
+      last: "&raquo;"
+      previous: "&lsaquo;"
+      next: "&rsaquo;"
+      truncate: "&hellip;"
+
+  errors:
+    views: 
+      no_user: 'Cannot find any such user'
+      invalid_session: 'Session lost or invalid. Please try again'
+
+  projects:
+    views:
+      pan_details_incomplete: 'Your pan details (PAN Card Number or PAN card proof) are incomplete. Please provide the following details to proceed further.'
+      address_details_incomplete: 'Your address or address proof details are incomplete. Please provide the following details to proceed further.'
+      project_created: 'Your project is created.'
+      project_edited: 'Your project details have successfully been updated.'
+      no_project: 'Cannot find any such project'
+      orphan_project: 'Cannot find any user associated with this project'
+    edit:
+      not_project_owner: 'You can only edit your projects.'
+
+  contributions:
+    errors:
+      project_expired: "This project's end date has expired. So one cannot contribute to this project"
+      project_not_published: "The project is not in published state and so cannot accept any contributions"
+      project_owner_cannot_contribute: 'The project owner cannot contribute to his/her own project'
+      no_project_min_amount: 'This amount does not meet project minimum amount requirement criteria'
+      project_amount_collected: 'This project has already collected the amount it required'
+      invalid_user: 'Something seems wrong with your session. Please try again'
+      no_token: "We didn't receive any payment. Please try again"
+    notice:
+      details_updated: 'Your details have been updated. You can now proceed further'
+
+  account:
+    views:
+      no_user: 'Cannot find any such user'
+    update:
+      details_updated: 'Your account has successfully been updated.'
+      cannot_edit_published:  'This project cannot be edited now'
+
+  comments:
+    views:
+      no_user_or_admin: 'You must be logged in to access this section'
+      no_user: 'Only registered users can comment or perform comment related tasks.'
+      no_project: 'Cannot find any such project.'
+      no_comment: 'Cannot find any such comment.'
+      no_admin: 'Cannot find any admin user.'
+      no_user_to_abuse_comment: 'Only registered users can report abuse a comment.'
+      only_comment_author_or_project_owner_delete: 'Sorry. Only project owner or comment author can delete the comment.'
+  payments:
+    errors:
+      failure: 'We were unable to recieve the payment due to following errors.'

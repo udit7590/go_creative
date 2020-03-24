@@ -1,0 +1,35 @@
+  <!-- Modal -->
+<div class="modal fade" id="userLoginModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only"></span></button>
+        <h4 class="modal-title" id="myModalLabel">Go Creative Sign In Page</h4>
+      </div>
+      <div class="modal-body">
+        <%= form_for(User.new, url: user_session_path, remote: true) do |f| %>
+          <div class="input-prepend">
+            <span class="add-on">@</span>
+            <%= f.email_field :email, class: 'span2', placeholder: 'Email Address*', size: 16, required: true, data: { pattern: 'email' }, title: 'Please provide a valid email address.' %>
+            <span rel="popover" data-content="Valid examples: abc@xyz.com<br />Invalid examples: ab @xy.com, abc@xyz, abc@xyz.co" data-animation="true" data-original-title="Email Instructions"><i class="icon-question-sign"></i></span>
+          </div>
+          <div class="input-prepend">
+            <span class="add-on">P</span>
+            <%= f.password_field :password, autocomplete: "off", class: 'span2', size: 18, placeholder: 'Password*', data: { pattern: 'password' } %>
+            <span rel="popover" data-content="Must have atleast 8 characters" data-animation="true" data-original-title="Password Instructions"><i class="icon-question-sign"></i></span>
+          </div>
+          <%- if devise_mapping.recoverable? && (!controller_name.in? %w(passwords registrations)) %>
+          <%= link_to 'Forgot your password?', new_user_password_path(resource_name) %><br />
+          <% end -%>
+          <%- if devise_mapping.confirmable? && controller_name != 'confirmations' %>
+            <%= link_to "Didn't receive confirmation instructions?", new_user_confirmation_path(resource_name) %><br />
+          <% end -%>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id='signupModalButton' class="btn btn-large" onclick='switchModalWindow("userLoginModal", "userRegistrationModal")'>Signup</button>
+        <%= f.submit 'Login', class: 'btn btn-large btn-inverse' %>
+      </div>
+      <% end %>
+    </div>
+  </div>
+</div>

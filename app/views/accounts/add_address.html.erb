@@ -1,0 +1,27 @@
+<!-- Page Content
+================================================== --> 
+<div class="row"><!--Container row-->
+
+  <!-- Page Sidebar
+  ================================================== --> 
+  <%= render partial: 'sidebar' %>
+
+  <!-- Page Content
+  ================================================== --> 
+  <div class="span8"><!--Begin page content column-->
+
+    <h2 class="title-bg">Your Account Settings <%= image_tag 'site/account_settings.png', size: '42x42', class: 'pull-right' %></h2>
+
+      <!-- Form Name -->
+      <legend>Your Email ID: <span class='text-special'><%= @user.email %></span></legend>
+      <%= render partial: 'address_fields_for_form' %>
+      
+  </div> <!--End page content column--> 
+
+</div><!-- End container row -->
+
+<!-- JS --> 
+<% content_for :javascripts do %>
+  <%= javascript_include_tag 'accounts_page', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'add_account_details', 'data-turbolinks-track' => true %>
+<% end %>  

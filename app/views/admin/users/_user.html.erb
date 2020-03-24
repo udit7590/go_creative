@@ -1,0 +1,8 @@
+<tr>
+  <td><%= user.name %></td>
+  <td><%= user.email %></td>
+  <td><%= user.created_at.to_s(:long) %></td>
+  <td>
+    <%= link_to (button_tag 'View', class: 'btn btn-primary'), admin_user_path(user) %>
+  </td>
+</tr>
