@@ -247,14 +247,14 @@ class Project < ActiveRecord::Base
 
   # To be Expired on project create/update
   def self.cached_recent(number_of_records = Constants::PROJECT_HOME_PAGE_LIMIT, exclude_ids = nil)
-    Rails.cache.fetch([name, 'recent'], expires_in: 15.minutes) do
+    Rails.cache.fetch([name, 'recent'], expires_in: 1.minute) do
       exclude_ids ? Project.recent_published.where.not(id: exclude_ids).limit(number_of_records).to_a : Project.recent_published.limit(number_of_records).to_a
     end
   end
 
   # To be Expired on project contribution
   def self.cached_popular(number_of_records = Constants::PROJECT_HOME_PAGE_LIMIT, exclude_ids = nil)
-    Rails.cache.fetch([name, 'popular'], expires_in: 15.minutes) do
+    Rails.cache.fetch([name, 'popular'], expires_in: 1.minute) do
       exclude_ids ? Project.popular.where.not(id: exclude_ids).limit(number_of_records).to_a : Project.popular.limit(number_of_records).to_a
     end
   end
@@ -262,7 +262,7 @@ class Project < ActiveRecord::Base
   # To be Expired on project completion
   def self.cached_completed(number_of_records = Constants::PROJECT_HOME_PAGE_LIMIT, exclude_ids = nil)
     #FIXME_AB: Please refactor this method along with similar others
-    Rails.cache.fetch([name, 'completed'], expires_in: 15.minutes) do
+    Rails.cache.fetch([name, 'completed'], expires_in: 1.minute) do
       exclude_ids ? Project.completed.where.not(id: exclude_ids).limit(number_of_records).to_a : Project.completed.limit(number_of_records).to_a
     end
   end
