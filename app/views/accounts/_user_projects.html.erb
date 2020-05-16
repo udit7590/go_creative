@@ -7,7 +7,7 @@
           <h5 title="<%= project.title %>"><a href="<%= project_path(project) %>"><%= truncate(project.title, length: 20) %></a></h5>
           <div class="progress" style="height: 7px" rel="tooltip" title="<%= project.percentage_completed %>% Completed" >
             <div class="bar bar-success" role="progressbar" style="width: <%= project.percentage_completed %>%;">
-              <!-- <span>60% Complete of INR <%= project.amount_required %></span> -->
+              <!-- <span>60% Complete of USD <%= project.amount_required %></span> -->
             </div>
           </div>
           <span>Target: <%= number_to_currency(project.amount_required, unit: Constants::DEFAULT_CURRENCY, precision: 0) %></span>

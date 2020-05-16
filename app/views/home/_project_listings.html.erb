@@ -30,7 +30,7 @@
             <span class="project-details"><%= link_to truncate(project.title, length: 40), project_path(project) %><br / >
               <div class="progress" style="height: 7px" rel="tooltip" title="<%= project.percentage_completed %>% Completed">
                 <div class="bar bar-success" role="progressbar" style="width: <%= project.percentage_completed %>%;">
-                  <!-- <span>60% Complete of INR <%= project.amount_required %></span> -->
+                  <!-- <span>60% Complete of USD <%= project.amount_required %></span> -->
                 </div>
               </div>
               Target <%= number_to_currency(project.amount_required, unit: Constants::DEFAULT_CURRENCY, precision: 0) %>

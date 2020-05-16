@@ -33,7 +33,7 @@ $(document).ready(function() {
           name: 'Go Creative',
           description: 'Project Contribution',
           amount: contributedAmount * 100, //In Paisa
-          currency: 'INR',
+          currency: 'USD',
           email: $this.data('user-email')
         });
 
