@@ -9,5 +9,5 @@ class AdminMailer < Devise::Mailer
   default template_path: 'devise/mailer'
 
   #FIXME_AB: should not hardcode this email, should be configurable through env based constants.
-  default from: 'site@gocreative.com'
+  default from: 'contact@booleans.in'
 end

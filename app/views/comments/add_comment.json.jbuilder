@@ -9,7 +9,7 @@ json.comment do
       json.id @comment.user.id
     else
       json.name 'Admin'
-      json.email 'admin@gocreative.com'
+      json.email 'contact@booleans.in'
       json.id @comment.admin_user_id
     end
   end

@@ -83,7 +83,7 @@ Gocreative::Application.configure do
   config.log_formatter = ::Logger::Formatter.new
 
   #For Mailer
-  config.action_mailer.default_url_options = { host: 'gocreative.herokuapp.com'}
+  config.action_mailer.default_url_options = { host: 'booleans-crowdfunding.herokuapp.com' }
 
   #load mail server settings
   config.action_mailer.raise_delivery_errors = true
@@ -99,7 +99,7 @@ Gocreative::Application.configure do
     enable_starttls_auto: true
   }
 
-  config.action_mailer.default_options = { from: 'site@gocreative.com' }
+  config.action_mailer.default_options = { from: 'contact@booleans.in' }
 
   config.after_initialize do
     # Send requests to the gateway's test servers

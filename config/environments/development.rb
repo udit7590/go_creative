@@ -35,7 +35,7 @@ Gocreative::Application.configure do
   config.action_mailer.perform_deliveries = true
   
   config.action_mailer.delivery_method = :letter_opener
-  config.action_mailer.default_options = { from: 'site@gocreative.com' }
+  config.action_mailer.default_options = { from: 'contact@booleans.in' }
 
   config.action_controller.perform_caching = true
   config.cache_store = :memory_store

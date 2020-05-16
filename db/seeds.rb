@@ -11,5 +11,5 @@
 
 AdminUser.create!(email: 'udit@booleans.in', password: 'admin123', password_confirmation: 'admin123')
 AdminUser.create!(email: 'admin@booleans.in', password: 'admin123', password_confirmation: 'admin123')
-u = User.create!(email: 'udit@booleans.in', password: 'user1234', password_confirmation: 'user1234')
+u = User.create!(first_name: 'Udit', email: 'udit@booleans.in', password: 'user1234', password_confirmation: 'user1234')
 u.confirm
