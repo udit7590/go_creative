@@ -53,9 +53,9 @@ RSpec.describe User, :type => :model do
 
   context 'methods' do
 
-    let(:user) { FactoryGirl.create(:user_complete) }
-    let(:user_without_name) { FactoryGirl.build(:user_without_name) }
-    let(:admin) { FactoryGirl.build(:admin_user) }
+    let(:user) { FactoryBot.create(:user_complete) }
+    let(:user_without_name) { FactoryBot.build(:user_without_name) }
+    let(:admin) { FactoryBot.build(:admin_user) }
 
     context '#name' do
       it 'gives user name' do

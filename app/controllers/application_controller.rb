@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
   
     #For permitting additional attributes to users devise model
     def configure_permitted_parameters
-      devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(:first_name, :last_name, :email, :password, :password_confirmation, :phone_number) }
+       devise_parameter_sanitizer.permit(:sign_up, keys: [:first_name, :last_name, :email, :password, :password_confirmation, :phone_number])
     end
 
     def store_location

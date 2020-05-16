@@ -2,12 +2,12 @@ class ConfirmationsController < Devise::ConfirmationsController
   before_action :load_original_token, only: :show
 
   def show
-    #FIXME_AB: refactor it
-    @resource = resource_class.find_by_confirmation_token Devise.token_generator.
-    digest(self, :confirmation_token, @original_token)
+    @resource = resource_class.find_by_confirmation_token @original_token
+    # @resource = resource_class.find_by_confirmation_token Devise.token_generator.
+    # digest(self, :confirmation_token, @original_token)
     if @resource
       if @resource.valid?
-        if @resource.confirm!
+        if @resource.confirm
           set_flash_message :notice, :confirmed
           sign_in_and_redirect resource_name, @resource
         else

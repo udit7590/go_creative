@@ -4,7 +4,7 @@ require 'support/shared_projects_controller_spec'
 RSpec.describe ProjectsController, type: :controller do
 
   describe '#index' do
-    let(:projects) { 3.times { FactoryGirl.create(:published_investment_project) } }
+    let(:projects) { 3.times { FactoryBot.create(:published_investment_project) } }
 
     it_behaves_like 'display published projects' do
       let(:action_name) { :index }
@@ -102,7 +102,7 @@ RSpec.describe ProjectsController, type: :controller do
   end
 
   describe '#create' do
-    let(:project_attributes) { FactoryGirl.attributes_for(:created_charity_project) }
+    let(:project_attributes) { FactoryBot.attributes_for(:created_charity_project) }
 
     def do_create
       post :create, project: project_attributes
@@ -169,7 +169,7 @@ RSpec.describe ProjectsController, type: :controller do
   end
 
   describe '#update' do
-    let(:project_attributes) { FactoryGirl.attributes_for(:published_charity_project) }
+    let(:project_attributes) { FactoryBot.attributes_for(:published_charity_project) }
 
     def do_update
       patch :update, project: project_attributes

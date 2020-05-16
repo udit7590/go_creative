@@ -1,48 +1,48 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :project do
-    title 'Go Creative'
-    description 'Crowdfunding platform'
-    amount_required 100000
-    min_amount_per_contribution 100
+    title {'Go Creative'}
+    description {'Crowdfunding platform'}
+    amount_required {100000}
+    min_amount_per_contribution {100}
     end_date { 30.days.from_now.end_of_day }
 
     # Association: belongs_to :user
     association :user, factory: :user
 
     trait :published do
-      state :published
+      state {:published}
     end
 
     trait :unpublished do
-      state :unpublished
+      state {:unpublished}
     end
 
     trait :created do
-      state :created
+      state {:created}
     end
 
     trait :successful do
-      state :successful
+      state {:successful}
     end
 
     trait :failed do
-      state :failed
+      state {:failed}
     end
 
     trait :payment_pending do
-      state :payment_pending
+      state {:payment_pending}
     end
 
     trait :amount_collected do
-      collected_amount 10000
+      collected_amount {10000}
     end
 
     trait :charity do
-      type 'CharityProject'
+      type {'CharityProject'}
     end
 
     trait :investment do
-      type 'InvestmentProject'
+      type {'InvestmentProject'}
     end
 
     factory :published_investment_project, traits: [:published, :investment]

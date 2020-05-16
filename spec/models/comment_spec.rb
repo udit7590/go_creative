@@ -57,11 +57,11 @@ RSpec.describe Comment, :type => :model do
 
   context 'methods' do
 
-    let(:user) { FactoryGirl.create(:user_complete) }
-    let(:another_user) { FactoryGirl.create(:user_complete) }
-    let(:yet_another_user) { FactoryGirl.create(:user_complete) }
-    let(:published_investment_project) { FactoryGirl.create(:published_investment_project, user: user) }
-    let!(:public_comment) { FactoryGirl.create(:public_comment, project: published_investment_project, user: another_user) }
+    let(:user) { FactoryBot.create(:user_complete) }
+    let(:another_user) { FactoryBot.create(:user_complete) }
+    let(:yet_another_user) { FactoryBot.create(:user_complete) }
+    let(:published_investment_project) { FactoryBot.create(:published_investment_project, user: user) }
+    let!(:public_comment) { FactoryBot.create(:public_comment, project: published_investment_project, user: another_user) }
 
     context '#mark_deleted' do
       it 'soft deletes comment' do

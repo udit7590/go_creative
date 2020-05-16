@@ -1,4 +1,4 @@
-class CreateAbuses < ActiveRecord::Migration
+class CreateAbuses < ActiveRecord::Migration[5.1]
   def change
     create_table :abuses do |t|
       t.integer :user_id

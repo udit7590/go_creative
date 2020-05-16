@@ -16,9 +16,9 @@ class Admin::UsersController < ::ApplicationController
 
   def verify
     if UserVerification.verify_details(@user, current_admin_user)
-      redirect_to admin_project_path(params[:project_id]), notice: 'User details verified.'
+      redirect_to admin_users_path, notice: 'User details verified.'
     else
-      redirect_to admin_project_path(params[:project_id]), alert: 'Cannot verify as user details are incomplete.'
+      redirect_to admin_users_path, alert: 'Cannot verify as user details are incomplete.'
     end
   end
 

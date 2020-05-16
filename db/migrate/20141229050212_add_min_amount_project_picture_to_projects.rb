@@ -1,4 +1,4 @@
-class AddMinAmountProjectPictureToProjects < ActiveRecord::Migration
+class AddMinAmountProjectPictureToProjects < ActiveRecord::Migration[5.1]
   def up
     add_column :projects, :min_amount_per_contribution, :decimal, precision: 12, scale: 2
     change_column :projects, :amount_required, :decimal, precision: 12, scale: 2

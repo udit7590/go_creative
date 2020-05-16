@@ -1,4 +1,4 @@
-class AddAttributesToContribution < ActiveRecord::Migration
+class AddAttributesToContribution < ActiveRecord::Migration[5.1]
   def change
     add_column :contributions, :card_type, :string
     add_column :contributions, :card_expires_on, :date

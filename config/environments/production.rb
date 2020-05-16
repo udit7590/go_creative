@@ -139,8 +139,8 @@ ExceptionNotification.configure do |config|
   # Email notifier sends notifications by email.
   config.add_notifier :email, {
     email_prefix: 'Go Creative Exception Notification key: "value", ',
-    sender_address: %{"notifier" <notifier@gocreative.com>},
-    exception_recipients: %w{udit@vinsol.com}
+    sender_address: %{"notifier" <contact@booleans.in>},
+    exception_recipients: %w{udit@booleans.in}
   }
 
 end

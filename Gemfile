@@ -1,16 +1,16 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.1.8'
+gem 'rails', '5.2.4.2'
 
 # Use postgresql as the database for Active Record
-gem 'pg', '~> 0.17.1'
+gem 'pg'
 
 # Use SCSS for stylesheets
 #gem 'sass-rails', '~> 4.0.0'
 
 # Use Uglifier as compressor for JavaScript assets
-gem 'uglifier', '>= 1.3.0'
+gem 'uglifier'
 
 # Use CoffeeScript for .js.coffee assets and views
 #gem 'coffee-rails', '~> 4.0.0'
@@ -25,7 +25,7 @@ gem 'jquery-rails'
 gem 'turbolinks'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder', '~> 1.2'
+gem 'jbuilder'
 
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
@@ -33,7 +33,7 @@ group :doc do
 end
 
 # Use ActiveModel has_secure_password
-gem 'bcrypt-ruby', '~> 3.0.0'
+gem 'bcrypt-ruby'
 
 # Use unicorn as the app server
 # gem 'unicorn'
@@ -49,18 +49,19 @@ gem 'devise'
 
 # Use Paperclippaperclip
 gem 'paperclip'
-
-# Use thin
-gem 'thin'
+#For Paperclip s3 storage
+gem 'aws-sdk'
+gem 'paperclip-dropbox'
 
 # Required for deployment on heroku
 gem 'rails_12factor', group: :production
 
 group :development, :test do
-  gem 'rspec-rails', '~> 3.0'
+  gem 'rspec-rails'
   gem 'shoulda-matchers'
-  gem 'shoulda-callback-matchers', '~> 1.1.1'
-  gem 'factory_girl_rails'
+  gem 'shoulda-callback-matchers'
+  gem 'factory_bot_rails'
+  gem 'dotenv-rails', '~> 2.2', require: 'dotenv/rails-now'
 end
 
 gem 'non-stupid-digest-assets', group: :production
@@ -69,16 +70,12 @@ gem 'non-stupid-digest-assets', group: :production
 gem 'kaminari'
 
 #For State Machine
-gem 'aasm', '~> 4.0.7'
+gem 'aasm'
 
 #For mails in test and development
 gem 'letter_opener', group: [:development, :test]
 
-gem 'quiet_assets', group: :development
-
-#For Paperclip s3 storage
-gem 'aws-sdk'
-gem 'paperclip-dropbox', '>= 1.1.7'
+# gem 'quiet_assets', group: :development
 
 # For payment
 gem 'activemerchant'
@@ -89,11 +86,11 @@ gem 'daemons'
 gem 'delayed_job_active_record'
 
 # For PDF
-gem 'prawn', '~> 1.3.0'
-gem 'prawn-table', '~> 0.2.1'
+gem 'prawn'
+gem 'prawn-table'
 
 # For production exception 
-gem 'exception_notification', '~> 4.0.1', group: :production
+gem 'exception_notification', group: :production
 
 # For test coverage
 gem 'simplecov', require: false, group: :test

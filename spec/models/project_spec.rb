@@ -129,19 +129,19 @@ RSpec.describe Project, type: :model do
   end
 
   context 'instance methods' do
-    let(:user) { FactoryGirl.create(:user_complete) }
-    let(:another_user) { FactoryGirl.create(:user_complete) }
+    let(:user) { FactoryBot.create(:user_complete) }
+    let(:another_user) { FactoryBot.create(:user_complete) }
     let(:projects) do
       [
-        FactoryGirl.create(:published_investment_project, user: user),
-        FactoryGirl.create(:published_charity_project, user: another_user),
-        FactoryGirl.create(:unpublished_investment_project, user: user),
-        FactoryGirl.create(:unpublished_charity_project, user: another_user),
-        FactoryGirl.create(:created_investment_project, user: user),
-        FactoryGirl.create(:created_charity_project, user: another_user),
-        FactoryGirl.create(:funded_investment_project, user: another_user),
-        FactoryGirl.create(:funded_investment_project, user: user),
-        FactoryGirl.create(:successful_investment_project, user: another_user)
+        FactoryBot.create(:published_investment_project, user: user),
+        FactoryBot.create(:published_charity_project, user: another_user),
+        FactoryBot.create(:unpublished_investment_project, user: user),
+        FactoryBot.create(:unpublished_charity_project, user: another_user),
+        FactoryBot.create(:created_investment_project, user: user),
+        FactoryBot.create(:created_charity_project, user: another_user),
+        FactoryBot.create(:funded_investment_project, user: another_user),
+        FactoryBot.create(:funded_investment_project, user: user),
+        FactoryBot.create(:successful_investment_project, user: another_user)
       ]
     end
 
@@ -150,7 +150,7 @@ RSpec.describe Project, type: :model do
         expect(projects.first.check_end_date).to eq(true)
       end
       it 'checks end date greater than 5 days' do
-        expect(FactoryGirl.build(:project, end_date: DateTime.current).check_end_date).to eq(false)
+        expect(FactoryBot.build(:project, end_date: DateTime.current).check_end_date).to eq(false)
       end
     end
 
@@ -170,25 +170,25 @@ RSpec.describe Project, type: :model do
         expect(projects.first.check_end_date).to eq(true)
       end
       it 'checks end date greater than 5 days' do
-        expect(FactoryGirl.build(:project, end_date: DateTime.current).check_end_date).to eq(false)
+        expect(FactoryBot.build(:project, end_date: DateTime.current).check_end_date).to eq(false)
       end
     end
   end
 
   context 'class methods' do
-    let(:user) { FactoryGirl.create(:user_complete) }
-    let(:another_user) { FactoryGirl.create(:user_complete) }
+    let(:user) { FactoryBot.create(:user_complete) }
+    let(:another_user) { FactoryBot.create(:user_complete) }
     let(:projects) do
       [
-        FactoryGirl.create(:published_investment_project, user: user),
-        FactoryGirl.create(:published_charity_project, user: another_user, end_date: 6.days.from_now),
-        FactoryGirl.create(:unpublished_investment_project, user: user),
-        FactoryGirl.create(:unpublished_charity_project, user: another_user),
-        FactoryGirl.create(:created_investment_project, user: user),
-        FactoryGirl.create(:created_charity_project, user: another_user),
-        FactoryGirl.create(:funded_investment_project, user: another_user, collected_amount: 20000),
-        FactoryGirl.create(:funded_investment_project, user: user),
-        FactoryGirl.create(:successful_investment_project, user: another_user)
+        FactoryBot.create(:published_investment_project, user: user),
+        FactoryBot.create(:published_charity_project, user: another_user, end_date: 6.days.from_now),
+        FactoryBot.create(:unpublished_investment_project, user: user),
+        FactoryBot.create(:unpublished_charity_project, user: another_user),
+        FactoryBot.create(:created_investment_project, user: user),
+        FactoryBot.create(:created_charity_project, user: another_user),
+        FactoryBot.create(:funded_investment_project, user: another_user, collected_amount: 20000),
+        FactoryBot.create(:funded_investment_project, user: user),
+        FactoryBot.create(:successful_investment_project, user: another_user)
       ]
     end
     before { projects }

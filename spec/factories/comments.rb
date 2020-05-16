@@ -1,25 +1,25 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :comment do
-    description 'Comment'
+    description {'Comment'}
 
     # Association: belongs_to :user, :project
     association :user, factory: :user
     association :project, factory: :project
 
     trait :public_comment do
-      visible_to_all true
+      visible_to_all {true}
     end
 
     trait :private_comment do
-      visible_to_all false
+      visible_to_all {false}
     end
 
     trait :spam do
-      spam true
+      spam {true}
     end
 
     trait :deleted do
-      deleted true
+      deleted {true}
       deleted_at { DateTime.current }
     end
 

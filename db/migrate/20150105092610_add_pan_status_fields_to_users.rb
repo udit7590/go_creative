@@ -1,4 +1,4 @@
-class AddPanStatusFieldsToUsers < ActiveRecord::Migration
+class AddPanStatusFieldsToUsers < ActiveRecord::Migration[5.1]
   def change
     # When the admin verifies the PAN
     add_column :users, :pan_verified_at, :datetime
